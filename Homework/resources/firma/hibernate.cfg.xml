@@ -6,8 +6,8 @@
     <session-factory>
         <!--Настройка подключения к БД-->
         <property name="connection.url">jdbc:mysql://localhost:3306/firma</property>
-        <property name="connection.username">User</property>
-        <property name="connection.password">Password</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">ProjectProf002</property>
 
         <!--Подключение к драйверу-->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
