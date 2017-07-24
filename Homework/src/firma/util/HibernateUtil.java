@@ -1,4 +1,4 @@
-package firma.hibernate.util;
+package firma.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -14,7 +14,7 @@ public class HibernateUtil {
 
     private static SessionFactory build(){
         registry = new StandardServiceRegistryBuilder()
-                .configure("firma/source/hibernate.cfg.xml")
+                .configure("firma/hibernate.cfg.xml")
                 .build();
         return new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }

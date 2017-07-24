@@ -26,8 +26,8 @@
         <!--Позволяет видеть все запросы sql-->
         <property name="show_sql">true</property>
 
-        <mapping class="firma.hibernate.entity.AccountEmployee"></mapping>
-        <mapping class="firma.hibernate.entity.EmployeeFirm"></mapping>
+        <mapping class="firma.entity.AccountEmployee"></mapping>
+        <mapping class="firma.entity.EmployeeFirm"></mapping>
 
 
     </session-factory>

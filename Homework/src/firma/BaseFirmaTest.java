@@ -1,8 +1,8 @@
-package firma.hibernate;
+package firma;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import firma.hibernate.util.HibernateUtil;
+import firma.util.HibernateUtil;
 import java.text.ParseException;
 
 public class BaseFirmaTest {

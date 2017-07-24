@@ -1,4 +1,4 @@
-package firma.hibernate.entity;
+package firma.entity;
 
 import javax.persistence.*;
 
