@@ -6,8 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.AdminWindowController">
    <children>
       <VBox alignment="TOP_RIGHT" layoutX="368.0" layoutY="152.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -34,11 +33,11 @@
                <children>
                   <TableView fx:id="tblView" prefHeight="530.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Прізвище" />
-                      <TableColumn prefWidth="75.0" text="Ім'я" />
-                        <TableColumn prefWidth="75.0" text="По-батькові" />
-                        <TableColumn prefWidth="75.0" text="Дата прийому" />
-                        <TableColumn prefWidth="75.0" text="Облік. запис" />
+                      <TableColumn fx:id="columnSurname" prefWidth="75.0" text="Прізвище" />
+                      <TableColumn fx:id="columnName" prefWidth="75.0" text="Ім'я" />
+                        <TableColumn fx:id="columnLastName" prefWidth="75.0" text="По-батькові" />
+                        <TableColumn fx:id="columnDateStartOfWork" prefWidth="75.0" text="Дата прийому" />
+                        <TableColumn fx:id="columnAccount" prefWidth="75.0" text="Облік. запис" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -49,7 +48,7 @@
                   </TableView>
                   <VBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="btnShovInfo" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Показати детальну і-цію">
+                        <Button fx:id="btnShovInfo" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Показати детальну і-цію">
                            <VBox.margin>
                               <Insets bottom="5.0" left="5.0" />
                            </VBox.margin>
@@ -57,7 +56,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnAdd" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Додати нового співробітника">
+                        <Button fx:id="btnAdd" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressAdd" prefHeight="30.0" prefWidth="200.0" text="Додати нового співробітника">
                            <VBox.margin>
                               <Insets left="5.0" top="5.0" />
                            </VBox.margin>
@@ -65,7 +64,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnUpdate" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Редагувати і-цію">
+                        <Button fx:id="btnUpdate" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdate" prefHeight="30.0" prefWidth="200.0" text="Редагувати і-цію">
                            <VBox.margin>
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
@@ -73,7 +72,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnDelete" layoutX="15.0" layoutY="95.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Видалити співробітника">
+                        <Button fx:id="btnDelete" layoutX="15.0" layoutY="95.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDelete" prefHeight="30.0" prefWidth="200.0" text="Видалити співробітника">
                            <VBox.margin>
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
