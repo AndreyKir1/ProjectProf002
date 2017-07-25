@@ -32,14 +32,14 @@ public class EmployeeFirm {
     public EmployeeFirm() {
     }
 
-    public EmployeeFirm(String surname, String name, String lastName, Integer age, Date bitrhDay,
+    public EmployeeFirm(String surname, String name, String lastName, Date bitrhDay,
                         Date dateOfStarWorking, EmployeeRols employeeRols, AccountEmployee accountEmployee) {
         this.surname = surname;
         this.name = name;
         this.lastName = lastName;
-        this.age = age;
         this.bitrhDay = bitrhDay;
         this.dateOfStarWorking = dateOfStarWorking;
+        this.age = new Date().getYear() - bitrhDay.getYear();
         this.employeeRols = employeeRols;
         this.account = false;
         this.accountEmployee = accountEmployee;
