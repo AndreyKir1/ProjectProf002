@@ -226,13 +226,13 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <children>
-                  <Button fx:id="btnUpdate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="85.0" text="Редагувати" HBox.hgrow="NEVER" />
-                  <Button fx:id="btnDelete" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="85.0" text="Видалити">
+                  <Button fx:id="btnUpdate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdate" prefHeight="30.0" prefWidth="85.0" text="Редагувати" HBox.hgrow="NEVER" />
+                  <Button fx:id="btnDelete" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDelete" prefHeight="30.0" prefWidth="85.0" text="Видалити">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnCancel" layoutX="125.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="85.0" text="Cancel">
+                  <Button fx:id="btnCancel" layoutX="125.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#prerssCancel" prefHeight="30.0" prefWidth="85.0" text="Cancel">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

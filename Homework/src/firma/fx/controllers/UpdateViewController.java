@@ -7,7 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class UpdateController {
+public class UpdateViewController {
+
+    @FXML
+    private static Stage stageRoot;
+
     @FXML
     private DatePicker fldDateOfStartWorking;
 
@@ -41,15 +45,21 @@ public class UpdateController {
     @FXML
     private TextField fldLastName;
 
+    public static void setStageRoot(Stage stageRoot) {
+        UpdateViewController.stageRoot = stageRoot;
+    }
+
     @FXML
     private void pressSave(){
         Stage stage = (Stage) btnSave.getScene().getWindow();
         stage.close();
+        stageRoot.show();
     }
 
     @FXML
     private void pressCancel(){
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
+        stageRoot.show();
     }
 }

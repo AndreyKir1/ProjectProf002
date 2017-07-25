@@ -1,12 +1,13 @@
 package firma.fx.controllers;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class DeleteController {
+public class DeleteVFormController {
+    @FXML
+    private static Stage stageRoot;
 
     @FXML
     private Button btnCancel;
@@ -17,10 +18,8 @@ public class DeleteController {
     @FXML
     private Label lbtext;
 
-    @FXML
-    private void pressOK(){
-        Stage stage = (Stage) btnOK.getScene().getWindow();
-        stage.close();
+    public static void setStageRoot(Stage stageRoot) {
+        DeleteVFormController.stageRoot = stageRoot;
     }
 
     @FXML
@@ -29,4 +28,15 @@ public class DeleteController {
         stage.close();
     }
 
+    @FXML
+    private void pressOK(){
+        Stage stage = (Stage) btnOK.getScene().getWindow();
+        stage.close();
+        stageRoot.close();
+    }
+
+    @FXML
+    private void pressUpdate(){
+
+    }
 }

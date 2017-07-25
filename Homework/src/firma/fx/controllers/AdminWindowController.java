@@ -95,6 +95,8 @@ public class AdminWindowController {
             stage.setScene(scene);
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(btnShovInfo.getScene().getWindow());
+            DeleteVFormController.setStageRoot(stage);
+            UpdateViewController.setStageRoot(stage);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
