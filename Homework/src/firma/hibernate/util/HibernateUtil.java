@@ -1,4 +1,4 @@
-package firma.util;
+package firma.hibernate.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
