@@ -63,7 +63,7 @@ public class ViewController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Редагування даних");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/UpdateViewForm.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/UpdateViewForm.fxml"));
             Scene scene = new Scene(root);
             stage.setMinWidth(315);
             stage.setMinHeight(500);
@@ -85,7 +85,7 @@ public class ViewController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Видалення співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/DeleteViewForm.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/DeleteViewForm.fxml"));
             Scene scene = new Scene(root);
             stage.setResizable(false);
             stage.setScene(scene);

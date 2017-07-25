@@ -48,7 +48,7 @@ public class LoginController {
                 stage.setTitle("База даних працівників підприємства");
                 stage.setMinHeight(600);
                 stage.setMinWidth(800);
-                Parent root = FXMLLoader.load(getClass().getResource("/view/AdminWindow.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();

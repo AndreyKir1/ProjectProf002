@@ -89,7 +89,7 @@ public class AdminWindowController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Детальна інформація");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/View.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/View.fxml"));
             Scene scene = new Scene (root);
             stage.setResizable(false);
             stage.setScene(scene);
@@ -108,7 +108,7 @@ public class AdminWindowController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Додати нового співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Add.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Add.fxml"));
             Scene scene = new Scene(root);
             stage.setMinWidth(315);
             stage.setMinHeight(360);
@@ -128,7 +128,7 @@ public class AdminWindowController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Редагувати дані співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Update.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Update.fxml"));
             Scene scene = new Scene(root);
             stage.setMinWidth(315);
             stage.setMinHeight(500);
@@ -148,7 +148,7 @@ public class AdminWindowController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Видалення співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Delete.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Delete.fxml"));
             Scene scene = new Scene(root);
             stage.setResizable(false);
             stage.setScene(scene);
