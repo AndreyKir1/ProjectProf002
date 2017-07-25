@@ -1,6 +1,6 @@
 package firma.fx.controllers;
 
-import firma.entity.EmployeeFirm;
+import firma.hibernate.entity.EmployeeFirm;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

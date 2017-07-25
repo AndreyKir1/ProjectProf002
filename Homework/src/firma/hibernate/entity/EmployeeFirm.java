@@ -1,4 +1,4 @@
-package firma.entity;
+package firma.hibernate.entity;
 
 import firma.support.EmployeeRols;
 
