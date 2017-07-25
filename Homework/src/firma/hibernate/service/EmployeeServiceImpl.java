@@ -1,25 +1,27 @@
 package firma.hibernate.service;
 
-import firma.hibernate.dao.AccountDAO;
-import firma.hibernate.dao.AccountDAOimpl;
-import firma.hibernate.entity.AccountEmployee;
+import firma.hibernate.dao.EmployeeDAO;
+import firma.hibernate.dao.EmployeeDAOimpl;
+import firma.hibernate.entity.EmployeeFirm;
 
 import java.util.List;
 
-public class AccountServiceImpl implements AccountService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private AccountDAO dao;
+    private EmployeeDAO dao;
 
-    public AccountServiceImpl () {dao = new AccountDAOimpl(); }
+    public EmployeeServiceImpl () {
+        dao = new EmployeeDAOimpl();
+    }
 
     @Override
-    public Long create(AccountEmployee account) {
-        if (account != null) return dao.create(account);
+    public Long create(EmployeeFirm employee) {
+        if (employee != null) return dao.create(employee);
         else return null;
     }
 
     @Override
-    public AccountEmployee read(Long id) {
+    public EmployeeFirm read(Long id) {
         if (dao.read(id) != null) return dao.read(id);
         else {
             System.out.println("Something wrong :(");
@@ -28,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean update(AccountEmployee update) {
+    public boolean update(EmployeeFirm update) {
         if (update != null) return dao.update(update);
         else {
             return false;
@@ -36,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean delete(AccountEmployee delete) {
+    public boolean delete(EmployeeFirm delete) {
         if (delete != null) return dao.delete(delete);
         else {
             return false;
@@ -44,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountEmployee> getAll() {
+    public List<EmployeeFirm> getAll() {
         return dao.getAll();
     }
 }

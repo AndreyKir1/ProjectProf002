@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class FirmaDAOimpl implements FirmaDAO {
+public class EmployeeDAOimpl implements EmployeeDAO {
     private SessionFactory factory = HibernateUtil.getFactory();
 
     @Override

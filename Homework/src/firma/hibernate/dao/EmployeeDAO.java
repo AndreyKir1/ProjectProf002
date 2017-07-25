@@ -4,7 +4,7 @@ import firma.hibernate.entity.EmployeeFirm;
 
 import java.util.List;
 
-public interface FirmaDAO {
+public interface EmployeeDAO {
     Long create(EmployeeFirm employee);
     EmployeeFirm read(Long id);
     boolean update(EmployeeFirm employee);

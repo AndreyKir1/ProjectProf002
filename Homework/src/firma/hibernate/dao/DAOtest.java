@@ -15,7 +15,7 @@ public class DAOtest {
     public static void main(String[] args) throws ParseException {
         SessionFactory factory = HibernateUtil.getFactory();
         Session session = factory.openSession();
-        FirmaDAO daoFirma = new FirmaDAOimpl();
+        EmployeeDAO daoFirma = new EmployeeDAOimpl();
         AccountDAO daoAccount = new AccountDAOimpl();
 
         AccountEmployee account1 = new AccountEmployee("login1", "password1");
