@@ -16,10 +16,17 @@ public class FirmaDAOimpl implements FirmaDAO {
     public Long create(EmployeeFirm employee) {
         Session session = factory.openSession();
         session.beginTransaction();
-        Long id = (Long) session.save(employee);
-        session.getTransaction().commit();
-        session.close();
-        return id;
+        try {
+            Long id = (Long) session.save(employee);
+            session.getTransaction().commit();
+            return id;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return null;
+        }finally {
+            session.close();
+        }
     }
 
     @Override
