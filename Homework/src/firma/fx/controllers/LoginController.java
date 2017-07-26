@@ -151,6 +151,7 @@ public class LoginController {
         employeeService.create(employee10);
 
         session.close();
+//        HibernateUtil.getFactory().close();
     }
 
 

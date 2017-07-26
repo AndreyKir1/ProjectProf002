@@ -25,20 +25,22 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AdminWindowController {
     @FXML
-    private static ObservableList<EmployeeFirm> listEmployee;
+    public static ObservableList<EmployeeFirm> listEmployee;
 
     @FXML
     private static ObservableList<AccountEmployee> listAccount;
 
-    private EmployeeService employeeService;
+    private EmployeeService employeeService = new EmployeeServiceImpl();
 
-    private AccountService accountService;
+    private AccountService accountService = new AccountServiceImpl();
 
     @FXML
     private Button btnUpdate;
@@ -79,31 +81,26 @@ public class AdminWindowController {
     @FXML
     private TableColumn<EmployeeFirm, Date> columnDateStartOfWork;
 
+    public void updateListEmployee(){
+        listEmployee.clear();
+        listEmployee.addAll(employeeService.getAll());
+    }
+
     @FXML
     private void initialize() throws ParseException {
-        accountService = new AccountServiceImpl();
-        employeeService = new EmployeeServiceImpl();
-
         columnSurname.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("surname"));
         columnName.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("name"));
         columnLastName.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("lastName"));
         columnDateStartOfWork.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, Date>("dateOfStarWorking"));
         columnAccount.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("account"));//може доведеться булеан приводити до стрінга
+
         listEmployee = FXCollections.observableArrayList(employeeService.getAll());
         tblView.setItems(listEmployee);
         tblView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getClickCount() == 2){
-                    EmployeeFirm selectedItem = tblView.getSelectionModel().getSelectedItem();
+                if (event.getClickCount() == 2) {
                     pressShowDetails();
-//                    viewController.initialize(selectedItem.getSurname(),
-//                            selectedItem.getName(), selectedItem.getLastName());
-//                    viewController = new ViewController();
-//                    pressShowDetails();
-//                    viewController.getLbSurname().setText(selectedItem.getSurname());
-//                    viewController.getLbName().setText(selectedItem.getName());
-//                    viewController.getLbLastName().setText(selectedItem.getLastName());
                 }
             }
         });
@@ -123,12 +120,36 @@ public class AdminWindowController {
     }
 
     @FXML
-    private void pressShowDetails(){
+    private void pressShowDetails() {
+        //доробити з даними про аккаунт
+        EmployeeFirm selectedItem = tblView.getSelectionModel().getSelectedItem();
+        Long id = selectedItem.getId();
+        EmployeeFirm currentEmployee = employeeService.read(id);
+        pressShow(currentEmployee.getSurname(), currentEmployee.getName(), currentEmployee.getLastName(),
+                new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getBitrhDay()),
+                new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getDateOfStarWorking()), currentEmployee.getAge(),
+                currentEmployee.getEmployeeRols().toString());
+    }
+
+    @FXML
+    private void pressShow(String surmane, String name, String lastname, String birthDay, String dateOfStartWorking, Integer age, String role) {
         try {
             Stage stage = new Stage();
             stage.setTitle("Детальна інформація");
-            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/View.fxml"));
-            Scene scene = new Scene (root);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/firma/view/View.fxml"));
+            Parent root = fxmlLoader.load();
+            ViewController viewController = fxmlLoader.getController();
+//            встановлення полів вікна перегляду
+            viewController.getLbSurname().setText(surmane);
+            viewController.getLbName().setText(name);
+            viewController.getLbLastName().setText(lastname);
+            viewController.getLbBirthDay().setText(birthDay);
+            viewController.getLbDayOfStartWorking().setText(dateOfStartWorking);
+            viewController.getLbAge().setText(age.toString());
+            viewController.getLbRole().setText(role);
+
+            Scene scene = new Scene(root);
             stage.setResizable(false);
             stage.setScene(scene);
             stage.initModality(Modality.WINDOW_MODAL);
@@ -142,7 +163,7 @@ public class AdminWindowController {
     }
 
     @FXML
-    private void pressAdd(){
+    private void pressAdd() throws ParseException {
         try {
             Stage stage = new Stage();
             stage.setTitle("Додати нового співробітника");
@@ -162,7 +183,7 @@ public class AdminWindowController {
     }
 
     @FXML
-    private void pressUpdate(){
+    private void pressUpdate() {
         try {
             Stage stage = new Stage();
             stage.setTitle("Редагувати дані співробітника");
@@ -182,7 +203,7 @@ public class AdminWindowController {
     }
 
     @FXML
-    private void pressDelete(){
+    private void pressDelete() {
         try {
             Stage stage = new Stage();
             stage.setTitle("Видалення співробітника");

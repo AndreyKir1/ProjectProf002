@@ -66,12 +66,29 @@ public class ViewController {
         return lbLastName;
     }
 
-//    @FXML
-//    public void initialize(String surName, String name, String lastName){
-//        lbSurname.setText(surName);
-//        lbName.setText(name);
-//        lbLastName.setText(lastName);
-//    }
+    public Label getLbPassword() {
+        return lbPassword;
+    }
+
+    public Label getLbDayOfStartWorking() {
+        return lbDayOfStartWorking;
+    }
+
+    public Label getLbBirthDay() {
+        return lbBirthDay;
+    }
+
+    public Label getLbAge() {
+        return lbAge;
+    }
+
+    public Label getLbRole() {
+        return lbRole;
+    }
+
+    public Label getLbLogin() {
+        return lbLogin;
+    }
 
     @FXML
     public static void setStageAdminWindow(Stage stageAdminWindow) {
