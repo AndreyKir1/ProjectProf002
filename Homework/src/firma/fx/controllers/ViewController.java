@@ -52,6 +52,28 @@ public class ViewController {
     private Label lbLastName;
 
     @FXML
+    public Label getLbName() {
+        return lbName;
+    }
+
+    @FXML
+    public Label getLbSurname() {
+        return lbSurname;
+    }
+
+    @FXML
+    public Label getLbLastName() {
+        return lbLastName;
+    }
+
+//    @FXML
+//    public void initialize(String surName, String name, String lastName){
+//        lbSurname.setText(surName);
+//        lbName.setText(name);
+//        lbLastName.setText(lastName);
+//    }
+
+    @FXML
     public static void setStageAdminWindow(Stage stageAdminWindow) {
         ViewController.stageAdminWindow = stageAdminWindow;
     }

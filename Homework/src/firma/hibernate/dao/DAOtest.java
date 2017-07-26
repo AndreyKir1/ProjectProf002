@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class DAOtest {
 
@@ -60,6 +61,12 @@ public class DAOtest {
         daoFirma.create(employee3);
         daoFirma.create(employee4);
         daoFirma.create(employee5);
+
+        List<AccountEmployee> list = daoAccount.getAll();
+        for(AccountEmployee el:list){
+            System.out.println(el.getLogin() + " " + el.getPassword());
+        }
+
 
         session.close();
         HibernateUtil.getFactory().close();
