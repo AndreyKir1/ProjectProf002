@@ -1,9 +1,7 @@
 package firma.fx.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +12,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ViewController {
+    @FXML
+    private static Stage stageAdminWindow;
 
     @FXML
     private Button btnCancel;
@@ -51,6 +51,10 @@ public class ViewController {
     @FXML
     private Label lbLastName;
 
+    @FXML
+    public static void setStageAdminWindow(Stage stageAdminWindow) {
+        ViewController.stageAdminWindow = stageAdminWindow;
+    }
 
     @FXML
     public void prerssCancel() {
@@ -70,9 +74,9 @@ public class ViewController {
             stage.setMaxWidth(415);
             stage.setMaxHeight(500);
             stage.setScene(scene);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(btnDelete.getScene().getWindow());
             Stage stageRoot = (Stage) btnUpdate.getScene().getWindow();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(stageAdminWindow);
             stageRoot.hide();
             stage.show();
         } catch (IOException e) {

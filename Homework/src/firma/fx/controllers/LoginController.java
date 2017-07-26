@@ -51,6 +51,7 @@ public class LoginController {
                 Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                ViewController.setStageAdminWindow(stage);
                 stage.show();
                 Stage curentStage = (Stage) btnOK.getScene().getWindow();
                 curentStage.close();
