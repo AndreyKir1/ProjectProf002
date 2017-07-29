@@ -17,7 +17,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="fldSurName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="fldSurName" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -30,7 +30,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="fldName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="fldName" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -43,7 +43,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="fldLastName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="fldLastName" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -56,7 +56,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="fldBirthDay" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <DatePicker fx:id="fldBirthDay" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -69,7 +69,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lbAge" layoutX="195.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" text="45">
+                  <Label fx:id="lbAge" layoutX="195.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -94,7 +94,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="fldDateOfStartWorking" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <DatePicker fx:id="fldDateOfStartWorking" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -107,7 +107,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="fldRole" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <ChoiceBox fx:id="fldRole" focusTraversable="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -118,8 +118,8 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <children>
-                  <Button fx:id="btnSave" defaultButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSave" prefHeight="30.0" prefWidth="85.0" text="Зберегти" HBox.hgrow="NEVER" />
-                  <Button fx:id="btnCancel" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="85.0" text="Відмінити">
+                  <Button fx:id="btnSave" defaultButton="true" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSave" prefHeight="30.0" prefWidth="85.0" text="Зберегти" HBox.hgrow="NEVER" />
+                  <Button fx:id="btnCancel" cancelButton="true" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="85.0" text="Відмінити">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

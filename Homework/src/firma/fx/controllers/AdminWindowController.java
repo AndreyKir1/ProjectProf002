@@ -6,8 +6,6 @@ import firma.hibernate.service.AccountService;
 import firma.hibernate.service.AccountServiceImpl;
 import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
-import firma.hibernate.util.HibernateUtil;
-import firma.support.EmployeeRols;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -34,56 +32,50 @@ import java.util.Date;
 public class AdminWindowController {
     @FXML
     public static ObservableList<EmployeeFirm> listEmployee;
-
     @FXML
     private static ObservableList<AccountEmployee> listAccount;
-
     private EmployeeService employeeService = new EmployeeServiceImpl();
-
     private AccountService accountService = new AccountServiceImpl();
+    private static EmployeeFirm currentEmployee;
 
     @FXML
     private Button btnUpdate;
-
     @FXML
     private TableView<EmployeeFirm> tblView;
-
     @FXML
     private Button btnFind;
-
     @FXML
     private Button btnDelete;
-
     @FXML
     private Button btnAdd;
-
     @FXML
     private Button btnShovInfo;
-
     @FXML
     private Label lblCountEmployee;
-
     @FXML
     private TextField fldFind;
-
     @FXML
     private TableColumn<EmployeeFirm, String> columnLastName;
-
     @FXML
     private TableColumn<EmployeeFirm, String> columnSurname;
-
     @FXML
     private TableColumn<EmployeeFirm, String> columnAccount;
-
     @FXML
     private TableColumn<EmployeeFirm, String> columnName;
-
     @FXML
     private TableColumn<EmployeeFirm, Date> columnDateStartOfWork;
 
-    public void updateListEmployee(){
+    public EmployeeFirm getCurrentEmployee() {
+        return currentEmployee;
+    }
+
+    public void updateListEmployee() {
         listEmployee.clear();
         listEmployee.addAll(employeeService.getAll());
+    }
+
+    private void updateCountLbl() {
+        lblCountEmployee.setText("Всього співробітників в базі: " + listEmployee.size());
     }
 
     @FXML
@@ -105,8 +97,8 @@ public class AdminWindowController {
             }
         });
 
-
         updateCountLbl();
+
         listEmployee.addListener(new ListChangeListener<EmployeeFirm>() {
             @Override
             public void onChanged(Change<? extends EmployeeFirm> c) {
@@ -115,24 +107,23 @@ public class AdminWindowController {
         });
     }
 
-    private void updateCountLbl() {
-        lblCountEmployee.setText("Всього співробітників в базі: " + listEmployee.size());
-    }
-
     @FXML
     private void pressShowDetails() {
-        //доробити з даними про аккаунт
-        EmployeeFirm selectedItem = tblView.getSelectionModel().getSelectedItem();
-        Long id = selectedItem.getId();
-        EmployeeFirm currentEmployee = employeeService.read(id);
-        pressShow(currentEmployee.getSurname(), currentEmployee.getName(), currentEmployee.getLastName(),
-                new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getBitrhDay()),
-                new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getDateOfStarWorking()), currentEmployee.getAge(),
-                currentEmployee.getEmployeeRols().toString());
+        if (tblView.getSelectionModel().getSelectedItem() != null) {
+            EmployeeFirm selectedItem = tblView.getSelectionModel().getSelectedItem();
+            Long id = selectedItem.getId();
+            currentEmployee = employeeService.read(id);
+            AccountEmployee currentAccount = currentEmployee.getAccountEmployee();
+
+            pressShow(currentEmployee.getSurname(), currentEmployee.getName(), currentEmployee.getLastName(),
+                    new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getBitrhDay()),
+                    new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getDateOfStarWorking()), currentEmployee.getAge(),
+                    currentEmployee.getEmployeeRols().toString(), currentAccount.getLogin(), currentAccount.getPassword());
+        }
     }
 
     @FXML
-    private void pressShow(String surmane, String name, String lastname, String birthDay, String dateOfStartWorking, Integer age, String role) {
+    private void pressShow(String surmane, String name, String lastname, String birthDay, String dateOfStartWorking, Integer age, String role, String login, String password) {
         try {
             Stage stage = new Stage();
             stage.setTitle("Детальна інформація");
@@ -148,6 +139,8 @@ public class AdminWindowController {
             viewController.getLbDayOfStartWorking().setText(dateOfStartWorking);
             viewController.getLbAge().setText(age.toString());
             viewController.getLbRole().setText(role);
+            viewController.getLbLogin().setText(login);
+            viewController.getLbPassword().setText(password);
 
             Scene scene = new Scene(root);
             stage.setResizable(false);
