@@ -53,7 +53,7 @@ public class EmployeeDAOimpl implements EmployeeDAO {
             query.setParameter("bitrhDay", employee.getBitrhDay());
             query.setParameter("dateOfStarWorking", employee.getDateOfStarWorking());
             query.setParameter("employeeRols", employee.getEmployeeRols());
-            query.setParameter("account", employee.getAccountEmployee());
+            query.setParameter("account", employee.isAccount());
             query.setParameter("id", employee.getId());
             query.executeUpdate();
             session.getTransaction().commit();

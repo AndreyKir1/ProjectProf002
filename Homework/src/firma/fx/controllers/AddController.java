@@ -97,6 +97,8 @@ public class AddController {
             if (newValue) fldDateOfStartWorking.setEffect(null);
         });
 
+        fldBirthDay.setEditable(false);
+        fldDateOfStartWorking.setEditable(false);
 
 //        fldName.addEventHandler(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
 //            @Override

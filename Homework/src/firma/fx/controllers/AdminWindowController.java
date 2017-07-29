@@ -37,6 +37,7 @@ public class AdminWindowController {
     private EmployeeService employeeService = new EmployeeServiceImpl();
     private AccountService accountService = new AccountServiceImpl();
     private static EmployeeFirm currentEmployee;
+    private static ViewController viewController;
 
     @FXML
     private Button btnUpdate;
@@ -67,6 +68,10 @@ public class AdminWindowController {
 
     public EmployeeFirm getCurrentEmployee() {
         return currentEmployee;
+    }
+
+    public static ViewController getViewController() {
+        return viewController;
     }
 
     public void updateListEmployee() {
@@ -130,7 +135,7 @@ public class AdminWindowController {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/firma/view/View.fxml"));
             Parent root = fxmlLoader.load();
-            ViewController viewController = fxmlLoader.getController();
+            viewController = fxmlLoader.getController();
 //            встановлення полів вікна перегляду
             viewController.getLbSurname().setText(surmane);
             viewController.getLbName().setText(name);
@@ -177,21 +182,24 @@ public class AdminWindowController {
 
     @FXML
     private void pressUpdate() {
-        try {
-            Stage stage = new Stage();
-            stage.setTitle("Редагувати дані співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Update.fxml"));
-            Scene scene = new Scene(root);
-            stage.setMinWidth(315);
-            stage.setMinHeight(500);
-            stage.setMaxWidth(415);
-            stage.setMaxHeight(500);
-            stage.setScene(scene);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(btnUpdate.getScene().getWindow());
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        currentEmployee = tblView.getSelectionModel().getSelectedItem();
+        if (currentEmployee != null) {
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Редагувати дані співробітника");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Update.fxml"));
+                Scene scene = new Scene(root);
+                stage.setMinWidth(315);
+                stage.setMinHeight(500);
+                stage.setMaxWidth(415);
+                stage.setMaxHeight(500);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnUpdate.getScene().getWindow());
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
