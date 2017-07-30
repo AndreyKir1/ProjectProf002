@@ -124,4 +124,9 @@ public class EmployeeFirm {
     public void setAccountEmployee(AccountEmployee accountEmployee) {
         this.accountEmployee = accountEmployee;
     }
+
+    @Override
+    public String toString() {
+        return surname + " " + name + " " + lastName;
+    }
 }

@@ -1,5 +1,6 @@
 package firma.hibernate.dao;
 
+import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.util.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -7,6 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class EmployeeDAOimpl implements EmployeeDAO {
@@ -35,6 +37,24 @@ public class EmployeeDAOimpl implements EmployeeDAO {
         session.beginTransaction();
         EmployeeFirm employee = session.get(EmployeeFirm.class, id);
         return employee;
+    }
+
+    @Override
+    public EmployeeFirm readByAccount(AccountEmployee account) {
+        Session session = factory.openSession();
+        session.beginTransaction();
+        try{
+            Query query = session.createQuery("from EmployeeFirm where accountEmployee =:accountEmployee");
+            query.setParameter("accountEmployee", account);
+            session.getTransaction().commit();
+            EmployeeFirm employee = (EmployeeFirm) query.list().get(0);
+            return employee;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            session.close();
+        }
     }
 
     @Override

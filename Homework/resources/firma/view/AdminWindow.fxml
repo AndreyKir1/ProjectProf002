@@ -31,7 +31,7 @@
             </MenuBar>
             <HBox prefHeight="540.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="tblView" prefHeight="530.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tblView" focusTraversable="false" prefHeight="530.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="columnSurname" prefWidth="75.0" text="Прізвище" />
                       <TableColumn fx:id="columnName" prefWidth="75.0" text="Ім'я" />
@@ -48,7 +48,7 @@
                   </TableView>
                   <VBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="btnShovInfo" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Показати детальну і-цію">
+                        <Button fx:id="btnShovInfo" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Показати детальну і-цію">
                            <VBox.margin>
                               <Insets bottom="5.0" left="5.0" />
                            </VBox.margin>
@@ -56,7 +56,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnAdd" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressAdd" prefHeight="30.0" prefWidth="200.0" text="Додати нового співробітника">
+                        <Button fx:id="btnAdd" focusTraversable="false" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressAdd" prefHeight="30.0" prefWidth="200.0" text="Додати нового співробітника">
                            <VBox.margin>
                               <Insets left="5.0" top="5.0" />
                            </VBox.margin>
@@ -64,7 +64,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnUpdate" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdate" prefHeight="30.0" prefWidth="200.0" text="Редагувати і-цію">
+                        <Button fx:id="btnUpdate" focusTraversable="false" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdate" prefHeight="30.0" prefWidth="200.0" text="Редагувати і-цію">
                            <VBox.margin>
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
@@ -72,7 +72,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnDelete" layoutX="15.0" layoutY="95.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDelete" prefHeight="30.0" prefWidth="200.0" text="Видалити співробітника">
+                        <Button fx:id="btnDelete" focusTraversable="false" layoutX="15.0" layoutY="95.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDelete" prefHeight="30.0" prefWidth="200.0" text="Видалити співробітника">
                            <VBox.margin>
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
@@ -97,12 +97,20 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="fldFind" minHeight="-Infinity" prefHeight="30.0" prefWidth="225.0">
+                  <TextField fx:id="fldFind" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="225.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="btnFind" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Шукати користувача" />
+                  <Button fx:id="btnFind" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Шукати користувача" />
+                  <Button fx:id="btnExit" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressExit" prefHeight="30.0" prefWidth="200.0" text="ЗАВЕРШИТИ РОБОТУ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />

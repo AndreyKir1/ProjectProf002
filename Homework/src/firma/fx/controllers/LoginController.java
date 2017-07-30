@@ -81,16 +81,14 @@ public class LoginController {
         listEmployee = employeeService.getAll();
         listAccount = accountService.getAll();
 
-        btnOK.setFocusTraversable(true);
-//        fldPassword.setFocusTraversable(false);
-//        fldLogin.setFocusTraversable(false);
-
-
         for(AccountEmployee el:listAccount){
-            if (fldLogin.getText().equals(el.getLogin()) && fldPassword.getText().equals(el.getPassword())) {
+
+            if (fldLogin.getText().equals(el.getLogin()) && fldPassword.getText().equals(el.getPassword()) && employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.ADMINISTRATOR)) {
                 try {
+                    EmployeeFirm currentEmployee = employeeService.readByAccount(el);
                     Stage stage = new Stage();
-                    stage.setTitle("База даних працівників підприємства");
+                    stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
+                    + " . Ви адміністратор системи");
                     stage.setMinHeight(600);
                     stage.setMinWidth(800);
                     Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
@@ -107,7 +105,6 @@ public class LoginController {
             }else{
                 fldPassword.setEffect(new InnerShadow(5, Color.RED));
                 fldLogin.setEffect(new InnerShadow(5, Color.RED));
-//                lbIncorrectLogPass.setText("Некоректне введення логіну чи паролю!");
             }
         }
     }
@@ -130,21 +127,18 @@ public class LoginController {
         AccountEmployee account10 = new AccountEmployee("login10", "password10");
         AccountEmployee account11 = new AccountEmployee("1", "1");
 
-
         //      create Employees
-
         EmployeeFirm employee1 = new EmployeeFirm("Surname1", "Name1", "LastName1", new SimpleDateFormat("dd.MM.yyy").parse("01.01.2001"), new SimpleDateFormat("dd.MM.yyy").parse("01.01.2017"), EmployeeRols.ADMINISTRATOR, account1);
-        EmployeeFirm employee2 = new EmployeeFirm("Surname2", "Name2", "LastName2", new SimpleDateFormat("dd.MM.yyy").parse("02.02.2002"), new SimpleDateFormat("dd.MM.yyy").parse("02.02.2017"), EmployeeRols.ADMINISTRATOR, account2);
-        EmployeeFirm employee3 = new EmployeeFirm("Surname3", "Name3", "LastName3", new SimpleDateFormat("dd.MM.yyy").parse("03.03.2003"), new SimpleDateFormat("dd.MM.yyy").parse("03.03.2017"), EmployeeRols.ADMINISTRATOR, account3);
-        EmployeeFirm employee4 = new EmployeeFirm("Surname4", "Name4", "LastName4", new SimpleDateFormat("dd.MM.yyy").parse("04.04.2004"), new SimpleDateFormat("dd.MM.yyy").parse("04.04.2017"), EmployeeRols.ADMINISTRATOR, account4);
-        EmployeeFirm employee5 = new EmployeeFirm("Surname5", "Name5", "LastName5", new SimpleDateFormat("dd.MM.yyy").parse("05.05.2005"), new SimpleDateFormat("dd.MM.yyy").parse("05.05.2017"), EmployeeRols.ADMINISTRATOR, account5);
-        EmployeeFirm employee6 = new EmployeeFirm("Surname6", "Name6", "LastName6", new SimpleDateFormat("dd.MM.yyy").parse("06.06.2006"), new SimpleDateFormat("dd.MM.yyy").parse("06.06.2017"), EmployeeRols.ADMINISTRATOR, account6);
-        EmployeeFirm employee7 = new EmployeeFirm("Surname7", "Name7", "LastName7", new SimpleDateFormat("dd.MM.yyy").parse("07.07.2007"), new SimpleDateFormat("dd.MM.yyy").parse("07.07.2017"), EmployeeRols.ADMINISTRATOR, account7);
-        EmployeeFirm employee8 = new EmployeeFirm("Surname8", "Name8", "LastName8", new SimpleDateFormat("dd.MM.yyy").parse("08.08.2008"), new SimpleDateFormat("dd.MM.yyy").parse("08.08.2017"), EmployeeRols.ADMINISTRATOR, account8);
-        EmployeeFirm employee9 = new EmployeeFirm("Surname9", "Name9", "LastName9", new SimpleDateFormat("dd.MM.yyy").parse("09.09.2009"), new SimpleDateFormat("dd.MM.yyy").parse("09.09.2017"), EmployeeRols.ADMINISTRATOR, account9);
-        EmployeeFirm employee10 = new EmployeeFirm("Surname10", "Name10", "LastName10", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.ADMINISTRATOR, account10);
+        EmployeeFirm employee2 = new EmployeeFirm("Surname2", "Name2", "LastName2", new SimpleDateFormat("dd.MM.yyy").parse("02.02.2002"), new SimpleDateFormat("dd.MM.yyy").parse("02.02.2017"), EmployeeRols.MANAGER, account2);
+        EmployeeFirm employee3 = new EmployeeFirm("Surname3", "Name3", "LastName3", new SimpleDateFormat("dd.MM.yyy").parse("03.03.2003"), new SimpleDateFormat("dd.MM.yyy").parse("03.03.2017"), EmployeeRols.MANAGER, account3);
+        EmployeeFirm employee4 = new EmployeeFirm("Surname4", "Name4", "LastName4", new SimpleDateFormat("dd.MM.yyy").parse("04.04.2004"), new SimpleDateFormat("dd.MM.yyy").parse("04.04.2017"), EmployeeRols.MANAGER, account4);
+        EmployeeFirm employee5 = new EmployeeFirm("Surname5", "Name5", "LastName5", new SimpleDateFormat("dd.MM.yyy").parse("05.05.2005"), new SimpleDateFormat("dd.MM.yyy").parse("05.05.2017"), EmployeeRols.MANAGER, account5);
+        EmployeeFirm employee6 = new EmployeeFirm("Surname6", "Name6", "LastName6", new SimpleDateFormat("dd.MM.yyy").parse("06.06.2006"), new SimpleDateFormat("dd.MM.yyy").parse("06.06.2017"), EmployeeRols.MANAGER, account6);
+        EmployeeFirm employee7 = new EmployeeFirm("Surname7", "Name7", "LastName7", new SimpleDateFormat("dd.MM.yyy").parse("07.07.2007"), new SimpleDateFormat("dd.MM.yyy").parse("07.07.2017"), EmployeeRols.MANAGER, account7);
+        EmployeeFirm employee8 = new EmployeeFirm("Surname8", "Name8", "LastName8", new SimpleDateFormat("dd.MM.yyy").parse("08.08.2008"), new SimpleDateFormat("dd.MM.yyy").parse("08.08.2017"), EmployeeRols.MANAGER, account8);
+        EmployeeFirm employee9 = new EmployeeFirm("Surname9", "Name9", "LastName9", new SimpleDateFormat("dd.MM.yyy").parse("09.09.2009"), new SimpleDateFormat("dd.MM.yyy").parse("09.09.2017"), EmployeeRols.MANAGER, account9);
+        EmployeeFirm employee10 = new EmployeeFirm("Surname10", "Name10", "LastName10", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.MANAGER, account10);
         EmployeeFirm employee11 = new EmployeeFirm("Surname11", "Name11", "LastName11", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.ADMINISTRATOR, account11);
-
 
 //      seve Accounts in DB
         accountService.create(account1);
@@ -159,7 +153,6 @@ public class LoginController {
         accountService.create(account10);
         accountService.create(account11);
 
-
 //      save Employees in DB
         employeeService.create(employee1);
         employeeService.create(employee2);
@@ -172,7 +165,6 @@ public class LoginController {
         employeeService.create(employee9);
         employeeService.create(employee10);
         employeeService.create(employee11);
-
 
         session.close();
 //        HibernateUtil.getFactory().close();

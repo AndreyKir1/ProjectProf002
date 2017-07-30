@@ -2,6 +2,7 @@ package firma.hibernate.service;
 
 import firma.hibernate.dao.EmployeeDAO;
 import firma.hibernate.dao.EmployeeDAOimpl;
+import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
 
 import java.util.List;
@@ -27,6 +28,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             System.out.println("Something wrong :(");
             return null;
         }
+    }
+
+    @Override
+    public EmployeeFirm readByAccount(AccountEmployee account) {
+        if(account != null) return dao.readByAccount(account);
+        else return null;
     }
 
     @Override

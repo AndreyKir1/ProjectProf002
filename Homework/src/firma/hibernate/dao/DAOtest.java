@@ -65,13 +65,13 @@ public class DAOtest {
         daoFirma.create(employee5);
 
         EmployeeService service = new EmployeeServiceImpl();
-        service.delete(employee5);
+//        service.delete(employee5);
 
-        List<AccountEmployee> list = daoAccount.getAll();
-        for(AccountEmployee el:list){
-            System.out.println(el.getLogin() + " " + el.getPassword());
-        }
-
+//        List<AccountEmployee> list = daoAccount.getAll();
+//        for(AccountEmployee el:list){
+//            System.out.println(el.getLogin() + " " + el.getPassword());
+//        }
+        System.out.println(service.readByAccount(account5));
 
         session.close();
         HibernateUtil.getFactory().close();

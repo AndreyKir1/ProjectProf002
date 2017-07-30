@@ -6,6 +6,7 @@ import firma.hibernate.service.AccountService;
 import firma.hibernate.service.AccountServiceImpl;
 import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
+import firma.hibernate.util.HibernateUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -55,6 +56,8 @@ public class AdminWindowController {
     private Label lblCountEmployee;
     @FXML
     private TextField fldFind;
+    @FXML
+    private Button btnExit;
     @FXML
     private TableColumn<EmployeeFirm, String> columnLastName;
     @FXML
@@ -222,5 +225,11 @@ public class AdminWindowController {
             }
         }
 
+    }
+
+    @FXML
+    private void pressExit() {
+        HibernateUtil.getFactory().close();
+        System.exit(0);
     }
 }
