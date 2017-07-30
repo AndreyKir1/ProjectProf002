@@ -77,6 +77,13 @@ public class UpdateController {
         fldLogin.setText(currentAccount.getLogin());
         fldPassword.setText(currentAccount.getPassword());
 
+        fldRole.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                fldRole.setEffect(null);
+            }
+        });
+
         fldSurName.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldSurName.setEffect(null);
         });
@@ -87,13 +94,6 @@ public class UpdateController {
 
         fldLastName.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldLastName.setEffect(null);
-        });
-
-        fldRole.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                fldRole.setEffect(null);
-            }
         });
 
         fldBirthDay.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -119,10 +119,12 @@ public class UpdateController {
     @FXML
     private void pressSave1() {
         shadowEffects();
+        btnSave.requestFocus();
         if (fldSurName.getText().length() > 0 && fldName.getText().length() > 0 && fldLastName.getText().length() > 0 && fldBirthDay.getValue() != null
                 && fldDateOfStartWorking.getValue() != null && fldRole.getValue() != null
                 && !((fldLogin.getText() != null && fldLogin.getText().length() > 0) && (fldPassword.getText() == null || fldPassword.getText().length() <= 0)) &&
-                !((fldLogin.getText() == null || fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() > 0))) {
+                !((fldLogin.getText() == null || fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() > 0))
+                && ((fldDateOfStartWorking.getValue().getYear() - fldBirthDay.getValue().getYear()) > 0)) {
             pressSave();
         }
 
@@ -140,7 +142,7 @@ public class UpdateController {
             currentEmployee.setAccount(true);
             currentAccount.setLogin(fldLogin.getText());
             currentAccount.setPassword(fldPassword.getText());
-        }else if ((fldLogin.getText() == null && fldPassword.getText() == null) || ((fldLogin.getText() != null && fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() <= 0))){
+        } else if ((fldLogin.getText() == null && fldPassword.getText() == null) || ((fldLogin.getText() != null && fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() <= 0))) {
             currentEmployee.setAccount(false);
             currentAccount.setLogin(null);
             currentAccount.setPassword(null);
@@ -176,6 +178,10 @@ public class UpdateController {
                 ((fldLogin.getText() == null || fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() > 0))) {
             fldLogin.setEffect(shadow);
             fldPassword.setEffect(shadow);
+        }
+        if ((fldDateOfStartWorking.getValue().getYear() - fldBirthDay.getValue().getYear()) <= 0){
+            fldBirthDay.setEffect(shadow);
+            fldDateOfStartWorking.setEffect(shadow);
         }
     }
 }

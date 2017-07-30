@@ -112,7 +112,7 @@ public class AddController {
 
     @FXML
     private void pressSave() {
-        btnSave.setFocusTraversable(true);
+        btnSave.requestFocus();
         InnerShadow shadow = new InnerShadow(5, Color.RED);
         if(fldSurName.getText().length() <= 1) fldSurName.setEffect(shadow);
         if(fldName.getText().length() <= 1) fldName.setEffect(shadow);

@@ -74,6 +74,7 @@ public class LoginController {
 
     @FXML
     private void pressOK() {
+        btnOK.requestFocus();
         EmployeeService employeeService = new EmployeeServiceImpl();
         AccountService accountService = new AccountServiceImpl();
 

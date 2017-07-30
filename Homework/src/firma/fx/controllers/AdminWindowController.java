@@ -115,8 +115,8 @@ public class AdminWindowController {
     @FXML
     private void pressShowDetails() {
         if (tblView.getSelectionModel().getSelectedItem() != null) {
-            EmployeeFirm selectedItem = tblView.getSelectionModel().getSelectedItem();
-            Long id = selectedItem.getId();
+            currentEmployee = tblView.getSelectionModel().getSelectedItem();
+            Long id = currentEmployee.getId();
             currentEmployee = employeeService.read(id);
             AccountEmployee currentAccount = currentEmployee.getAccountEmployee();
 
@@ -205,18 +205,22 @@ public class AdminWindowController {
 
     @FXML
     private void pressDelete() {
-        try {
-            Stage stage = new Stage();
-            stage.setTitle("Видалення співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Delete.fxml"));
-            Scene scene = new Scene(root);
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(btnDelete.getScene().getWindow());
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        currentEmployee = tblView.getSelectionModel().getSelectedItem();
+        if (currentEmployee != null) {
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Видалення співробітника");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Delete.fxml"));
+                Scene scene = new Scene(root);
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnDelete.getScene().getWindow());
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }

@@ -2,6 +2,8 @@ package firma.hibernate.dao;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
+import firma.hibernate.service.EmployeeService;
+import firma.hibernate.service.EmployeeServiceImpl;
 import firma.hibernate.util.HibernateUtil;
 import firma.support.EmployeeRols;
 import org.hibernate.Session;
@@ -61,6 +63,9 @@ public class DAOtest {
         daoFirma.create(employee3);
         daoFirma.create(employee4);
         daoFirma.create(employee5);
+
+        EmployeeService service = new EmployeeServiceImpl();
+        service.delete(employee5);
 
         List<AccountEmployee> list = daoAccount.getAll();
         for(AccountEmployee el:list){
