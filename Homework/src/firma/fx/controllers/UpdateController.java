@@ -64,6 +64,8 @@ public class UpdateController {
         fldRole.getItems().setAll(EmployeeRols.ADMINISTRATOR, EmployeeRols.MANAGER);
         currentEmployee = new AdminWindowController().getCurrentEmployee();
         currentAccount = currentEmployee.getAccountEmployee();
+        fldBirthDay.setTooltip(new Tooltip("Дата народження не може бути пізнішою за дату прийому на роботу"));
+        fldDateOfStartWorking.setTooltip(new Tooltip("Дата прийому на роботу не може бути ранішою за дату народження"));
 
         fldSurName.setText(currentEmployee.getSurname());
         fldName.setText(currentEmployee.getName());
@@ -72,7 +74,6 @@ public class UpdateController {
         fldDateOfStartWorking.setValue(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(currentEmployee.getDateOfStarWorking())));
         lbAge.setText(currentEmployee.getAge().toString());
         fldRole.setValue(currentEmployee.getEmployeeRols());
-
 
         fldLogin.setText(currentAccount.getLogin());
         fldPassword.setText(currentAccount.getPassword());

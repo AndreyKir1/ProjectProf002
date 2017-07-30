@@ -68,6 +68,8 @@ public class UpdateViewController {
         fldRole.getItems().setAll(EmployeeRols.ADMINISTRATOR, EmployeeRols.MANAGER);
         currentEmployee = new AdminWindowController().getCurrentEmployee();
         currentAccount = currentEmployee.getAccountEmployee();
+        fldBirthDay.setTooltip(new Tooltip("Дата народження не може бути пізнішою за дату прийому на роботу"));
+        fldDateOfStartWorking.setTooltip(new Tooltip("Дата прийому на роботу не може бути ранішою за дату народження"));
 
         fldSurName.setText(currentEmployee.getSurname());
         fldName.setText(currentEmployee.getName());

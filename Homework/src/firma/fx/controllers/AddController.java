@@ -69,6 +69,8 @@ public class AddController {
     @FXML
     private void initialize() {
         fldRole.getItems().addAll(EmployeeRols.ADMINISTRATOR, EmployeeRols.MANAGER);
+        fldBirthDay.setTooltip(new Tooltip("Дата народження не може бути пізнішою за дату прийому на роботу"));
+        fldDateOfStartWorking.setTooltip(new Tooltip("Дата прийому на роботу не може бути ранішою за дату народження"));
 
         fldSurName.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldSurName.setEffect(null);
