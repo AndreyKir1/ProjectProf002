@@ -102,7 +102,7 @@
                         <Insets right="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="btnFind" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Шукати користувача" />
+                  <Button fx:id="btnFind" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSearch" prefHeight="30.0" prefWidth="150.0" text="Шукати користувача" />
                   <Button fx:id="btnExit" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressExit" prefHeight="30.0" prefWidth="200.0" text="ЗАВЕРШИТИ РОБОТУ">
                      <font>
                         <Font name="System Bold" size="12.0" />

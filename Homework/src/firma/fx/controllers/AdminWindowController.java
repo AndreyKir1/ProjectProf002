@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class AdminWindowController {
     @FXML
@@ -231,5 +232,24 @@ public class AdminWindowController {
     private void pressExit() {
         HibernateUtil.getFactory().close();
         System.exit(0);
+    }
+
+    @FXML
+    private void pressSearch(){
+        if(fldFind.getText() != null && fldFind.getText().length() > 0){
+            List<EmployeeFirm> list = employeeService.getAll();
+            listEmployee.clear();
+            for(EmployeeFirm el: list){
+                if(el.getSurname().toLowerCase().contains(fldFind.getText()) || el.getName().toLowerCase().contains(fldFind.getText())
+                        || el.getLastName().toLowerCase().contains(fldFind.getText())){
+                    listEmployee.add(el);
+                }
+            }
+            if(listEmployee.size() > 0) {
+                fldFind.setText(null);
+            }
+        }else if (fldFind.getText() == null || fldFind.getText().length() == 0){
+            updateListEmployee();
+        }
     }
 }

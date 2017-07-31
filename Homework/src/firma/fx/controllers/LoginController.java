@@ -70,6 +70,7 @@ public class LoginController {
     private void pressCancel() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
+        HibernateUtil.getFactory().close();
     }
 
     @FXML
@@ -81,33 +82,52 @@ public class LoginController {
         listEmployee = employeeService.getAll();
         listAccount = accountService.getAll();
 
-        for(AccountEmployee el:listAccount){
+        for (AccountEmployee el : listAccount) {
+            if (fldLogin.getText().equals(el.getLogin()) && fldPassword.getText().equals(el.getPassword())) {
+                if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.ADMINISTRATOR)) {
+                    try {
+                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        Stage stage = new Stage();
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
+                                + " . Ви адміністратор системи");
+                        stage.setMinHeight(600);
+                        stage.setMinWidth(800);
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        ViewController.setStageAdminWindow(stage);
+                        stage.show();
+                        Stage curentStage = (Stage) btnOK.getScene().getWindow();
+                        curentStage.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            if (fldLogin.getText().equals(el.getLogin()) && fldPassword.getText().equals(el.getPassword()) && employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.ADMINISTRATOR)) {
-                try {
-                    EmployeeFirm currentEmployee = employeeService.readByAccount(el);
-                    Stage stage = new Stage();
-                    stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
-                    + " . Ви адміністратор системи");
-                    stage.setMinHeight(600);
-                    stage.setMinWidth(800);
-                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    ViewController.setStageAdminWindow(stage);
-                    stage.show();
-                    Stage curentStage = (Stage) btnOK.getScene().getWindow();
-                    curentStage.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.MANAGER)) {
+                    try{
+                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        Stage stage = new Stage();
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
+                                + " . Ваш рівень доступу - менеджер");
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/ManagerWindow.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        ViewController.setStageAdminWindow(stage);
+                        stage.show();
+                        Stage curentStage = (Stage) btnOK.getScene().getWindow();
+                        curentStage.close();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
                 }
                 break;
-            }else{
+            } else {
                 fldPassword.setEffect(new InnerShadow(5, Color.RED));
                 fldLogin.setEffect(new InnerShadow(5, Color.RED));
             }
         }
     }
+
     private void testDataEmployee() throws ParseException {
         SessionFactory factory = HibernateUtil.getFactory();
         Session session = factory.openSession();
