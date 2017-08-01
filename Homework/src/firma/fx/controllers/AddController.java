@@ -7,6 +7,7 @@ import firma.hibernate.service.AccountServiceImpl;
 import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
 import firma.support.EmployeeRols;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -21,6 +22,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
+
+import java.lang.reflect.Method;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -46,13 +51,13 @@ public class AddController {
     private Button btnCancel;
 
     @FXML
-    private TextField fldSurName;
+    private CustomTextField fldSurName;
 
     @FXML
     private Button btnSave;
 
     @FXML
-    private TextField fldName;
+    private CustomTextField fldName;
 
     @FXML
     private DatePicker fldBirthDay;
@@ -64,7 +69,7 @@ public class AddController {
     private ChoiceBox<EmployeeRols> fldRole;
 
     @FXML
-    private TextField fldLastName;
+    private CustomTextField fldLastName;
 
     @FXML
     private void initialize() {
@@ -109,7 +114,20 @@ public class AddController {
 //            }
 //        });
 //        btnSave.setDisable(true);
+        setClearInCTF(fldSurName);
+        setClearInCTF(fldName);
+        setClearInCTF(fldLastName);
+    }
 
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

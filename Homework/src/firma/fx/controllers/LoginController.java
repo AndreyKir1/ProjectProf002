@@ -8,6 +8,7 @@ import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
 import firma.hibernate.util.HibernateUtil;
 import firma.support.EmployeeRols;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,10 +21,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomPasswordField;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -43,7 +48,7 @@ public class LoginController {
     private Label lbPassword;
 
     @FXML
-    private PasswordField fldPassword;
+    private CustomPasswordField fldPassword;
 
     @FXML
     private Button btnOK;
@@ -52,7 +57,7 @@ public class LoginController {
     private Label lbLlogin;
 
     @FXML
-    private TextField fldLogin;
+    private CustomTextField fldLogin;
 
     @FXML
     private void initialize() throws ParseException {
@@ -64,6 +69,31 @@ public class LoginController {
         fldLogin.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldLogin.setEffect(null);
         });
+
+        setClearInCPF(fldPassword);
+        setClearInCTF(fldLogin);
+    }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void setClearInCPF(CustomPasswordField cpf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, cpf, cpf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

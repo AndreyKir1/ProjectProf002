@@ -7,6 +7,7 @@ import firma.hibernate.service.AccountServiceImpl;
 import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
 import firma.support.EmployeeRols;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,7 +15,10 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -37,16 +41,16 @@ public class UpdateViewController {
     private Button btnCancel;
 
     @FXML
-    private TextField fldSurName;
+    private CustomTextField fldSurName;
 
     @FXML
-    private TextField fldPassword;
+    private CustomTextField fldPassword;
 
     @FXML
     private Button btnSave;
 
     @FXML
-    private TextField fldName;
+    private CustomTextField fldName;
 
     @FXML
     private DatePicker fldBirthDay;
@@ -58,10 +62,10 @@ public class UpdateViewController {
     private ChoiceBox<EmployeeRols> fldRole;
 
     @FXML
-    private TextField fldLogin;
+    private CustomTextField fldLogin;
 
     @FXML
-    private TextField fldLastName;
+    private CustomTextField fldLastName;
 
     @FXML
     private void initialize() {
@@ -119,10 +123,27 @@ public class UpdateViewController {
 
         fldBirthDay.setEditable(false);
         fldDateOfStartWorking.setEditable(false);
+
+        setClearInCTF(fldLastName);
+        setClearInCTF(fldSurName);
+        setClearInCTF(fldName);
+        setClearInCTF(fldLogin);
+        setClearInCTF(fldPassword);
     }
 
     public static void setStageRoot(Stage stageRoot) {
         UpdateViewController.stageRoot = stageRoot;
+    }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
