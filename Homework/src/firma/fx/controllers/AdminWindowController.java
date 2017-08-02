@@ -7,6 +7,7 @@ import firma.hibernate.service.AccountServiceImpl;
 import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
 import firma.hibernate.util.HibernateUtil;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -24,8 +25,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,7 +60,7 @@ public class AdminWindowController {
     @FXML
     private Label lblCountEmployee;
     @FXML
-    private TextField fldFind;
+    private CustomTextField fldFind;
     @FXML
     private Button btnExit;
     @FXML
@@ -114,7 +118,21 @@ public class AdminWindowController {
                 updateCountLbl();
             }
         });
+
+        setClearInCTF(fldFind);
     }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void pressShowDetails() {
