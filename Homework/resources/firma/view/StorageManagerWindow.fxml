@@ -13,23 +13,23 @@
       <VBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
+               <menus>
+                  <Menu mnemonicParsing="false" text="File">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Edit">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+               </menus>
             </MenuBar>
             <HBox alignment="TOP_RIGHT" prefHeight="373.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
@@ -44,13 +44,13 @@
                            </VBox.margin>
                         </Label>
                         <TableView fx:id="TableViewOrders" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="C1" />
+                              <TableColumn prefWidth="75.0" text="C2" />
+                           </columns>
                         </TableView>
                         <Label text="всього замовлень: ">
                            <font>
@@ -73,12 +73,12 @@
                            </font>
                         </Label>
                         <CheckBox fx:id="chBoxNew" focusTraversable="false" mnemonicParsing="false" text="нові">
-                           <VBox.margin>
-                              <Insets left="5.0" top="5.0" />
-                           </VBox.margin>
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </VBox.margin>
                         </CheckBox>
                         <CheckBox fx:id="chBoxWorked" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" text="в роботі">
                            <font>
@@ -112,7 +112,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <Button fx:id="btnNewOrder" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="створити нове">
+                        <Button fx:id="btnNewOrder" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="перевірити наявність товару">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -120,22 +120,19 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnUpdateOrder" focusTraversable="false" layoutX="15.0" layoutY="167.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="редагувати">
+                        <Label layoutX="15.0" layoutY="145.0" text="Статус замовлення">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="btnChangeStatus" focusTraversable="false" layoutX="15.0" layoutY="247.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="змінити статус">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
+                        </Label>
+                        <ChoiceBox focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0">
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
-                        </Button>
+                        </ChoiceBox>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -155,7 +152,10 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="TableViewPositions" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="TableViewPositions" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="302.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                            <columns>
                               <TableColumn prefWidth="75.0" text="C1" />
                               <TableColumn prefWidth="75.0" text="C2" />
@@ -163,16 +163,13 @@
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
                         </TableView>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <VBox minWidth="-Infinity" prefHeight="237.0" prefWidth="210.0">
+                  <VBox prefHeight="237.0" prefWidth="210.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>

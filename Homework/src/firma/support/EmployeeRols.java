@@ -1,5 +1,5 @@
 package firma.support;
 
 public enum EmployeeRols {
-    ADMINISTRATOR, MANAGER
+    ADMINISTRATOR, SALES_MANAGER, STORAGE_MANAGER
 }

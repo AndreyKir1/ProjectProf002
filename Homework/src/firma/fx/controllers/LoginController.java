@@ -132,9 +132,8 @@ public class LoginController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.MANAGER)) {
-                    try{
+                } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.SALES_MANAGER)) {
+                    try {
                         EmployeeFirm currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
@@ -146,7 +145,23 @@ public class LoginController {
                         stage.show();
                         Stage curentStage = (Stage) btnOK.getScene().getWindow();
                         curentStage.close();
-                    }catch (IOException e){
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.STORAGE_MANAGER)) {
+                    try {
+                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        Stage stage = new Stage();
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
+                                + " . Ваш рівень доступу - кладовщик");
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/StorageManagerWindow.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        ViewController.setStageAdminWindow(stage);
+                        stage.show();
+                        Stage curentStage = (Stage) btnOK.getScene().getWindow();
+                        curentStage.close();
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -178,16 +193,16 @@ public class LoginController {
         AccountEmployee account11 = new AccountEmployee("admin", "admin");
 
         //      create Employees
-        EmployeeFirm employee1 = new EmployeeFirm("Прищепка", "Антоніна", "Анатоліївна", new SimpleDateFormat("dd.MM.yyy").parse("01.01.2001"), new SimpleDateFormat("dd.MM.yyy").parse("01.01.2017"), EmployeeRols.MANAGER, account1);
-        EmployeeFirm employee2 = new EmployeeFirm("Морда", "Ростислав", "Степанович", new SimpleDateFormat("dd.MM.yyy").parse("02.02.2002"), new SimpleDateFormat("dd.MM.yyy").parse("02.02.2017"), EmployeeRols.MANAGER, account2);
-        EmployeeFirm employee3 = new EmployeeFirm("Брунька", "Мирослава", "Пилипівна", new SimpleDateFormat("dd.MM.yyy").parse("03.03.2003"), new SimpleDateFormat("dd.MM.yyy").parse("03.03.2017"), EmployeeRols.MANAGER, account3);
-        EmployeeFirm employee4 = new EmployeeFirm("Безстрашний", "Олег", "Роанович", new SimpleDateFormat("dd.MM.yyy").parse("04.04.2004"), new SimpleDateFormat("dd.MM.yyy").parse("04.04.2017"), EmployeeRols.MANAGER, account4);
-        EmployeeFirm employee5 = new EmployeeFirm("Рєзкий", "Панас", "Миронович", new SimpleDateFormat("dd.MM.yyy").parse("05.05.2005"), new SimpleDateFormat("dd.MM.yyy").parse("05.05.2017"), EmployeeRols.MANAGER, account5);
-        EmployeeFirm employee6 = new EmployeeFirm("Гудзик", "Тетяна", "Мартинівна", new SimpleDateFormat("dd.MM.yyy").parse("06.06.2006"), new SimpleDateFormat("dd.MM.yyy").parse("06.06.2017"), EmployeeRols.MANAGER, account6);
-        EmployeeFirm employee7 = new EmployeeFirm("Рододендрон", "Мирослав", "Іванович", new SimpleDateFormat("dd.MM.yyy").parse("07.07.2007"), new SimpleDateFormat("dd.MM.yyy").parse("07.07.2017"), EmployeeRols.MANAGER, account7);
-        EmployeeFirm employee8 = new EmployeeFirm("Бравий", "Карп", "Маркович", new SimpleDateFormat("dd.MM.yyy").parse("08.08.2008"), new SimpleDateFormat("dd.MM.yyy").parse("08.08.2017"), EmployeeRols.MANAGER, account8);
-        EmployeeFirm employee9 = new EmployeeFirm("Світлячок", "Світлана", "Юріївна", new SimpleDateFormat("dd.MM.yyy").parse("09.09.2009"), new SimpleDateFormat("dd.MM.yyy").parse("09.09.2017"), EmployeeRols.MANAGER, account9);
-        EmployeeFirm employee10 = new EmployeeFirm("Піпетка", "Жанна", "Прокопівна", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.MANAGER, account10);
+        EmployeeFirm employee1 = new EmployeeFirm("Прищепка", "Антоніна", "Анатоліївна", new SimpleDateFormat("dd.MM.yyy").parse("01.01.2001"), new SimpleDateFormat("dd.MM.yyy").parse("01.01.2017"), EmployeeRols.SALES_MANAGER, account1);
+        EmployeeFirm employee2 = new EmployeeFirm("Морда", "Ростислав", "Степанович", new SimpleDateFormat("dd.MM.yyy").parse("02.02.2002"), new SimpleDateFormat("dd.MM.yyy").parse("02.02.2017"), EmployeeRols.SALES_MANAGER, account2);
+        EmployeeFirm employee3 = new EmployeeFirm("Брунька", "Мирослава", "Пилипівна", new SimpleDateFormat("dd.MM.yyy").parse("03.03.2003"), new SimpleDateFormat("dd.MM.yyy").parse("03.03.2017"), EmployeeRols.SALES_MANAGER, account3);
+        EmployeeFirm employee4 = new EmployeeFirm("Безстрашний", "Олег", "Роанович", new SimpleDateFormat("dd.MM.yyy").parse("04.04.2004"), new SimpleDateFormat("dd.MM.yyy").parse("04.04.2017"), EmployeeRols.SALES_MANAGER, account4);
+        EmployeeFirm employee5 = new EmployeeFirm("Рєзкий", "Панас", "Миронович", new SimpleDateFormat("dd.MM.yyy").parse("05.05.2005"), new SimpleDateFormat("dd.MM.yyy").parse("05.05.2017"), EmployeeRols.STORAGE_MANAGER, account5);
+        EmployeeFirm employee6 = new EmployeeFirm("Гудзик", "Тетяна", "Мартинівна", new SimpleDateFormat("dd.MM.yyy").parse("06.06.2006"), new SimpleDateFormat("dd.MM.yyy").parse("06.06.2017"), EmployeeRols.STORAGE_MANAGER, account6);
+        EmployeeFirm employee7 = new EmployeeFirm("Рододендрон", "Мирослав", "Іванович", new SimpleDateFormat("dd.MM.yyy").parse("07.07.2007"), new SimpleDateFormat("dd.MM.yyy").parse("07.07.2017"), EmployeeRols.SALES_MANAGER, account7);
+        EmployeeFirm employee8 = new EmployeeFirm("Бравий", "Карп", "Маркович", new SimpleDateFormat("dd.MM.yyy").parse("08.08.2008"), new SimpleDateFormat("dd.MM.yyy").parse("08.08.2017"), EmployeeRols.STORAGE_MANAGER, account8);
+        EmployeeFirm employee9 = new EmployeeFirm("Світлячок", "Світлана", "Юріївна", new SimpleDateFormat("dd.MM.yyy").parse("09.09.2009"), new SimpleDateFormat("dd.MM.yyy").parse("09.09.2017"), EmployeeRols.SALES_MANAGER, account9);
+        EmployeeFirm employee10 = new EmployeeFirm("Піпетка", "Жанна", "Прокопівна", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.SALES_MANAGER, account10);
         EmployeeFirm employee11 = new EmployeeFirm("Рамік", "Андрій", "Русланович", new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"), new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"), EmployeeRols.ADMINISTRATOR, account11);
         employee1.setAccount(true);
         employee11.setAccount(true);
