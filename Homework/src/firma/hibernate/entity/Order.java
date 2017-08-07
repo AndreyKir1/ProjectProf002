@@ -19,12 +19,15 @@ public class Order {
     private Double totalPrice;
 
     @Temporal(TemporalType.DATE)
+    @Column (name = "CREATE_DATE")
     private Date createOrder;
 
     @Temporal(TemporalType.DATE)
+    @Column (name = "READY_DATE")
     private Date orderReady;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column (name = "ORDER_CONDITIONS")
     private OrderConditions orderConditions;
 
     @Column(name = "NOTE_ABOUT_ORDER")
@@ -32,7 +35,7 @@ public class Order {
 
     private AccountEmployee salesManager;
 
-    private AccountEmployee storegeManager;
+    private AccountEmployee storageManager;
 
     private Client client;
 }

@@ -19,7 +19,7 @@
         <org.junit.ver>4.12</org.junit.ver>
         <org.mysql.version>5.1.40</org.mysql.version>
         <org.hibernate.version>5.0.2.Final</org.hibernate.version>
-        <org.springframework.version>4.2.6.RELEASE</org.springframework.version>
+        <org.springframework.version>4.3.10.RELEASE</org.springframework.version>
     </properties>
 
     <dependencies>
@@ -52,7 +52,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${org.mysql.version}</version>
-
         </dependency>
 
         <!--Настройка и подключение Spring Framework-->
@@ -72,6 +71,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <!-- Настройка взаимодействия с БД -->
+        <!-- Spring IoC + Hibernate + @Transactional-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
 

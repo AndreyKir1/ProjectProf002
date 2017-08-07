@@ -7,16 +7,22 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class EmployeeDAOimpl implements EmployeeDAO {
-    private SessionFactory factory = HibernateUtil.getFactory();
+
+    @Autowired
+    private SessionFactory factory;
+    /*private SessionFactory factory = HibernateUtil.getFactory();*/
 
     @Override
     public Long create(EmployeeFirm employee) {
-        Session session = factory.openSession();
+        return (Long) factory.getCurrentSession().save(employee);
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try {
             Long id = (Long) session.save(employee);
@@ -28,38 +34,50 @@ public class EmployeeDAOimpl implements EmployeeDAO {
             return null;
         }finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public EmployeeFirm read(Long id) {
-        Session session = factory.openSession();
+        return factory.getCurrentSession().get(EmployeeFirm.class, id);
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         EmployeeFirm employee = session.get(EmployeeFirm.class, id);
-        return employee;
+        return employee;*/
     }
 
     @Override
     public EmployeeFirm readByAccount(AccountEmployee account) {
+
+        //TODO
         Session session = factory.openSession();
         session.beginTransaction();
-        try{
+        try {
             Query query = session.createQuery("from EmployeeFirm where accountEmployee =:accountEmployee");
             query.setParameter("accountEmployee", account);
             session.getTransaction().commit();
             EmployeeFirm employee = (EmployeeFirm) query.list().get(0);
             return employee;
-        }catch (HibernateException e){
+        } catch (HibernateException e) {
             e.printStackTrace();
             return null;
-        }finally {
+        } finally {
             session.close();
         }
     }
 
     @Override
     public boolean update(EmployeeFirm employee) {
-        Session session = factory.openSession();
+        try {
+            factory.getCurrentSession().saveOrUpdate(employee);
+            return true;
+        } catch (HibernateException e) {
+            factory.getCurrentSession().getTransaction().rollback();
+            return false;
+        }
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try {
             Query query = session.createQuery("update EmployeeFirm set surname =:surname," +
@@ -84,12 +102,20 @@ public class EmployeeDAOimpl implements EmployeeDAO {
             return false;
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public boolean delete(EmployeeFirm employee) {
-        Session session = factory.openSession();
+        try {
+            factory.getCurrentSession().delete(employee);
+            return true;
+        } catch (HibernateException e) {
+            factory.getCurrentSession().getTransaction().rollback();
+            return false;
+        }
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try {
             Query query = session.createQuery("delete from EmployeeFirm where id = :id");
@@ -103,16 +129,18 @@ public class EmployeeDAOimpl implements EmployeeDAO {
             return false;
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public List<EmployeeFirm> getAll() {
-        Session session = factory.openSession();
+        return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.EmployeeFirm").list();
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         Query query = session.createQuery("from EmployeeFirm");
         List<EmployeeFirm> list = query.list();
         session.close();
-        return list;
+        return list;*/
     }
 }

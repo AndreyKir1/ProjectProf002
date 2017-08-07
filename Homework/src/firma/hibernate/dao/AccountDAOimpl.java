@@ -6,15 +6,20 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class AccountDAOimpl implements AccountDAO{
-    private SessionFactory factory = HibernateUtil.getFactory();
+
+    @Autowired
+    private SessionFactory factory;
 
     @Override
     public Long create(AccountEmployee account) {
-        Session session = factory.openSession();
+        return (Long) factory.getCurrentSession().save(account);
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try{
             Long id = (Long)session.save(account);
@@ -26,20 +31,30 @@ public class AccountDAOimpl implements AccountDAO{
             return null;
         }finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public AccountEmployee read(Long id) {
-        Session session = factory.openSession();
+        return factory.getCurrentSession().get(AccountEmployee.class, id);
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         AccountEmployee account = session.get(AccountEmployee.class, id);
-        return account;
+        return account;*/
     }
 
     @Override
     public boolean update(AccountEmployee account) {
-        Session session = factory.openSession();
+        try {
+            factory.getCurrentSession().saveOrUpdate(account);
+            return true;
+        } catch (HibernateException e){
+            factory.getCurrentSession().getTransaction().rollback();
+            return false;
+        }
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try{
             Query query = session.createQuery("update AccountEmployee set login = :login, " +
@@ -56,12 +71,20 @@ public class AccountDAOimpl implements AccountDAO{
             return false;
         }finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public boolean delete(AccountEmployee account) {
-        Session session = factory.openSession();
+        try {
+            factory.getCurrentSession().delete(account);
+            return true;
+        } catch (HibernateException e) {
+            factory.getCurrentSession().getTransaction().rollback();
+            return false;
+        }
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         try{
             Query query = session.createQuery("delete from AccountEmployee  where id = :id");
@@ -75,16 +98,18 @@ public class AccountDAOimpl implements AccountDAO{
             return false;
         }finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public List<AccountEmployee> getAll() {
-        Session session = factory.openSession();
+        return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.AccountEmployee").list();
+
+        /*Session session = factory.openSession();
         session.beginTransaction();
         Query query = session.createQuery("from AccountEmployee ");
         List<AccountEmployee> list = query.list();
         session.close();
-        return list;
+        return list;*/
     }
 }
