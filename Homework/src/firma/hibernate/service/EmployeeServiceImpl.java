@@ -4,11 +4,15 @@ import firma.hibernate.dao.EmployeeDAO;
 import firma.hibernate.dao.EmployeeDAOimpl;
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    @Autowired
     private EmployeeDAO dao;
 
     public EmployeeServiceImpl () {

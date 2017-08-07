@@ -26,6 +26,8 @@ import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -61,7 +63,8 @@ public class LoginController {
 
     @FXML
     private void initialize() throws ParseException {
-        testDataEmployee();
+        //TODO
+        //testDataEmployee();
         fldPassword.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldPassword.setEffect(null);
         });
@@ -174,7 +177,20 @@ public class LoginController {
     }
 
     private void testDataEmployee() throws ParseException {
-        SessionFactory factory = HibernateUtil.getFactory();
+
+        //TODO
+
+        ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"firma/ioc/spring-config.xml"});
+
+        AccountEmployee account11 = new AccountEmployee("admin", "admin");
+
+        EmployeeService employeeService = context.getBean(EmployeeService.class);
+        employeeService.create(new EmployeeFirm("Рамік", "Андрій", "Русланович",
+                new SimpleDateFormat("dd.MM.yyy").parse("10.10.2010"),
+                new SimpleDateFormat("dd.MM.yyy").parse("10.10.2017"),
+                EmployeeRols.ADMINISTRATOR, account11));
+
+        /*SessionFactory factory = HibernateUtil.getFactory();
         Session session = factory.openSession();
         AccountService accountService = new AccountServiceImpl();
         EmployeeService employeeService = new EmployeeServiceImpl();
@@ -233,7 +249,7 @@ public class LoginController {
         employeeService.create(employee10);
         employeeService.create(employee11);
 
-        session.close();
+        session.close();*/
 //        HibernateUtil.getFactory().close();
     }
 

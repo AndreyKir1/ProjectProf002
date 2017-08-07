@@ -8,10 +8,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Repository
 public class EmployeeDAOimpl implements EmployeeDAO {
 
     @Autowired
@@ -19,6 +22,7 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     /*private SessionFactory factory = HibernateUtil.getFactory();*/
 
     @Override
+    @Transactional
     public Long create(EmployeeFirm employee) {
         return (Long) factory.getCurrentSession().save(employee);
 
@@ -38,6 +42,7 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public EmployeeFirm read(Long id) {
         return factory.getCurrentSession().get(EmployeeFirm.class, id);
 

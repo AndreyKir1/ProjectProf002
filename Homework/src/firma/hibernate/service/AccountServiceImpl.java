@@ -3,11 +3,15 @@ package firma.hibernate.service;
 import firma.hibernate.dao.AccountDAO;
 import firma.hibernate.dao.AccountDAOimpl;
 import firma.hibernate.entity.AccountEmployee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AccountServiceImpl implements AccountService {
 
+    @Autowired
     private AccountDAO dao;
 
     public AccountServiceImpl () {dao = new AccountDAOimpl(); }

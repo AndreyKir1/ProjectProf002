@@ -7,15 +7,19 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
 public class AccountDAOimpl implements AccountDAO{
 
     @Autowired
     private SessionFactory factory;
 
     @Override
+    @Transactional
     public Long create(AccountEmployee account) {
         return (Long) factory.getCurrentSession().save(account);
 
@@ -35,6 +39,7 @@ public class AccountDAOimpl implements AccountDAO{
     }
 
     @Override
+    @Transactional
     public AccountEmployee read(Long id) {
         return factory.getCurrentSession().get(AccountEmployee.class, id);
 

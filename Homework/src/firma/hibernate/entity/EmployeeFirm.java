@@ -4,6 +4,7 @@ import firma.support.EmployeeRols;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Entity
 @Table(name = "EMPLOYEES")
 public class EmployeeFirm {
