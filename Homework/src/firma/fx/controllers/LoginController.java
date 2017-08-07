@@ -1,5 +1,6 @@
 package firma.fx.controllers;
 
+import firma.fx.controllers.admin.ViewController;
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.service.AccountService;
@@ -9,14 +10,12 @@ import firma.hibernate.service.EmployeeServiceImpl;
 import firma.hibernate.util.HibernateUtil;
 import firma.support.EmployeeRols;
 import javafx.beans.property.ObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.paint.Color;
@@ -24,8 +23,6 @@ import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -125,7 +122,7 @@ public class LoginController {
                                 + " . Ви адміністратор системи");
                         stage.setMinHeight(600);
                         stage.setMinWidth(800);
-                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/AdminWindow.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/admin/AdminWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         ViewController.setStageAdminWindow(stage);
@@ -141,7 +138,7 @@ public class LoginController {
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ваш рівень доступу - менеджер");
-                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/ManagerWindow.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/ManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         ViewController.setStageAdminWindow(stage);
@@ -157,7 +154,7 @@ public class LoginController {
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ваш рівень доступу - кладовщик");
-                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/StorageManagerWindow.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/StorageManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         ViewController.setStageAdminWindow(stage);

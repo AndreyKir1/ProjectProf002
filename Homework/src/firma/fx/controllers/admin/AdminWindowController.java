@@ -1,4 +1,4 @@
-package firma.fx.controllers;
+package firma.fx.controllers.admin;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
@@ -155,7 +155,7 @@ public class AdminWindowController {
             Stage stage = new Stage();
             stage.setTitle("Детальна інформація");
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/firma/view/View.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/firma/view/admin/View.fxml"));
             Parent root = fxmlLoader.load();
             viewController = fxmlLoader.getController();
 //            встановлення полів вікна перегляду
@@ -187,7 +187,7 @@ public class AdminWindowController {
         try {
             Stage stage = new Stage();
             stage.setTitle("Додати нового співробітника");
-            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Add.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/admin/Add.fxml"));
             Scene scene = new Scene(root);
             stage.setMinWidth(315);
             stage.setMinHeight(360);
@@ -209,7 +209,7 @@ public class AdminWindowController {
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Редагувати дані співробітника");
-                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Update.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/admin/Update.fxml"));
                 Scene scene = new Scene(root);
                 stage.setMinWidth(315);
                 stage.setMinHeight(500);
@@ -232,7 +232,7 @@ public class AdminWindowController {
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Видалення співробітника");
-                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/Delete.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/admin/Delete.fxml"));
                 Scene scene = new Scene(root);
                 stage.setResizable(false);
                 stage.setScene(scene);

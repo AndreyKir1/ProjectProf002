@@ -1,4 +1,4 @@
-package firma.fx.controllers;
+package firma.fx.controllers.admin;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
@@ -8,18 +8,11 @@ import firma.hibernate.service.EmployeeService;
 import firma.hibernate.service.EmployeeServiceImpl;
 import firma.support.EmployeeRols;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.effect.Glow;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -28,9 +21,6 @@ import org.controlsfx.control.textfield.TextFields;
 import java.lang.reflect.Method;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-
-import static java.awt.Color.RED;
 
 public class AddController {
     boolean fillBDfield = false;
@@ -73,7 +63,7 @@ public class AddController {
 
     @FXML
     private void initialize() {
-        fldRole.getItems().addAll(EmployeeRols.ADMINISTRATOR, EmployeeRols.MANAGER);
+        fldRole.getItems().addAll(EmployeeRols.values());
         fldBirthDay.setTooltip(new Tooltip("Дата народження не може бути пізнішою за дату прийому на роботу"));
         fldDateOfStartWorking.setTooltip(new Tooltip("Дата прийому на роботу не може бути ранішою за дату народження"));
 

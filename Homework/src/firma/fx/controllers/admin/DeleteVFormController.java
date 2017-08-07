@@ -1,4 +1,4 @@
-package firma.fx.controllers;
+package firma.fx.controllers.admin;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;

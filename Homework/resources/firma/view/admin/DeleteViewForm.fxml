@@ -6,11 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.DeleteController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.admin.DeleteVFormController">
    <children>
       <VBox alignment="CENTER" fillWidth="false" layoutX="90.0" layoutY="-50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="lbtext" minWidth="-Infinity" text="Ви дійсно хочете видалити  дану позицію" wrapText="true">
+            <Label fx:id="lbtext" text="Ви дійсно хочете видалити даного користувача?" wrapText="true">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -18,17 +18,12 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="lbEmployee" layoutX="32.0" layoutY="32.0" text="позиція товару в замовленні" wrapText="true">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
+            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="40.0" prefWidth="300.0">
                <children>
                   <Button fx:id="btnOK" defaultButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressOK" prefHeight="30.0" prefWidth="85.0" text="OK" HBox.hgrow="NEVER" />
                   <Button fx:id="btnCancel" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="85.0" text="Cancel">
                      <HBox.margin>
-                        <Insets left="10.0" right="5.0" />
+                        <Insets left="10.0" />
                      </HBox.margin>
                   </Button>
                </children>

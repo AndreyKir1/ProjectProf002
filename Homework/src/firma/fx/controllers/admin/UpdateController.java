@@ -1,5 +1,6 @@
-package firma.fx.controllers;
+package firma.fx.controllers.admin;
 
+import firma.fx.controllers.admin.AdminWindowController;
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.service.AccountService;
@@ -24,15 +25,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-
-public class UpdateViewController {
+public class UpdateController {
     private EmployeeFirm currentEmployee;
     private AccountEmployee currentAccount;
     private EmployeeService employeeService;
     private AccountService accountService;
-
-    @FXML
-    private static Stage stageRoot;
 
     @FXML
     private DatePicker fldDateOfStartWorking;
@@ -69,7 +66,7 @@ public class UpdateViewController {
 
     @FXML
     private void initialize() {
-        fldRole.getItems().setAll(EmployeeRols.ADMINISTRATOR, EmployeeRols.MANAGER);
+        fldRole.getItems().setAll(EmployeeRols.values());
         currentEmployee = new AdminWindowController().getCurrentEmployee();
         currentAccount = currentEmployee.getAccountEmployee();
         fldBirthDay.setTooltip(new Tooltip("Дата народження не може бути пізнішою за дату прийому на роботу"));
@@ -131,10 +128,6 @@ public class UpdateViewController {
         setClearInCTF(fldPassword);
     }
 
-    public static void setStageRoot(Stage stageRoot) {
-        UpdateViewController.stageRoot = stageRoot;
-    }
-
     @FXML
     private void setClearInCTF(CustomTextField ctf) {
         try {
@@ -146,6 +139,7 @@ public class UpdateViewController {
         }
     }
 
+
     @FXML
     private void pressSave1() {
         shadowEffects();
@@ -156,7 +150,6 @@ public class UpdateViewController {
                 !((fldLogin.getText() == null || fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() > 0))
                 && ((fldDateOfStartWorking.getValue().getYear() - fldBirthDay.getValue().getYear()) > 0)) {
             pressSave();
-            showParentWindow();
         }
 
     }
@@ -173,7 +166,7 @@ public class UpdateViewController {
             currentEmployee.setAccount(true);
             currentAccount.setLogin(fldLogin.getText());
             currentAccount.setPassword(fldPassword.getText());
-        }else if ((fldLogin.getText() == null && fldPassword.getText() == null) || ((fldLogin.getText() != null && fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() <= 0))){
+        } else if ((fldLogin.getText() == null && fldPassword.getText() == null) || ((fldLogin.getText() != null && fldLogin.getText().length() <= 0) && (fldPassword.getText() != null && fldPassword.getText().length() <= 0))) {
             currentEmployee.setAccount(false);
             currentAccount.setLogin(null);
             currentAccount.setPassword(null);
@@ -183,23 +176,17 @@ public class UpdateViewController {
         accountService = new AccountServiceImpl();
         accountService.update(currentAccount);
         employeeService.update(currentEmployee);
-        Long employeeId = currentEmployee.getId();
 
-        currentEmployee = employeeService.read(employeeId);
-        currentAccount = currentEmployee.getAccountEmployee();
-
-        ViewController viewController = AdminWindowController.getViewController();
-        viewController.getLbSurname().setText(currentEmployee.getSurname());
-        viewController.getLbName().setText(currentEmployee.getName());
-        viewController.getLbLastName().setText(currentEmployee.getLastName());
-        viewController.getLbRole().setText(currentEmployee.getEmployeeRols().toString());
-        viewController.getLbAge().setText(currentEmployee.getAge().toString());
-        viewController.getLbBirthDay().setText(new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getBitrhDay()));
-        viewController.getLbDayOfStartWorking().setText(new SimpleDateFormat("dd.MM.yyyy").format(currentEmployee.getDateOfStarWorking()));
-        viewController.getLbLogin().setText(currentAccount.getLogin());
-        viewController.getLbPassword().setText(currentAccount.getPassword());
+        new AdminWindowController().updateListEmployee();
 
         Stage stage = (Stage) btnSave.getScene().getWindow();
+        stage.close();
+    }
+
+
+    @FXML
+    private void pressCancel() {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
@@ -220,19 +207,5 @@ public class UpdateViewController {
             fldBirthDay.setEffect(shadow);
             fldDateOfStartWorking.setEffect(shadow);
         }
-    }
-
-    @FXML
-    private void showParentWindow() {
-        new AdminWindowController().updateListEmployee();
-        stageRoot.show();
-
-    }
-
-    @FXML
-    private void pressCancel() {
-        Stage stage = (Stage) btnCancel.getScene().getWindow();
-        stage.close();
-        stageRoot.show();
     }
 }
