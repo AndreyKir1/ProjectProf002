@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="772.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.ManagerWindow">
+<AnchorPane prefHeight="772.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.UpdateOrder">
    <children>
       <VBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -53,7 +53,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" text="№ замовлення">
+                              <Label fx:id="lbOrderNumber" layoutX="15.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" text="№ замовлення">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -70,7 +70,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label prefHeight="40.0" prefWidth="200.0" text="Дата замовлення">
+                              <Label fx:id="lbOrderDarte" prefHeight="40.0" prefWidth="200.0" text="Дата замовлення">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -90,7 +90,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <DatePicker editable="false" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
+                              <DatePicker fx:id="fldReadyOrderDate" editable="false" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
                            </children>
                            <VBox.margin>
                               <Insets top="10.0" />
@@ -106,7 +106,7 @@
                         </Label>
                         <HBox layoutX="15.0" layoutY="339.0" maxWidth="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnExit2" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="160.0" text="обрати з бази">
+                              <Button fx:id="btnChooseFromDB" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressChooseFromDB" prefHeight="30.0" prefWidth="160.0" text="обрати з бази">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -114,7 +114,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="btnExit21" focusTraversable="false" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="160.0" text="додати нового">
+                              <Button fx:id="btnAddNewToDB" focusTraversable="false" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressAddNewToDB" prefHeight="30.0" prefWidth="160.0" text="додати нового">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -137,7 +137,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="Прізвище">
+                              <Label fx:id="lbSurname" layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="Прізвище">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -157,7 +157,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="Імя">
+                              <Label fx:id="lbName" layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="Імя">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -177,7 +177,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="По-батькові">
+                              <Label fx:id="lbLastName" layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="По-батькові">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -197,7 +197,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="телефон">
+                              <Label fx:id="lbPhone" layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="телефон">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -217,7 +217,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="e-mail">
+                              <Label fx:id="lbEmail" layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" text="e-mail">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -237,7 +237,7 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnExit2111" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="видалити позицію">
+                              <Button fx:id="btnDeleteOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDeleteOrderPosition" prefHeight="30.0" prefWidth="200.0" text="видалити позицію">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -249,7 +249,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnExit21111" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="редагувати позицію">
+                              <Button fx:id="btnUpdateOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdateOrderPosition" prefHeight="30.0" prefWidth="200.0" text="редагувати позицію">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -261,7 +261,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnExit211" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="обрати товар">
+                              <Button fx:id="btnChooseOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressChooseOrderPosition" prefHeight="30.0" prefWidth="200.0" text="обрати товар">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -281,7 +281,7 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="btnExit2112" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="ПІБ">
+                              <Button fx:id="btnStorageManager" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressStorageManager" prefHeight="30.0" prefWidth="200.0" text="ПІБ">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -301,7 +301,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <ChoiceBox focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
+                              <ChoiceBox fx:id="btnOrderStatus" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
                            </children>
                            <VBox.margin>
                               <Insets top="10.0" />
@@ -317,7 +317,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextArea focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" />
+                              <TextArea fx:id="areaNote" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" />
                            </children>
                            <VBox.margin>
                               <Insets top="10.0" />
@@ -341,13 +341,15 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TableView fx:id="TableViewOrders" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="580.0" prefWidth="458.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableOrderPosition" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="580.0" prefWidth="458.0" VBox.vgrow="ALWAYS">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                            <columns>
-                              <TableColumn prefWidth="75.0" text="C1" />
-                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn fx:id="columnProductCode" prefWidth="75.0" text="Код товару" />
+                              <TableColumn fx:id="columnProductNane" prefWidth="75.0" text="Назва товару" />
+                              <TableColumn fx:id="columnAmount" prefWidth="75.0" text="Кількість" />
+                              <TableColumn fx:id="columnCost" prefWidth="75.0" text="Вартість" />
                            </columns>
                         </TableView>
                      </children>
@@ -356,7 +358,7 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" layoutX="15.0" layoutY="369.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="20.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="300.0" text="Вартість замовлення, грн: ">
+                  <Label fx:id="lblrderCost" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="300.0" text="Вартість замовлення, грн: ">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -365,7 +367,7 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="706.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="40.0" prefWidth="800.0">
                <children>
-                  <Button fx:id="btnExit3" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="150.0" text="ОК">
+                  <Button fx:id="btnOK" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressOK" prefHeight="30.0" prefWidth="150.0" text="ОК">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -373,7 +375,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnExit31" focusTraversable="false" layoutX="655.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="150.0" text="ВІДМІНА">
+                  <Button fx:id="btnCancel" focusTraversable="false" layoutX="655.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="150.0" text="ВІДМІНА">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

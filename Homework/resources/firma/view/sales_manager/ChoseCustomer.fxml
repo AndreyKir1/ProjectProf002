@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.view.ChoseCustomer">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.ChoseCustomer">
    <children>
       <VBox layoutX="306.0" layoutY="151.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -34,13 +33,13 @@
             </MenuBar>
             <HBox prefHeight="358.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView prefHeight="317.0" prefWidth="406.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tblView" prefHeight="317.0" prefWidth="406.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                        <TableColumn prefWidth="75.0" text="C2" />
-                        <TableColumn prefWidth="75.0" text="C2" />
-                        <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn fx:id="columnSurName" prefWidth="75.0" text="Прізвище" />
+                      <TableColumn fx:id="columnName" prefWidth="75.0" text="Імя" />
+                        <TableColumn fx:id="columnLastName" prefWidth="75.0" text="По-батькові" />
+                        <TableColumn fx:id="columnPhone" prefWidth="75.0" text="Телефон" />
+                        <TableColumn fx:id="columnEmail" prefWidth="75.0" text="e-mail" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -51,7 +50,7 @@
                   </TableView>
                   <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="210.0">
                      <children>
-                        <Button fx:id="btnShovInfo" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Додати нового клієнта">
+                        <Button fx:id="btnAdd" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressAdd" prefHeight="30.0" prefWidth="200.0" text="Додати нового клієнта">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -59,7 +58,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnShovInfo1" focusTraversable="false" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Редагувати інформацію">
+                        <Button fx:id="btnUpdate" focusTraversable="false" layoutX="15.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdate" prefHeight="30.0" prefWidth="200.0" text="Редагувати інформацію">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -67,7 +66,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnShovInfo11" focusTraversable="false" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="Видалити клієнта">
+                        <Button fx:id="btnDelete" focusTraversable="false" layoutX="15.0" layoutY="55.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDelete" prefHeight="30.0" prefWidth="200.0" text="Видалити клієнта">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -81,7 +80,7 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="NEVER">
                <children>
-                  <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="234.0" text="Всього клієнтів: ">
+                  <Label fx:id="lblCustomerCount" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="234.0" text="Всього клієнтів: ">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -90,7 +89,7 @@
                      </HBox.margin>
                   </Label>
                   <Pane maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnShovInfo111" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="95.0" text="ОК">
+                  <Button fx:id="btnSave" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSave" prefHeight="30.0" prefWidth="95.0" text="ОК">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -98,7 +97,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnShovInfo1111" focusTraversable="false" layoutX="455.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="95.0" text="Відмінити">
+                  <Button fx:id="btnCancel" focusTraversable="false" layoutX="455.0" layoutY="15.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="95.0" text="Відмінити">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

@@ -43,16 +43,18 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TableView fx:id="TableViewOrders" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableOrders" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn fx:id="columnOrderNumber" prefWidth="75.0" text="Номер" />
+                            <TableColumn fx:id="columnOrderDate" prefWidth="75.0" text="Дата" />
+                              <TableColumn fx:id="columnOrderCustomer" prefWidth="75.0" text="Замовник" />
+                              <TableColumn fx:id="columnOrderCost" prefWidth="75.0" text="Вартість" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <Label text="всього замовлень: ">
+                        <Label fx:id="lblOrderNumbers" text="всього замовлень: ">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -72,7 +74,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <CheckBox fx:id="chBoxNew" focusTraversable="false" mnemonicParsing="false" text="нові">
+                        <CheckBox fx:id="chBoxNew" focusTraversable="false" mnemonicParsing="false" onAction="#boxNewOrders" text="нові">
                            <VBox.margin>
                               <Insets left="5.0" top="5.0" />
                            </VBox.margin>
@@ -80,7 +82,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxWorked" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" text="в роботі">
+                        <CheckBox fx:id="chBoxWorked" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#boxInWork" text="в роботі">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -88,7 +90,7 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxFinished" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" text="виконані">
+                        <CheckBox fx:id="chBoxFinished" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#boxDone" text="виконані">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -96,7 +98,7 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxAll" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" text="всі">
+                        <CheckBox fx:id="chBoxAll" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#boxAll" text="всі">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -112,7 +114,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <Button fx:id="btnNewOrder" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="створити нове">
+                        <Button fx:id="btnNewOrder" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressNewOrder" prefHeight="30.0" prefWidth="200.0" text="створити нове">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -120,7 +122,7 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnUpdateOrder" focusTraversable="false" layoutX="15.0" layoutY="167.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="редагувати">
+                        <Button fx:id="btnUpdateOrder" focusTraversable="false" layoutX="15.0" layoutY="167.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdateOrder" prefHeight="30.0" prefWidth="200.0" text="редагувати">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -128,7 +130,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnChangeStatus" focusTraversable="false" layoutX="15.0" layoutY="247.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="змінити статус">
+                        <Button fx:id="btnChangeStatus" focusTraversable="false" layoutX="15.0" layoutY="247.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressChangeStatus" prefHeight="30.0" prefWidth="200.0" text="змінити статус">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -155,10 +157,12 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="TableViewPositions" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableOrderDetails" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
                            <columns>
-                              <TableColumn prefWidth="75.0" text="C1" />
-                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn fx:id="columnProductCode" prefWidth="75.0" text="Код товару" />
+                              <TableColumn fx:id="columnProductName" prefWidth="75.0" text="Назва товару" />
+                              <TableColumn fx:id="columnProductAmount" prefWidth="75.0" text="Кількість" />
+                              <TableColumn fx:id="columnProductCost" prefWidth="75.0" text="Вартсть" />
                            </columns>
                            <VBox.margin>
                               <Insets />
@@ -184,7 +188,7 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" layoutX="15.0" layoutY="369.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="40.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="btnExit" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="200.0" text="ВИЙТИ З ПРОГРАМИ">
+                  <Button fx:id="btnExit" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressExit" prefHeight="30.0" prefWidth="200.0" text="ВИЙТИ З ПРОГРАМИ">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

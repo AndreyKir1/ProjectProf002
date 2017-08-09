@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="484.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.view.CreateOrderPosition">
+<AnchorPane prefHeight="484.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.UpdateOrderPosition">
    <children>
       <VBox layoutX="214.0" layoutY="134.0" minHeight="-Infinity" prefHeight="512.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -34,10 +33,11 @@
             </MenuBar>
             <HBox prefHeight="462.0" prefWidth="797.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tableView" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn fx:id="columnProductCode" prefWidth="75.0" text="Код товару" />
+                      <TableColumn fx:id="columnProductName" prefWidth="75.0" text="Назва" />
+                        <TableColumn fx:id="columnProductPrice" prefWidth="75.0" text="Ціна за одиницю" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -52,7 +52,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ChoiceBox focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
+                              <ChoiceBox fx:id="btnChooseProductCategory" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" />
                            </children>
                         </HBox>
                         <HBox layoutX="10.0" layoutY="50.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="330.0">
@@ -62,7 +62,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <TextField focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="125.0" />
+                              <TextField fx:id="fldAmount" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="125.0" />
                               <Label layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" text="одиниць">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
@@ -91,7 +91,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </padding>
                <children>
-                  <Label maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="144.0" text="всього товарів в базі:">
+                  <Label fx:id="lblCountProduct" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="144.0" text="всього товарів в базі:">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -103,7 +103,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </padding>
                <children>
-                  <Button fx:id="btnExit3" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="150.0" text="ОК">
+                  <Button fx:id="btnSave" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressOK" prefHeight="30.0" prefWidth="150.0" text="ОК">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -111,7 +111,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnExit31" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressShowDetails" prefHeight="30.0" prefWidth="150.0" text="ВІДМІНА">
+                  <Button fx:id="btnCancel" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCancel" prefHeight="30.0" prefWidth="150.0" text="ВІДМІНА">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

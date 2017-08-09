@@ -1,6 +1,6 @@
 package firma.hibernate.entity;
 
-import firma.support.OrderConditions;
+import firma.support.OrderStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class Order {
 
     @Enumerated(EnumType.ORDINAL)
     @Column (name = "ORDER_CONDITIONS")
-    private OrderConditions orderConditions;
+    private OrderStatus orderConditions;
 
     @Column(name = "NOTE_ABOUT_ORDER")
     private String noteAboutOrder;

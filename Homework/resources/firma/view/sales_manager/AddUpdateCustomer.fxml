@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.admin.AddController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.AddUpdateCustomer">
    <children>
       <VBox layoutX="278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -44,7 +44,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="fldLastName1" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <CustomTextField fx:id="fldLastName" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -57,7 +57,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="fldLastName2" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <CustomTextField fx:id="fldPhoneNumber" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -70,7 +70,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="fldLastName" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
+                  <CustomTextField fx:id="fldEmail" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="180.0" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
