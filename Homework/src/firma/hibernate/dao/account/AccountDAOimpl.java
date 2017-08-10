@@ -1,10 +1,7 @@
-package firma.hibernate.dao;
+package firma.hibernate.dao.account;
 
 import firma.hibernate.entity.AccountEmployee;
-import firma.hibernate.util.HibernateUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,6 @@
-package firma.hibernate.service;
+package firma.hibernate.service.employee;
 
-import firma.hibernate.dao.EmployeeDAO;
-import firma.hibernate.dao.EmployeeDAOimpl;
+import firma.hibernate.dao.employee.EmployeeDAO;
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +14,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeDAO dao;
 
-    public EmployeeServiceImpl () {
-        dao = new EmployeeDAOimpl();
-    }
-
     @Override
-    public Long create(EmployeeFirm employee) {
-        if (employee != null) return dao.create(employee);
-        else return null;
+    public void create(EmployeeFirm employee) {
+        if (employee != null) {
+            employee.setId(dao.create(employee));
+        }
     }
 
     @Override
     public EmployeeFirm read(Long id) {
-        if (dao.read(id) != null) return dao.read(id);
+        if (dao.read(id) != null) {
+            return dao.read(id);
+        }
         else {
             System.out.println("Something wrong :(");
             return null;

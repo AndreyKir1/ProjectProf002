@@ -1,7 +1,6 @@
-package firma.hibernate.service;
+package firma.hibernate.service.account;
 
-import firma.hibernate.dao.AccountDAO;
-import firma.hibernate.dao.AccountDAOimpl;
+import firma.hibernate.dao.account.AccountDAO;
 import firma.hibernate.entity.AccountEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +13,18 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountDAO dao;
 
-    public AccountServiceImpl () {dao = new AccountDAOimpl(); }
-
     @Override
-    public Long create(AccountEmployee account) {
-        if (account != null) return dao.create(account);
-        else return null;
+    public void create(AccountEmployee account) {
+        if (account != null) {
+            account.setId(dao.create(account));
+        }
     }
 
     @Override
     public AccountEmployee read(Long id) {
-        if (dao.read(id) != null) return dao.read(id);
-        else {
+        if (dao.read(id) != null) {
+            return dao.read(id);
+        } else {
             System.out.println("Something wrong :(");
             return null;
         }
@@ -33,16 +32,18 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean update(AccountEmployee update) {
-        if (update != null) return dao.update(update);
-        else {
+        if (update != null) {
+            return dao.update(update);
+        } else {
             return false;
         }
     }
 
     @Override
     public boolean delete(AccountEmployee delete) {
-        if (delete != null) return dao.delete(delete);
-        else {
+        if (delete != null) {
+            return dao.delete(delete);
+        } else {
             return false;
         }
     }

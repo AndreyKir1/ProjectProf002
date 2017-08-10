@@ -1,13 +1,10 @@
 package firma.hibernate.dao;
 
+import firma.hibernate.dao.account.AccountDAO;
+import firma.hibernate.dao.employee.EmployeeDAO;
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
-import firma.hibernate.service.EmployeeService;
-import firma.hibernate.service.EmployeeServiceImpl;
-import firma.hibernate.util.HibernateUtil;
 import firma.support.EmployeeRols;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

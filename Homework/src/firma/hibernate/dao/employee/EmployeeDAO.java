@@ -1,4 +1,4 @@
-package firma.hibernate.dao;
+package firma.hibernate.dao.employee;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;

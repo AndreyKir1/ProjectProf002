@@ -1,11 +1,11 @@
-package firma.hibernate.service;
+package firma.hibernate.service.account;
 
 import firma.hibernate.entity.AccountEmployee;
 
 import java.util.List;
 
 public interface AccountService {
-    Long create(AccountEmployee account);
+    void create(AccountEmployee account);
     AccountEmployee read(Long id);
     boolean update(AccountEmployee update);
     boolean delete(AccountEmployee delete);

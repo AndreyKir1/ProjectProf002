@@ -29,11 +29,11 @@
         <list>
             <value>firma.hibernate.entity.AccountEmployee</value>
             <value>firma.hibernate.entity.EmployeeFirm</value>
-            <!--<value>firma.hibernate.entity.Client</value>-->
-            <!--<value>firma.hibernate.entity.Order</value>-->
-            <!--<value>firma.hibernate.entity.OrderPosition</value>-->
-            <!--<value>firma.hibernate.entity.Product</value>-->
-            <!--<value>firma.hibernate.entity.ProductType</value>-->
+            <value>firma.hibernate.entity.Client</value>
+            <value>firma.hibernate.entity.Order</value>
+            <value>firma.hibernate.entity.OrderPosition</value>
+            <value>firma.hibernate.entity.Product</value>
+            <value>firma.hibernate.entity.ProductType</value>
         </list>
     </property>
 </bean>

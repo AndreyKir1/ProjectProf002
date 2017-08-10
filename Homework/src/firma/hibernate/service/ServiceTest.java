@@ -1,26 +1,22 @@
-package firma;
+package firma.hibernate.service;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
-import firma.hibernate.service.AccountService;
-import firma.hibernate.service.AccountServiceImpl;
-import firma.hibernate.service.EmployeeService;
-import firma.hibernate.service.EmployeeServiceImpl;
+import firma.hibernate.service.account.AccountService;
+import firma.hibernate.service.employee.EmployeeService;
 import firma.support.EmployeeRols;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import firma.hibernate.util.HibernateUtil;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class BaseFirmaTest {
+public class ServiceTest {
     public static void main(String[] args) throws ParseException {
-        SessionFactory factory = HibernateUtil.getFactory();
-        Session session = factory.openSession();
-        AccountService accountService = new AccountServiceImpl();
-        EmployeeService employeeService = new EmployeeServiceImpl();
+        ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+        EmployeeService employeeService = context.getBean(EmployeeService.class);
+        AccountService accountService = context.getBean(AccountService.class);
 
 //      create Accounts
         AccountEmployee account1 = new AccountEmployee("login1", "password1");
@@ -74,7 +70,10 @@ public class BaseFirmaTest {
         for (AccountEmployee el : list) {
             System.out.println(el.getLogin() + " " + el.getPassword());
         }
-        session.close();
-        HibernateUtil.getFactory().close();
+
+        System.out.println(employeeService.readByAccount(account6));
+
+        employeeService.delete(employee9);
+        employeeService.delete(employee10);
     }
 }

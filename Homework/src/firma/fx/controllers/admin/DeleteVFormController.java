@@ -2,10 +2,10 @@ package firma.fx.controllers.admin;
 
 import firma.hibernate.entity.AccountEmployee;
 import firma.hibernate.entity.EmployeeFirm;
-import firma.hibernate.service.AccountService;
-import firma.hibernate.service.AccountServiceImpl;
-import firma.hibernate.service.EmployeeService;
-import firma.hibernate.service.EmployeeServiceImpl;
+import firma.hibernate.service.account.AccountService;
+import firma.hibernate.service.account.AccountServiceImpl;
+import firma.hibernate.service.employee.EmployeeService;
+import firma.hibernate.service.employee.EmployeeServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
