@@ -24,7 +24,14 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     @Override
     @Transactional
     public Long create(EmployeeFirm employee) {
-        return (Long) factory.getCurrentSession().save(employee);
+        try {
+            Long id = (Long) factory.getCurrentSession().save(employee);
+            return id;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            factory.getCurrentSession().getTransaction().rollback();
+            return null;
+        }
 
         /*Session session = factory.openSession();
         session.beginTransaction();
@@ -53,31 +60,30 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public EmployeeFirm readByAccount(AccountEmployee account) {
 
-        //TODO
-        Session session = factory.openSession();
+        Session session = factory.getCurrentSession();
         session.beginTransaction();
         try {
             Query query = session.createQuery("from EmployeeFirm where accountEmployee =:accountEmployee");
             query.setParameter("accountEmployee", account);
-            session.getTransaction().commit();
             EmployeeFirm employee = (EmployeeFirm) query.list().get(0);
             return employee;
         } catch (HibernateException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            session.close();
         }
     }
 
     @Override
+    @Transactional
     public boolean update(EmployeeFirm employee) {
         try {
             factory.getCurrentSession().saveOrUpdate(employee);
             return true;
         } catch (HibernateException e) {
+            e.printStackTrace();
             factory.getCurrentSession().getTransaction().rollback();
             return false;
         }
@@ -111,11 +117,13 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public boolean delete(EmployeeFirm employee) {
         try {
             factory.getCurrentSession().delete(employee);
             return true;
         } catch (HibernateException e) {
+            e.printStackTrace();
             factory.getCurrentSession().getTransaction().rollback();
             return false;
         }
@@ -138,6 +146,7 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public List<EmployeeFirm> getAll() {
         return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.EmployeeFirm").list();
 

@@ -21,7 +21,14 @@ public class AccountDAOimpl implements AccountDAO{
     @Override
     @Transactional
     public Long create(AccountEmployee account) {
-        return (Long) factory.getCurrentSession().save(account);
+        try {
+            Long id = (Long) factory.getCurrentSession().save(account);
+            return id;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            factory.getCurrentSession().getTransaction().rollback();
+            return null;
+        }
 
         /*Session session = factory.openSession();
         session.beginTransaction();
@@ -50,11 +57,13 @@ public class AccountDAOimpl implements AccountDAO{
     }
 
     @Override
+    @Transactional
     public boolean update(AccountEmployee account) {
         try {
             factory.getCurrentSession().saveOrUpdate(account);
             return true;
         } catch (HibernateException e){
+            e.printStackTrace();
             factory.getCurrentSession().getTransaction().rollback();
             return false;
         }
@@ -80,11 +89,13 @@ public class AccountDAOimpl implements AccountDAO{
     }
 
     @Override
+    @Transactional
     public boolean delete(AccountEmployee account) {
         try {
             factory.getCurrentSession().delete(account);
             return true;
         } catch (HibernateException e) {
+            e.printStackTrace();
             factory.getCurrentSession().getTransaction().rollback();
             return false;
         }
@@ -107,6 +118,7 @@ public class AccountDAOimpl implements AccountDAO{
     }
 
     @Override
+    @Transactional
     public List<AccountEmployee> getAll() {
         return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.AccountEmployee").list();
 

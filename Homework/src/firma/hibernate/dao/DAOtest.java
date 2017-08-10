@@ -8,6 +8,8 @@ import firma.hibernate.util.HibernateUtil;
 import firma.support.EmployeeRols;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,10 +18,9 @@ import java.util.List;
 public class DAOtest {
 
     public static void main(String[] args) throws ParseException {
-        SessionFactory factory = HibernateUtil.getFactory();
-        Session session = factory.openSession();
-        EmployeeDAO daoFirma = new EmployeeDAOimpl();
-        AccountDAO daoAccount = new AccountDAOimpl();
+        ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+        EmployeeDAO daoFirma = context.getBean(EmployeeDAO.class);
+        AccountDAO daoAccount = context.getBean(AccountDAO.class);
 
         AccountEmployee account1 = new AccountEmployee("login1", "password1");
         AccountEmployee account2 = new AccountEmployee("login2", "password2");
@@ -64,16 +65,15 @@ public class DAOtest {
         daoFirma.create(employee4);
         daoFirma.create(employee5);
 
-        EmployeeService service = new EmployeeServiceImpl();
-//        service.delete(employee5);
+//        daoFirma.delete(employee5);
 
-//        List<AccountEmployee> list = daoAccount.getAll();
-//        for(AccountEmployee el:list){
-//            System.out.println(el.getLogin() + " " + el.getPassword());
-//        }
-        System.out.println(service.readByAccount(account5));
+        List<AccountEmployee> list = daoAccount.getAll();
+        for(AccountEmployee el:list){
+            System.out.println(el.getLogin() + " " + el.getPassword());
+        }
+        System.out.println(daoFirma.readByAccount(account5));
 
-        session.close();
-        HibernateUtil.getFactory().close();
+//        session.close();
+//        HibernateUtil.getFactory().close();
     }
 }
