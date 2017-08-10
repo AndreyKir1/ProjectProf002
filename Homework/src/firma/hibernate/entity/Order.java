@@ -4,6 +4,7 @@ import firma.support.OrderStatus;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "ALL_ORDERS")
@@ -33,26 +34,31 @@ public class Order {
     @Column(name = "NOTE_ABOUT_ORDER")
     private String noteAboutOrder;
 
-    private AccountEmployee salesManager;
+    @OneToOne
+    private EmployeeFirm salesManager;
 
-    private AccountEmployee storageManager;
+    @OneToOne
+    private EmployeeFirm storageManager;
 
+    @OneToOne
     private Client client;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private Set<OrderPosition> orderPositions;
 
     public Order() {
     }
 
-    public Order(String number, Double totalPrice, Date createOrder, Date orderReady, OrderStatus orderConditions, String noteAboutOrder, AccountEmployee salesManager, AccountEmployee storageManager, Client client) {
+    public Order(String number, Date createOrder, OrderStatus orderConditions, String noteAboutOrder, EmployeeFirm salesManager, Client client) {
         this.number = number;
-        this.totalPrice = totalPrice;
         this.createOrder = createOrder;
-        this.orderReady = orderReady;
         this.orderConditions = orderConditions;
         this.noteAboutOrder = noteAboutOrder;
         this.salesManager = salesManager;
-        this.storageManager = storageManager;
         this.client = client;
     }
+
+
 
     public Long getId() {
         return id;
@@ -110,19 +116,19 @@ public class Order {
         this.noteAboutOrder = noteAboutOrder;
     }
 
-    public AccountEmployee getSalesManager() {
+    public EmployeeFirm getSalesManager() {
         return salesManager;
     }
 
-    public void setSalesManager(AccountEmployee salesManager) {
+    public void setSalesManager(EmployeeFirm salesManager) {
         this.salesManager = salesManager;
     }
 
-    public AccountEmployee getStorageManager() {
+    public EmployeeFirm getStorageManager() {
         return storageManager;
     }
 
-    public void setStorageManager(AccountEmployee storageManager) {
+    public void setStorageManager(EmployeeFirm storageManager) {
         this.storageManager = storageManager;
     }
 
@@ -132,5 +138,13 @@ public class Order {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Set<OrderPosition> getOrderPositions() {
+        return orderPositions;
+    }
+
+    public void setOrderPositions(Set<OrderPosition> orderPositions) {
+        this.orderPositions = orderPositions;
     }
 }

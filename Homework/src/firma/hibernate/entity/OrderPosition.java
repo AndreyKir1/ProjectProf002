@@ -18,19 +18,21 @@ public class OrderPosition {
     @Column(name = "PRODUCT_AMOUNT")
     private Integer productAmount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
 
+    @OneToOne
     private Product product;
 
     public OrderPosition() {
     }
 
-    public OrderPosition(String positionName, Double totalPriceOfProduct, Integer productAmount, Order order, Product product) {
+    public OrderPosition(String positionName, Integer productAmount, Order order, Product product) {
         this.positionName = positionName;
-        this.totalPriceOfProduct = totalPriceOfProduct;
         this.productAmount = productAmount;
         this.order = order;
         this.product = product;
+        this.totalPriceOfProduct = productAmount*product.getProductPrice();
     }
 
     public Long getId() {

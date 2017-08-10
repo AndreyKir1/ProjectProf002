@@ -6,7 +6,7 @@
         <datasource-map>
           <unit-entry name="firma:hibernate.cfg.xml" value="8f133f06-a377-4ff1-a892-396fcd6a50ca" />
           <unit-entry name="hibernate.cfg.xml" value="f3abaabf-3b15-43d3-9476-29aab5e8828d" />
-          <unit-entry name="sessionFactory" value="dataSource" />
+          <unit-entry name="sessionFactory" value="8f133f06-a377-4ff1-a892-396fcd6a50ca" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/resources/firma/hibernate.cfg.xml" />

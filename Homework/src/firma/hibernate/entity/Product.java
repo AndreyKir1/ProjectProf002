@@ -21,10 +21,12 @@ public class Product {
     @Column(name = "AMOUNT_IN_STORAGE")
     private Integer amountInStorage;
 
+    @OneToOne
     private ProductType productType;
 
     public Product() {
     }
+
 
     public Product(String productCode, String productName, Double productPrice, Integer amountInStorage, ProductType productType) {
         this.productCode = productCode;
