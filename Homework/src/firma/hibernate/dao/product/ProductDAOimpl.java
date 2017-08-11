@@ -1,7 +1,10 @@
 package firma.hibernate.dao.product;
 
 import firma.hibernate.entity.Product;
+import firma.hibernate.entity.ProductType;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -63,5 +66,20 @@ public class ProductDAOimpl implements ProductDAO {
     @Transactional
     public List<Product> getAll() {
         return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.Product").list();
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getByProductType(ProductType prodType) {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from Product where productType =:productType");
+            query.setParameter("productType", prodType);
+            List<Product> list = query.list();
+            return list;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

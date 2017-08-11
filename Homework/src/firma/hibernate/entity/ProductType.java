@@ -1,6 +1,7 @@
 package firma.hibernate.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "PRODUCT_TYPE")
@@ -14,6 +15,9 @@ public class ProductType {
 
     @Column(name = "TYPE_NAME")
     private String typeName;
+
+    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY)
+    private Set<Product> products;
 
     public ProductType() {
     }
@@ -45,5 +49,13 @@ public class ProductType {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

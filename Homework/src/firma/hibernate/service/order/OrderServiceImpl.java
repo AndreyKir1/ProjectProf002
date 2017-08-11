@@ -1,6 +1,8 @@
 package firma.hibernate.service.order;
 
 import firma.hibernate.dao.order.OrderDAO;
+import firma.hibernate.entity.Client;
+import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAll() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Order> getOrdersByEmployee(EmployeeFirm employee) {
+        if(employee != null) return dao.getOrdersByEmployee(employee);
+        else return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByClient(Client client) {
+        if (client != null) return dao.getOrdersByClient(client);
+        else return null;
     }
 }

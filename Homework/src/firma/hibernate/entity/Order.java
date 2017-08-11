@@ -4,6 +4,7 @@ import firma.support.OrderStatus;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,13 +35,17 @@ public class Order {
     @Column(name = "NOTE_ABOUT_ORDER")
     private String noteAboutOrder;
 
-    @OneToOne
-    private EmployeeFirm salesManager;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private EmployeeFirm salesManager;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private EmployeeFirm storageManager;
 
-    @OneToOne
-    private EmployeeFirm storageManager;
+    @ManyToMany()
+    @JoinTable(name = "jnd_orders_employee", joinColumns = @JoinColumn(name = "orders_fk"), inverseJoinColumns = @JoinColumn(name = "managers_fk"))
+    private Set<EmployeeFirm> managers;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
@@ -49,12 +54,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(String number, Date createOrder, OrderStatus orderConditions, String noteAboutOrder, EmployeeFirm salesManager, Client client) {
+    public Order(String number, Date createOrder, OrderStatus orderConditions, String noteAboutOrder, Set<EmployeeFirm> managers, Client client) {
         this.number = number;
         this.createOrder = createOrder;
         this.orderConditions = orderConditions;
         this.noteAboutOrder = noteAboutOrder;
-        this.salesManager = salesManager;
+        this.managers = managers;
         this.client = client;
     }
 
@@ -116,21 +121,21 @@ public class Order {
         this.noteAboutOrder = noteAboutOrder;
     }
 
-    public EmployeeFirm getSalesManager() {
-        return salesManager;
-    }
-
-    public void setSalesManager(EmployeeFirm salesManager) {
-        this.salesManager = salesManager;
-    }
-
-    public EmployeeFirm getStorageManager() {
-        return storageManager;
-    }
-
-    public void setStorageManager(EmployeeFirm storageManager) {
-        this.storageManager = storageManager;
-    }
+//    public EmployeeFirm getSalesManager() {
+//        return salesManager;
+//    }
+//
+//    public void setSalesManager(EmployeeFirm salesManager) {
+//        this.salesManager = salesManager;
+//    }
+//
+//    public EmployeeFirm getStorageManager() {
+//        return storageManager;
+//    }
+//
+//    public void setStorageManager(EmployeeFirm storageManager) {
+//        this.storageManager = storageManager;
+//    }
 
     public Client getClient() {
         return client;
@@ -146,5 +151,13 @@ public class Order {
 
     public void setOrderPositions(Set<OrderPosition> orderPositions) {
         this.orderPositions = orderPositions;
+    }
+
+    public Set<EmployeeFirm> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(Set<EmployeeFirm> managers) {
+        this.managers = managers;
     }
 }

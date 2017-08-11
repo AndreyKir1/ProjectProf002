@@ -1,5 +1,6 @@
 package firma.hibernate.service.orderPosition;
 
+import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 
 import java.util.List;
@@ -10,4 +11,6 @@ public interface OrderPositionService {
     boolean update(OrderPosition orderPosition);
     boolean delete(OrderPosition orderPosition);
     List<OrderPosition> getAll();
+    List<OrderPosition> getOrderPositionByOrder(Order order);
+
 }

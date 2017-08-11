@@ -15,7 +15,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ServiceTest {
     public static void main(String[] args) throws ParseException {
@@ -76,11 +79,19 @@ public class ServiceTest {
         Product yaht3 = new Product("y-03", "Яхта, 30 м", 60000.00, 1, yaht);
 
 //        Create Orders
-        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", employee4, client1);
-        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", employee5, client2);
-        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", employee6, client3);
-        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", employee4, client4);
-        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", employee4, client5);
+//        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", employee4, client1);
+//        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", employee5, client2);
+//        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", employee6, client3);
+//        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", employee4, client4);
+//        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", employee4, client5);
+
+
+        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client1);
+        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client2);
+        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client3);
+        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client4);
+        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client5);
+
 
         //        Create Order positions
         OrderPosition orderPosition1 = new OrderPosition(bmw.getProductName(), 2, order1, bmw);
@@ -150,12 +161,38 @@ public class ServiceTest {
         employeeService.create(employee9);
         employeeService.create(employee10);
 
+        Set<EmployeeFirm> set = new LinkedHashSet<>();
+        Set<EmployeeFirm> set1 = new LinkedHashSet<>();
+        Set<EmployeeFirm> set2 = new LinkedHashSet<>();
+        Set<EmployeeFirm> set3 = new LinkedHashSet<>();
+        Set<EmployeeFirm> set4 = new LinkedHashSet<>();
+
+        set3.add(employee1);
+        set3.add(employee6);
+        set4.add(employee2);
+        set4.add(employee9);
+        set4.add(employee7);
+        set.add(employee5);
+        set.add(employee6);
+        set1.add(employee10);
+        set1.add(employee9);
+        set2.add(employee5);
+        set2.add(employee3);
+        set2.add(employee6);
+
+
+        order1.setManagers(set3);
+        order2.setManagers(set4);
+        order3.setManagers(set2);
+        order4.setManagers(set1);
+        order5.setManagers(set);
+
         //        Save Orders in DB
         orderService.create(order1);
         orderService.create(order2);
         orderService.create(order3);
-        orderService.create(order4);
         orderService.create(order5);
+        orderService.create(order4);
 
 //        Save Order positions in DB
         orderPositionService.create(orderPosition1);
@@ -174,14 +211,35 @@ public class ServiceTest {
         orderPositionService.create(orderPosition14);
         orderPositionService.create(orderPosition15);
 
-        List<AccountEmployee> list = accountService.getAll();
-        for (AccountEmployee el : list) {
-            System.out.println(el.getLogin() + " " + el.getPassword());
-        }
-
         System.out.println(employeeService.readByAccount(account6));
 
-        employeeService.delete(employee9);
-        employeeService.delete(employee10);
+//        List<AccountEmployee> list = accountService.getAll();
+//        for (AccountEmployee el : list) {
+//            System.out.println(el.getLogin() + " " + el.getPassword());
+//        }
+//        System.out.println("----------------------------------------------------------------");
+//        List<Product> list1 = productService.getByProductType(building);
+//        for (Product el : list1) {
+//            System.out.println(el.getProductCode() + " " + el.getProductName());
+//        }
+//        System.out.println("----------------------------------------------------------------");
+//        List<OrderPosition> list2 = orderPositionService.getOrderPositionByOrder(order3);
+//        for (OrderPosition el : list2) {
+//            System.out.println(el.getPositionName() + " " + el.getProductAmount() + " " + el.getTotalPriceOfProduct());
+//        }
+//        employeeService.delete(employee9);
+//        employeeService.delete(employee10);
+
+//        оця фігня не працює, звязок мені то мені
+        System.out.println("----------------------------------------------------------------");
+        List<Order> list = orderService.getOrdersByClient(client1);
+        for(Order el: list){
+            System.out.println(el.getNumber());
+        }
+        System.out.println("----------------------------------------------------------------");
+        List<Order> list1 = orderService.getOrdersByEmployee(employee6);
+        for(Order el: list){
+            System.out.println(el.getNumber());
+        }
     }
 }

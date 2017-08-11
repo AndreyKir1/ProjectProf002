@@ -60,9 +60,7 @@ public class EmployeeDAOimpl implements EmployeeDAO {
     @Override
     @Transactional
     public EmployeeFirm readByAccount(AccountEmployee account) {
-
         Session session = factory.getCurrentSession();
-        session.beginTransaction();
         try {
             Query query = session.createQuery("from EmployeeFirm where accountEmployee =:accountEmployee");
             query.setParameter("accountEmployee", account);

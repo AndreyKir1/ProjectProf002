@@ -1,7 +1,10 @@
 package firma.hibernate.dao.orderPosition;
 
+import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -63,5 +66,20 @@ public class OrderPositionDAOimpl implements OrderPositionDAO{
     @Transactional
     public List<OrderPosition> getAll() {
         return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.OrderPosition").list();
+    }
+
+    @Override
+    @Transactional
+    public List<OrderPosition> getOrderPositionByOrder(Order order) {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from OrderPosition where order =:orders");
+            query.setParameter("orders", order);
+            List<OrderPosition> list = query.list();
+            return list;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -4,6 +4,8 @@ import firma.support.EmployeeRols;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "EMPLOYEES")
@@ -29,6 +31,8 @@ public class EmployeeFirm {
     private boolean account;
     @OneToOne
     private AccountEmployee accountEmployee;
+    @ManyToMany(mappedBy = "managers", fetch = FetchType.LAZY)
+    private Set<Order> orders;
 
     public EmployeeFirm() {
     }
@@ -124,6 +128,14 @@ public class EmployeeFirm {
 
     public void setAccountEmployee(AccountEmployee accountEmployee) {
         this.accountEmployee = accountEmployee;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

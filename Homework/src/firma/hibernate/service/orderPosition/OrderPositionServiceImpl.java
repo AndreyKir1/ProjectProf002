@@ -1,6 +1,7 @@
 package firma.hibernate.service.orderPosition;
 
 import firma.hibernate.dao.orderPosition.OrderPositionDAO;
+import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,11 @@ public class OrderPositionServiceImpl implements OrderPositionService{
     @Override
     public List<OrderPosition> getAll() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<OrderPosition> getOrderPositionByOrder(Order order) {
+        if(order != null) return dao.getOrderPositionByOrder(order);
+        else return null;
     }
 }

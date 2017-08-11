@@ -2,6 +2,7 @@ package firma.hibernate.service.product;
 
 import firma.hibernate.dao.product.ProductDAO;
 import firma.hibernate.entity.Product;
+import firma.hibernate.entity.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAll() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Product> getByProductType(ProductType productType) {
+        if (productType != null) return dao.getByProductType(productType);
+        else return null;
     }
 }
