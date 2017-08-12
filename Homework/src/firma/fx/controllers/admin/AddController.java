@@ -17,19 +17,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.lang.reflect.Method;
 import java.time.ZoneId;
 import java.util.Date;
 
 public class AddController {
-    boolean fillBDfield = false;
-    boolean fillDOSWfield = false;
-
-
-    private AccountService accountService = new AccountServiceImpl();
-
-    private EmployeeService employeeService = new EmployeeServiceImpl();
+    private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+    private EmployeeService employeeService = context.getBean(EmployeeService.class);
+    private AccountService accountService = context.getBean(AccountService.class);
 
     @FXML
     private static AdminWindowController adminController;

@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -26,10 +28,12 @@ import java.util.Date;
 
 
 public class UpdateViewController {
+    private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+    private EmployeeService employeeService = context.getBean(EmployeeService.class);
+    private AccountService accountService = context.getBean(AccountService.class);
+
     private EmployeeFirm currentEmployee;
     private AccountEmployee currentAccount;
-    private EmployeeService employeeService;
-    private AccountService accountService;
 
     @FXML
     private static Stage stageRoot;
@@ -179,8 +183,6 @@ public class UpdateViewController {
             currentAccount.setPassword(null);
         }
 
-        employeeService = new EmployeeServiceImpl();
-        accountService = new AccountServiceImpl();
         accountService.update(currentAccount);
         employeeService.update(currentEmployee);
         Long employeeId = currentEmployee.getId();

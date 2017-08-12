@@ -10,12 +10,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class DeleteVFormController {
+    private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+    private EmployeeService employeeService = context.getBean(EmployeeService.class);
+    private AccountService accountService = context.getBean(AccountService.class);
+
     private EmployeeFirm currentEmployee;
     private AccountEmployee currentAccount;
-    private EmployeeService employeeService;
-    private AccountService accountService;
 
     @FXML
     private static Stage stageRoot;
@@ -47,9 +51,6 @@ public class DeleteVFormController {
 
     @FXML
     private void pressOK(){
-        employeeService = new EmployeeServiceImpl();
-        accountService = new AccountServiceImpl();
-
         employeeService.delete(currentEmployee);
         accountService.delete(currentAccount);
 

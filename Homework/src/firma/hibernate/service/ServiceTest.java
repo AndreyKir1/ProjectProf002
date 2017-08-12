@@ -213,9 +213,14 @@ public class ServiceTest {
 
         System.out.println(employeeService.readByAccount(account6));
 
-//        List<AccountEmployee> list = accountService.getAll();
-//        for (AccountEmployee el : list) {
-//            System.out.println(el.getLogin() + " " + el.getPassword());
+        List<AccountEmployee> list = accountService.getAll();
+        for (AccountEmployee el : list) {
+            System.out.println(el.getLogin() + " " + el.getPassword());
+        }
+//        System.out.println();
+//        List<EmployeeFirm> list1 = employeeService.getAll();
+//        for (EmployeeFirm el : list1) {
+//            System.out.println(el.getLastName() + " " + el.getSurname());
 //        }
 //        System.out.println("----------------------------------------------------------------");
 //        List<Product> list1 = productService.getByProductType(building);
@@ -231,15 +236,15 @@ public class ServiceTest {
 //        employeeService.delete(employee10);
 
 //        оця фігня не працює, звязок мені то мені
-        System.out.println("----------------------------------------------------------------");
-        List<Order> list = orderService.getOrdersByClient(client1);
-        for(Order el: list){
-            System.out.println(el.getNumber());
-        }
-        System.out.println("----------------------------------------------------------------");
-        List<Order> list1 = orderService.getOrdersByEmployee(employee6);
-        for(Order el: list){
-            System.out.println(el.getNumber());
-        }
+//        System.out.println("----------------------------------------------------------------");
+//        List<Order> list = orderService.getOrdersByClient(client1);
+//        for(Order el: list){
+//            System.out.println(el.getNumber());
+//        }
+//        System.out.println("----------------------------------------------------------------");
+//        List<Order> list1 = orderService.getOrdersByEmployee(employee6);
+//        for(Order el: list){
+//            System.out.println(el.getNumber());
+//        }
     }
 }

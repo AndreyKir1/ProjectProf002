@@ -27,6 +27,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -36,12 +38,13 @@ import java.util.Date;
 import java.util.List;
 
 public class AdminWindowController {
+    private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
+    private EmployeeService employeeService = context.getBean(EmployeeService.class);
+    private AccountService accountService = context.getBean(AccountService.class);
     @FXML
     public static ObservableList<EmployeeFirm> listEmployee;
     @FXML
     private static ObservableList<AccountEmployee> listAccount;
-    private EmployeeService employeeService = new EmployeeServiceImpl();
-    private AccountService accountService = new AccountServiceImpl();
     private static EmployeeFirm currentEmployee;
     private static ViewController viewController;
 
@@ -93,13 +96,13 @@ public class AdminWindowController {
 
     @FXML
     private void initialize() throws ParseException {
-        columnSurname.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("surname"));
-        columnName.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("name"));
-        columnLastName.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("lastName"));
-        columnDateStartOfWork.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, Date>("dateOfStarWorking"));
-        columnAccount.setCellValueFactory(new PropertyValueFactory<EmployeeFirm, String>("account"));//може доведеться булеан приводити до стрінга
-
         listEmployee = FXCollections.observableArrayList(employeeService.getAll());
+        columnSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        columnDateStartOfWork.setCellValueFactory(new PropertyValueFactory<>("dateOfStarWorking"));
+        columnAccount.setCellValueFactory(new PropertyValueFactory<>("account"));//може доведеться булеан приводити до стрінга
+
         tblView.setItems(listEmployee);
         tblView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -248,7 +251,6 @@ public class AdminWindowController {
 
     @FXML
     private void pressExit() {
-        HibernateUtil.getFactory().close();
         System.exit(0);
     }
 
