@@ -103,6 +103,15 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </padding>
                <children>
+                  <Button fx:id="btnAddNewProduct" focusTraversable="false" layoutX="520.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#AddNewProduct" prefHeight="30.0" prefWidth="150.0" text="Додати новий товар">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Pane maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="357.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="btnSave" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSave" prefHeight="30.0" prefWidth="150.0" text="ОК">
                      <font>
                         <Font name="System Bold" size="12.0" />

@@ -86,33 +86,55 @@ public class ServiceTest {
 //        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", employee4, client5);
 
 
-        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client1);
-        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client2);
-        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client3);
-        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client4);
-        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", new LinkedHashSet<>(), client5);
+        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", client1);
+        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", client2);
+        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", client3);
+        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", client4);
+        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", client5);
 
 
         //        Create Order positions
-        OrderPosition orderPosition1 = new OrderPosition(bmw.getProductName(), 2, order1, bmw);
-        OrderPosition orderPosition2 = new OrderPosition(appartment.getProductName(), 1, order1, appartment);
-        OrderPosition orderPosition3 = new OrderPosition(yaht1.getProductName(), 1, order1, yaht1);
+        OrderPosition orderPosition1 = new OrderPosition(2, bmw);
+        OrderPosition orderPosition2 = new OrderPosition(1, appartment);
+        OrderPosition orderPosition3 = new OrderPosition(1, yaht1);
 
-        OrderPosition orderPosition4 = new OrderPosition(kia.getProductName(), 5, order2, kia);
-        OrderPosition orderPosition5 = new OrderPosition(office.getProductName(), 1, order2, office);
-        OrderPosition orderPosition6 = new OrderPosition(yaht2.getProductName(), 1, order2, yaht2);
+        OrderPosition orderPosition4 = new OrderPosition(5,  kia);
+        OrderPosition orderPosition5 = new OrderPosition(1,  office);
+        OrderPosition orderPosition6 = new OrderPosition(1, yaht2);
 
-        OrderPosition orderPosition7 = new OrderPosition(deo.getProductName(), 25, order3, deo);
-        OrderPosition orderPosition8 = new OrderPosition(house.getProductName(), 1, order3, house);
-        OrderPosition orderPosition9 = new OrderPosition(yaht3.getProductName(), 1, order3, yaht3);
+        OrderPosition orderPosition7 = new OrderPosition(25,  deo);
+        OrderPosition orderPosition8 = new OrderPosition(1, house);
+        OrderPosition orderPosition9 = new OrderPosition(1,  yaht3);
 
-        OrderPosition orderPosition10 = new OrderPosition(kia.getProductName(), 15, order4, kia);
-        OrderPosition orderPosition11 = new OrderPosition(appartment.getProductName(), 3, order4, appartment);
-        OrderPosition orderPosition12 = new OrderPosition(yaht2.getProductName(), 1, order4, yaht2);
+        OrderPosition orderPosition10 = new OrderPosition(15, kia);
+        OrderPosition orderPosition11 = new OrderPosition(3, appartment);
+        OrderPosition orderPosition12 = new OrderPosition(1,  yaht2);
 //
-        OrderPosition orderPosition13 = new OrderPosition(bmw.getProductName(), 2, order5, bmw);
-        OrderPosition orderPosition14 = new OrderPosition(house.getProductName(), 11, order5, house);
-        OrderPosition orderPosition15 = new OrderPosition(yaht1.getProductName(), 5, order5, yaht1);
+        OrderPosition orderPosition13 = new OrderPosition(2,  bmw);
+        OrderPosition orderPosition14 = new OrderPosition(11,  house);
+        OrderPosition orderPosition15 = new OrderPosition(5, yaht1);
+
+        orderPosition1.setOrder(order1);
+        orderPosition2.setOrder(order1);
+        orderPosition3.setOrder(order1);
+
+        orderPosition4.setOrder(order2);
+        orderPosition5.setOrder(order2);
+        orderPosition6.setOrder(order2);
+
+        orderPosition7.setOrder(order3);
+        orderPosition8.setOrder(order3);
+        orderPosition9.setOrder(order3);
+
+        orderPosition10.setOrder(order4);
+        orderPosition11.setOrder(order4);
+        orderPosition12.setOrder(order4);
+
+        orderPosition13.setOrder(order5);
+        orderPosition14.setOrder(order5);
+        orderPosition15.setOrder(order5);
+
+
 // Save
 // Client in DB
         clientService.create(client1);

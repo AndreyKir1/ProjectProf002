@@ -12,6 +12,9 @@ public class OrderPosition {
     @Column(name = "POSITION_NAME")
     private String positionName;
 
+    @Column(name = "POSITION_CODE")
+    private String positionCode;
+
     @Column(name = "TOTAL_PRICE_OF_PRODUCT")
     private Double totalPriceOfProduct;
 
@@ -27,11 +30,11 @@ public class OrderPosition {
     public OrderPosition() {
     }
 
-    public OrderPosition(String positionName, Integer productAmount, Order order, Product product) {
-        this.positionName = positionName;
+    public OrderPosition(Integer productAmount, Product product) {
         this.productAmount = productAmount;
-        this.order = order;
         this.product = product;
+        this.positionName = product.getProductName();
+        this.positionCode = product.getProductCode();
         this.totalPriceOfProduct = productAmount*product.getProductPrice();
     }
 
@@ -81,5 +84,13 @@ public class OrderPosition {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getPositionCode() {
+        return positionCode;
+    }
+
+    public void setPositionCode(String positionCode) {
+        this.positionCode = positionCode;
     }
 }

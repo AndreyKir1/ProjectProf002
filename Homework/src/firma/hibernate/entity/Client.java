@@ -25,7 +25,7 @@ public class Client {
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     public Client() {
@@ -93,5 +93,10 @@ public class Client {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return surname + " " + name.charAt(0) + ". " + lastName.charAt(0) + ".";
     }
 }

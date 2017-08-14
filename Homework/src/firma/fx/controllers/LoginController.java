@@ -39,6 +39,8 @@ public class LoginController {
     private EmployeeService employeeService = context.getBean(EmployeeService.class);
     private AccountService accountService = context.getBean(AccountService.class);
 
+    private static EmployeeFirm currentEmployee;
+
     @FXML
     private List<EmployeeFirm> listEmployee;
 
@@ -125,7 +127,7 @@ public class LoginController {
             if (fldLogin.getText().equals(el.getLogin()) && fldPassword.getText().equals(el.getPassword())) {
                 if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.ADMINISTRATOR)) {
                     try {
-                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ви адміністратор системи");
@@ -143,14 +145,15 @@ public class LoginController {
                     }
                 } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.SALES_MANAGER)) {
                     try {
-                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ваш рівень доступу - менеджер");
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/ManagerWindow.fxml"));
                         Scene scene = new Scene(root);
+                        stage.setMinWidth(640);
+                        stage.setMinHeight(800);
                         stage.setScene(scene);
-                        ViewController.setStageAdminWindow(stage);
                         stage.show();
                         Stage curentStage = (Stage) btnOK.getScene().getWindow();
                         curentStage.close();
@@ -159,14 +162,13 @@ public class LoginController {
                     }
                 } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.STORAGE_MANAGER)) {
                     try {
-                        EmployeeFirm currentEmployee = employeeService.readByAccount(el);
+                        currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
                         stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ваш рівень доступу - кладовщик");
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/StorageManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
-                        ViewController.setStageAdminWindow(stage);
                         stage.show();
                         Stage curentStage = (Stage) btnOK.getScene().getWindow();
                         curentStage.close();
@@ -238,5 +240,7 @@ public class LoginController {
         employeeService.create(employee11);
     }
 
-
+    public static EmployeeFirm getCurrentEmployee() {
+        return currentEmployee;
+    }
 }

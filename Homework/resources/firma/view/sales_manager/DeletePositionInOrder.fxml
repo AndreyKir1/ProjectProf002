@@ -18,7 +18,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="lbEmployee" layoutX="32.0" layoutY="32.0" text="позиція товару в замовленні" wrapText="true">
+            <Label fx:id="lbPosition" layoutX="32.0" layoutY="32.0" text="позиція товару в замовленні" wrapText="true">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

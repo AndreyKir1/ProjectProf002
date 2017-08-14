@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="772.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.UpdateOrder">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="820.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="firma.fx.controllers.sales_manager.UpdateOrder">
    <children>
       <VBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -237,14 +237,14 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnDeleteOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDeleteOrderPosition" prefHeight="30.0" prefWidth="200.0" text="видалити позицію">
+                              <Button fx:id="btnCreateOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressCreateOrderPosition" prefHeight="30.0" prefWidth="200.0" text="додати товар">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
                            </children>
                            <VBox.margin>
-                              <Insets top="5.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
@@ -261,14 +261,17 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">
                            <children>
-                              <Button fx:id="btnChooseOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressChooseOrderPosition" prefHeight="30.0" prefWidth="200.0" text="обрати товар">
+                              <Button fx:id="btnDeleteOrderPosition" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressDeleteOrderPosition" prefHeight="30.0" prefWidth="200.0" text="видалити позицію">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
                               </Button>
                            </children>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" layoutX="15.0" layoutY="516.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="330.0">

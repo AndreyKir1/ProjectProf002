@@ -31,6 +31,7 @@ public class EmployeeFirm {
     private boolean account;
     @OneToOne
     private AccountEmployee accountEmployee;
+
     @ManyToMany(mappedBy = "managers", fetch = FetchType.LAZY)
     private Set<Order> orders;
 
