@@ -57,5 +57,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:4.3.10.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.10.RELEASE" level="project" />
     <orderEntry type="library" name="controlsfx-8.40.131" level="project" />
+    <orderEntry type="library" name="org.controlsfx:controlsfx:8.40.13" level="project" />
   </component>
 </module>

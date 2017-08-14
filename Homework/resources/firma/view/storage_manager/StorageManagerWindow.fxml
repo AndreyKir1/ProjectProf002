@@ -12,25 +12,6 @@
    <children>
       <VBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <MenuBar>
-               <menus>
-                  <Menu mnemonicParsing="false" text="File">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Edit">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Help">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                     </items>
-                  </Menu>
-               </menus>
-            </MenuBar>
             <HBox alignment="TOP_RIGHT" prefHeight="373.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox prefHeight="335.0" prefWidth="590.0" HBox.hgrow="ALWAYS">
@@ -48,8 +29,10 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                            <columns>
-                              <TableColumn prefWidth="75.0" text="C1" />
-                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn fx:id="columnOrderNumber" prefWidth="75.0" text="Код замовлення" />
+                              <TableColumn fx:id="columnOrderCreateDate" prefWidth="75.0" text="Дата замовлення" />
+                              <TableColumn fx:id="columnOrderTotalPrice" prefWidth="75.0" text="Total price" />
+                              <TableColumn fx:id="columnOrderStatus" prefWidth="75.0" text="Статус" />
                            </columns>
                         </TableView>
                         <Label text="всього замовлень: ">
@@ -128,7 +111,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ChoiceBox focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0">
+                        <ChoiceBox fx:id="choiseBoxOrderStatus" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
@@ -157,8 +140,9 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                            <columns>
-                              <TableColumn prefWidth="75.0" text="C1" />
-                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn fx:id="columnProductName" prefWidth="75.0" text="Продукт" />
+                              <TableColumn fx:id="columnProductAmount" prefWidth="75.0" text="Кiлькiсть" />
+                              <TableColumn fx:id="columnProductPrice" prefWidth="75.0" text="Цiна" />
                            </columns>
                            <VBox.margin>
                               <Insets />
