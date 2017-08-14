@@ -1,6 +1,7 @@
 package firma.fx.controllers.sales_manager;
 
 import firma.hibernate.entity.*;
+import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.hibernate.service.product.ProductService;
 import firma.hibernate.service.productType.ProductTypeService;
@@ -34,6 +35,7 @@ public class CreateOrderPosition {
     private ProductService productService = context.getBean(ProductService.class);
     private ProductTypeService productTypeService = context.getBean(ProductTypeService.class);
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
 
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
@@ -128,8 +130,10 @@ public class CreateOrderPosition {
             }
             if(updatreOrdeOwner){
                 OrderPosition newOrderPosition = new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem());
-                newOrderPosition.setOrder(currentOrder);
-                orderPositionService.create(newOrderPosition);
+//                newOrderPosition.setOrder(currentOrder);
+//                orderPositionService.create(newOrderPosition);
+//                orderService.update(currentOrder);
+                UpdateOrder.addToorderPositions(new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem()));
                 new UpdateOrder().updateOrderPositions();
                 fldAmount.clear();
             }

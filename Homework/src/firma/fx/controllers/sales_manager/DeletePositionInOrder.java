@@ -1,5 +1,6 @@
 package firma.fx.controllers.sales_manager;
 
+import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
@@ -13,9 +14,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class DeletePositionInOrder {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
 
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
+
+    private static Order currentOrder;
 
     @FXML
     private static OrderPosition currentOrderPosition;
@@ -46,7 +50,8 @@ public class DeletePositionInOrder {
         }
         if(updatreOrdeOwner){
             orderPositionService.delete(currentOrderPosition);
-            new UpdateOrder().updateOrderPositions();
+            orderService.update(currentOrder);
+            new UpdateOrder().updateOrderPositions1(currentOrder);
             Stage current = (Stage) btnOK.getScene().getWindow();
             current.close();
         }
@@ -69,6 +74,10 @@ public class DeletePositionInOrder {
 
     public static void setUpdatreOrdeOwner(boolean updatreOrdeOwner) {
         DeletePositionInOrder.updatreOrdeOwner = updatreOrdeOwner;
+    }
+
+    public static void setCurrentOrder(Order currentOrder) {
+        DeletePositionInOrder.currentOrder = currentOrder;
     }
 }
 

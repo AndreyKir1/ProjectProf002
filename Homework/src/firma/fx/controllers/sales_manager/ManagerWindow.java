@@ -189,14 +189,14 @@ public class ManagerWindow {
     @FXML
     void pressUpdateOrder() {
         if(tableOrders.getSelectionModel().getSelectedItem() != null){
-            currentOrder = tableOrders.getSelectionModel().getSelectedItem();
+            currentOrder = orderService.read(tableOrders.getSelectionModel().getSelectedItem().getId());
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Редагування замовлення");
                 Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/UpdateOrder.fxml"));
                 Scene scene = new Scene(root);
                 stage.setMinWidth(800);
-                stage.setMinHeight(820);
+                stage.setMinHeight(860);
                 stage.setScene(scene);
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(btnUpdateOrder.getScene().getWindow());

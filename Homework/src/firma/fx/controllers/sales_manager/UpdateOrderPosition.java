@@ -1,9 +1,8 @@
 package firma.fx.controllers.sales_manager;
 
-import firma.hibernate.entity.EmployeeFirm;
-import firma.hibernate.entity.OrderPosition;
-import firma.hibernate.entity.Product;
-import firma.hibernate.entity.ProductType;
+import firma.hibernate.entity.*;
+import firma.hibernate.service.order.OrderService;
+import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.hibernate.service.product.ProductService;
 import firma.hibernate.service.productType.ProductTypeService;
 import javafx.beans.value.ChangeListener;
@@ -24,9 +23,15 @@ public class UpdateOrderPosition {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private ProductService productService = context.getBean(ProductService.class);
     private ProductTypeService productTypeService = context.getBean(ProductTypeService.class);
+    private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
+
 
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
+
+    private static Order currentOrder;
+
 
     @FXML
     private static OrderPosition currentOrderPosition;
@@ -111,11 +116,10 @@ public class UpdateOrderPosition {
                 OrderPosition updated = new OrderPosition();
                 updated.setProduct(tableView.getSelectionModel().getSelectedItem());
                 updated.setProductAmount(Integer.parseInt(fldAmount.getText()));
-                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
-                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
-                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
-                        Integer.parseInt(fldAmount.getText()));
-
+//                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
+//                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
+//                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
+//                        Integer.parseInt(fldAmount.getText()));
                 CreateOrder.setToOrderPosition(indexCurrentOrderPosition, updated);
                 fldAmount.clear();
                 Stage current = (Stage) btnSave.getScene().getWindow();
@@ -123,15 +127,17 @@ public class UpdateOrderPosition {
                 createOrderOwner = false;
             }
             if(updatreOrdeOwner){
-                OrderPosition updated = new OrderPosition();
+                OrderPosition updated = currentOrderPosition;
                 updated.setProduct(tableView.getSelectionModel().getSelectedItem());
                 updated.setProductAmount(Integer.parseInt(fldAmount.getText()));
-                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
-                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
-                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
-                        Integer.parseInt(fldAmount.getText()));
-
                 UpdateOrder.setToOrderPosition(indexCurrentOrderPosition, updated);
+//                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
+//                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
+//                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
+//                        Integer.parseInt(fldAmount.getText()));
+//                orderPositionService.update(updated);
+//                orderService.update(currentOrder);
+//                new UpdateOrder().updateOrderPositions();
                 fldAmount.clear();
                 Stage current = (Stage) btnSave.getScene().getWindow();
                 current.close();
@@ -167,6 +173,10 @@ public class UpdateOrderPosition {
 
     public static void setUpdatreOrdeOwner(boolean updatreOrdeOwner) {
         UpdateOrderPosition.updatreOrdeOwner = updatreOrdeOwner;
+    }
+
+    public static void setCurrentOrder(Order currentOrder) {
+        UpdateOrderPosition.currentOrder = currentOrder;
     }
 }
 

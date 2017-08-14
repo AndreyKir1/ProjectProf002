@@ -2,6 +2,7 @@ package firma.fx.controllers.sales_manager;
 
 import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
+import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.support.OrderStatus;
 import javafx.collections.FXCollections;
@@ -26,10 +27,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UpdateOrder {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
     private Order currentOrder;
 
     @FXML
@@ -108,7 +111,7 @@ public class UpdateOrder {
     private Label lbLastName;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         columnProductCode.setCellValueFactory(new PropertyValueFactory<>("positionCode"));
         columnProductNane.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
@@ -119,6 +122,8 @@ public class UpdateOrder {
         tableOrderPosition.setItems(orderPositions);
 
         btnOrderStatus.getItems().setAll(OrderStatus.values());
+        btnOrderStatus.setValue(currentOrder.getOrderConditions());
+
 
         tableOrderPosition.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -168,9 +173,11 @@ public class UpdateOrder {
 
     @FXML
     void pressDeleteOrderPosition() {
-        if(tableOrderPosition.getSelectionModel().getSelectedItem() != null){
+        if (tableOrderPosition.getSelectionModel().getSelectedItem() != null) {
             DeletePositionInOrder.setCreateOrderOwner(false);
             DeletePositionInOrder.setUpdatreOrdeOwner(true);
+            DeletePositionInOrder.setCurrentOrderPosition(orderPositionService.read(tableOrderPosition.getSelectionModel().getSelectedItem().getId()));
+            DeletePositionInOrder.setCurrentOrder(currentOrder);
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Видалити позицію в замовленні");
@@ -189,8 +196,12 @@ public class UpdateOrder {
 
     @FXML
     void pressUpdateOrderPosition() {
-        if(tableOrderPosition.getSelectionModel().getSelectedItem() != null){
+        if (tableOrderPosition.getSelectionModel().getSelectedItem() != null) {
+            UpdateOrderPosition.setCreateOrderOwner(false);
             UpdateOrderPosition.setUpdatreOrdeOwner(true);
+            UpdateOrderPosition.setCurrentOrderPosition(tableOrderPosition.getSelectionModel().getSelectedItem());
+            UpdateOrderPosition.setCurrentOrder(currentOrder);
+
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Редагувати позицію в замовленні");
@@ -231,7 +242,7 @@ public class UpdateOrder {
 
     @FXML
     void pressStorageManager() {
-        if(btnStorageManager.getText() != null){
+        if (btnStorageManager.getText() != null) {
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Інформація про кладовщика");
@@ -250,28 +261,66 @@ public class UpdateOrder {
 
     @FXML
     void pressOK() {
-
+        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
+            Stage stage = (Stage) btnOK.getScene().getWindow();
+            stage.close();
+        } else if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+            List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+            for (OrderPosition el : list) {
+                orderPositionService.delete(el);
+            }
+            orderService.update(currentOrder);
+            Stage stage = (Stage) btnOK.getScene().getWindow();
+            stage.close();
+        }else if(orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0){
+            for(OrderPosition el:orderPositions){
+                el.setOrder(currentOrder);
+                orderPositionService.create(el);
+            }
+            orderService.update(currentOrder);
+            Stage stage = (Stage) btnOK.getScene().getWindow();
+            stage.close();
+        }else if(orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0){
+            List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+            for (OrderPosition el : list) {
+                orderPositionService.delete(el);
+            }
+            orderService.update(currentOrder);
+            for(OrderPosition el:orderPositions){
+                el.setOrder(currentOrder);
+                orderPositionService.create(el);
+            }
+            orderService.update(currentOrder);
+            Stage stage = (Stage) btnOK.getScene().getWindow();
+            stage.close();
+        }
     }
 
     @FXML
-    public static void setToOrderPosition(int index, OrderPosition orderPosition){
+    public static void setToOrderPosition(int index, OrderPosition orderPosition) {
         orderPositions.set(index, orderPosition);
     }
 
     @FXML
-    public static void addToorderPositions(OrderPosition orderPosition){
+    public static void addToorderPositions(OrderPosition orderPosition) {
         orderPositions.add(orderPosition);
     }
 
-//    @FXML
-//    public static void deleteOrderPositions(OrderPosition orderPosition){
-//        orderPositions.remove(orderPosition);
-//    }
+    @FXML
+    public static void deleteOrderPositions(OrderPosition orderPosition) {
+        orderPositions.remove(orderPosition);
+    }
 
     @FXML
-    public void updateOrderPositions(){
+    public void updateOrderPositions() {
         orderPositions.clear();
         orderPositions.setAll(orderPositionService.getOrderPositionByOrder(currentOrder));
+    }
+
+    @FXML
+    public void updateOrderPositions1(Order newOrder) {
+        orderPositions.clear();
+        orderPositions.setAll(orderPositionService.getOrderPositionByOrder(newOrder));
     }
 
     @FXML
@@ -281,7 +330,7 @@ public class UpdateOrder {
     }
 
     @FXML
-    void setCustomerData(String surName, String name, String lastName, String phoneNumber, String email){
+    void setCustomerData(String surName, String name, String lastName, String phoneNumber, String email) {
         lbSurname.setText(surName);
         lbName.setText(name);
         lbLastName.setText(lastName);
