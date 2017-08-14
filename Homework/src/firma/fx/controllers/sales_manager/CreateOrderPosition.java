@@ -40,6 +40,9 @@ public class CreateOrderPosition {
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
 
+    private static CreateOrder createOrderController;
+    private static UpdateOrder updateOrderController;
+
     private static Order currentOrder;
 
     @FXML
@@ -127,15 +130,12 @@ public class CreateOrderPosition {
             if(createOrderOwner){
                 CreateOrder.addToorderPositions(new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem()));
                 fldAmount.clear();
+                createOrderController.setOrderCostValue();
             }
             if(updatreOrdeOwner){
-                OrderPosition newOrderPosition = new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem());
-//                newOrderPosition.setOrder(currentOrder);
-//                orderPositionService.create(newOrderPosition);
-//                orderService.update(currentOrder);
                 UpdateOrder.addToorderPositions(new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem()));
-                new UpdateOrder().updateOrderPositions();
                 fldAmount.clear();
+                updateOrderController.setOrderCostValue();
             }
 
         }
@@ -180,6 +180,14 @@ public class CreateOrderPosition {
 
     public static void setCurrentOrder(Order currentOrder) {
         CreateOrderPosition.currentOrder = currentOrder;
+    }
+
+    public static void setCreateOrderController(CreateOrder createOrderController) {
+        CreateOrderPosition.createOrderController = createOrderController;
+    }
+
+    public static void setUpdateOrderController(UpdateOrder updateOrderController) {
+        CreateOrderPosition.updateOrderController = updateOrderController;
     }
 }
 

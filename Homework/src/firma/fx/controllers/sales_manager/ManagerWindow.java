@@ -52,6 +52,9 @@ public class ManagerWindow {
     private CheckBox chBoxAll;
 
     @FXML
+    private Label lbCurrentOrder;
+
+    @FXML
     private TableView<Order> tableOrders;
 
     @FXML
@@ -122,7 +125,10 @@ public class ManagerWindow {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 1) {
-                    showOrderPositions();
+                    int row =  tableOrders.getSelectionModel().getSelectedIndex();
+                    lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + tableOrders.getSelectionModel().getSelectedItem().getNumber());
+                    showOrderPositions(tableOrders.getSelectionModel().getSelectedItem());
+                    tableOrders.getSelectionModel().select(row);
                 }
             }
         });
@@ -140,11 +146,19 @@ public class ManagerWindow {
     }
 
     @FXML
-    private void showOrderPositions() {
-        if(tableOrders.getSelectionModel().getSelectedItem() != null){
-            orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(tableOrders.getSelectionModel().getSelectedItem()));
+    public void showOrderPositions(Order order) {
+        if(order != null){
+            orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(order));
             tableOrderDetails.setItems(orderPositionsList);
             btnOrderStatus.setValue(tableOrders.getSelectionModel().getSelectedItem().getOrderConditions());
+        }
+    }
+
+    @FXML
+    public void updateOrderPositions(Order order) {
+        if(order != null){
+            orderPositionsList.clear();
+            orderPositionsList.setAll(orderPositionService.getOrderPositionByOrder(order));
         }
     }
 
@@ -176,7 +190,7 @@ public class ManagerWindow {
             Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/CreateOrder.fxml"));
             Scene scene = new Scene(root);
             stage.setMinWidth(800);
-            stage.setMinHeight(772);
+            stage.setMinHeight(820);
             stage.setScene(scene);
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(btnNewOrder.getScene().getWindow());

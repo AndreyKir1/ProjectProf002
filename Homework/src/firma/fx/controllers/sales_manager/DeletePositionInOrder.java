@@ -14,10 +14,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class DeletePositionInOrder {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
-    private OrderService orderService = context.getBean(OrderService.class);
 
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
+
+    private static CreateOrder createOrderController;
+    private static UpdateOrder updateOrderController;
 
     private static Order currentOrder;
 
@@ -45,13 +47,13 @@ public class DeletePositionInOrder {
     void pressOK() {
         if (createOrderOwner) {
             CreateOrder.deleteOrderPositions(currentOrderPosition);
+            createOrderController.setOrderCostValue();
             Stage current = (Stage) btnOK.getScene().getWindow();
             current.close();
         }
         if(updatreOrdeOwner){
-            orderPositionService.delete(currentOrderPosition);
-            orderService.update(currentOrder);
-            new UpdateOrder().updateOrderPositions1(currentOrder);
+            UpdateOrder.deleteOrderPositions(currentOrderPosition);
+            updateOrderController.setOrderCostValue();
             Stage current = (Stage) btnOK.getScene().getWindow();
             current.close();
         }
@@ -78,6 +80,14 @@ public class DeletePositionInOrder {
 
     public static void setCurrentOrder(Order currentOrder) {
         DeletePositionInOrder.currentOrder = currentOrder;
+    }
+
+    public static void setCreateOrderController(CreateOrder createOrderController) {
+        DeletePositionInOrder.createOrderController = createOrderController;
+    }
+
+    public static void setUpdateOrderController(UpdateOrder updateOrderController) {
+        DeletePositionInOrder.updateOrderController = updateOrderController;
     }
 }
 

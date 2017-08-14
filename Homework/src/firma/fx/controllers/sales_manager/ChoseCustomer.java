@@ -3,6 +3,7 @@ package firma.fx.controllers.sales_manager;
 import firma.hibernate.entity.Client;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.service.client.ClientService;
+import firma.hibernate.service.order.OrderService;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -27,6 +28,8 @@ import java.io.IOException;
 public class ChoseCustomer {
     private static ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private static ClientService service = context.getBean(ClientService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
+
     private static CreateOrder createOrderController;
     private static UpdateOrder updateOrderController;
 
@@ -152,20 +155,37 @@ public class ChoseCustomer {
     @FXML
     void pressDelete() {
         if(tblView.getSelectionModel().getSelectedItem() != null){
-            DeleteCustomerConfirm.setCurrentClient(tblView.getSelectionModel().getSelectedItem());
-            try {
-                Stage stage = new Stage();
-                stage.setTitle("Видалити клієнта з бази");
-                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/DeleteCustomerConfirm.fxml"));
-                Scene scene = new Scene(root);
-                stage.setResizable(false);
-                stage.setScene(scene);
-                stage.initModality(Modality.WINDOW_MODAL);
-                stage.initOwner(btnDelete.getScene().getWindow());
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(orderService.getOrdersByClient(tblView.getSelectionModel().getSelectedItem()).size() == 0){
+                DeleteCustomerConfirm.setCurrentClient(tblView.getSelectionModel().getSelectedItem());
+                try {
+                    Stage stage = new Stage();
+                    stage.setTitle("Видалити клієнта з бази");
+                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/DeleteCustomerConfirm.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setResizable(false);
+                    stage.setScene(scene);
+                    stage.initModality(Modality.WINDOW_MODAL);
+                    stage.initOwner(btnDelete.getScene().getWindow());
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                try {
+                    Stage stage = new Stage();
+                    stage.setTitle("Попередження!");
+                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/DeleteCustomerImposible.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setResizable(false);
+                    stage.setScene(scene);
+                    stage.initModality(Modality.WINDOW_MODAL);
+                    stage.initOwner(btnDelete.getScene().getWindow());
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
     }
 
@@ -173,12 +193,14 @@ public class ChoseCustomer {
     void pressSave() {
         if(tblView.getSelectionModel().getSelectedItem() != null){
             currentClient = tblView.getSelectionModel().getSelectedItem();
-            CreateOrder.setCurrentClient(currentClient);
+
             if(createOrderController != null){
+                CreateOrder.setCurrentClient(currentClient);
                 createOrderController.setCustomerData(currentClient.getSurname(), currentClient.getName(), currentClient.getLastName(),
                         currentClient.getPhoneNumder(), currentClient.getEmail());
             }
             if(updateOrderController != null){
+                UpdateOrder.setCurrentClient(currentClient);
                 updateOrderController.setCustomerData(currentClient.getSurname(), currentClient.getName(), currentClient.getLastName(),
                         currentClient.getPhoneNumder(), currentClient.getEmail());
             }

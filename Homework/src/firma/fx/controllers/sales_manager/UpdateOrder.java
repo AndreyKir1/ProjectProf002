@@ -1,5 +1,6 @@
 package firma.fx.controllers.sales_manager;
 
+import firma.hibernate.entity.Client;
 import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 import firma.hibernate.service.order.OrderService;
@@ -27,6 +28,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 public class UpdateOrder {
@@ -34,6 +39,9 @@ public class UpdateOrder {
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
     private OrderService orderService = context.getBean(OrderService.class);
     private Order currentOrder;
+
+    @FXML
+    private static Client currentClient;
 
     @FXML
     private static ObservableList<OrderPosition> orderPositions;
@@ -118,12 +126,26 @@ public class UpdateOrder {
         columnCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
 
         currentOrder = ManagerWindow.getCurrentOrder();
+        lbOrderNumber.setText(currentOrder.getNumber());
+        lbOrderDarte.setText(new SimpleDateFormat("dd.MM.yyyy").format(currentOrder.getCreateOrder()));
         orderPositions = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(currentOrder));
         tableOrderPosition.setItems(orderPositions);
 
         btnOrderStatus.getItems().setAll(OrderStatus.values());
         btnOrderStatus.setValue(currentOrder.getOrderConditions());
 
+        Client temp = currentOrder.getClient();
+        lbSurname.setText(temp.getSurname());
+        lbName.setText(temp.getName());
+        lbLastName.setText(temp.getLastName());
+        lbEmail.setText(temp.getEmail());
+        lbPhone.setText(temp.getEmail());
+
+        lblrderCost.setText("Вартість замовлення, грн: " + currentOrder.getTotalPrice());
+
+        if (currentOrder.getOrderReady() != null) {
+            fldReadyOrderDate.setValue(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(currentOrder.getOrderReady())));
+        }
 
         tableOrderPosition.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -176,7 +198,8 @@ public class UpdateOrder {
         if (tableOrderPosition.getSelectionModel().getSelectedItem() != null) {
             DeletePositionInOrder.setCreateOrderOwner(false);
             DeletePositionInOrder.setUpdatreOrdeOwner(true);
-            DeletePositionInOrder.setCurrentOrderPosition(orderPositionService.read(tableOrderPosition.getSelectionModel().getSelectedItem().getId()));
+            DeletePositionInOrder.setUpdateOrderController(this);
+            DeletePositionInOrder.setCurrentOrderPosition(tableOrderPosition.getSelectionModel().getSelectedItem());
             DeletePositionInOrder.setCurrentOrder(currentOrder);
             try {
                 Stage stage = new Stage();
@@ -199,8 +222,9 @@ public class UpdateOrder {
         if (tableOrderPosition.getSelectionModel().getSelectedItem() != null) {
             UpdateOrderPosition.setCreateOrderOwner(false);
             UpdateOrderPosition.setUpdatreOrdeOwner(true);
+            UpdateOrderPosition.setUpdateOrderController(this);
             UpdateOrderPosition.setCurrentOrderPosition(tableOrderPosition.getSelectionModel().getSelectedItem());
-            UpdateOrderPosition.setCurrentOrder(currentOrder);
+            UpdateOrderPosition.setIndexCurrentOrderPosition(orderPositions.indexOf(tableOrderPosition.getSelectionModel().getSelectedItem()));
 
             try {
                 Stage stage = new Stage();
@@ -224,6 +248,7 @@ public class UpdateOrder {
         CreateOrderPosition.setCreateOrderOwner(false);
         CreateOrderPosition.setUpdatreOrdeOwner(true);
         CreateOrderPosition.setCurrentOrder(currentOrder);
+        CreateOrderPosition.setUpdateOrderController(this);
         try {
             Stage stage = new Stage();
             stage.setTitle("Обрати товар");
@@ -261,39 +286,52 @@ public class UpdateOrder {
 
     @FXML
     void pressOK() {
-        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
-            Stage stage = (Stage) btnOK.getScene().getWindow();
-            stage.close();
-        } else if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+//        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
+        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
             List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
             for (OrderPosition el : list) {
                 orderPositionService.delete(el);
             }
-            orderService.update(currentOrder);
-            Stage stage = (Stage) btnOK.getScene().getWindow();
-            stage.close();
-        }else if(orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0){
-            for(OrderPosition el:orderPositions){
+            currentOrder.setTotalPrice(0.0);
+        } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
+            for (OrderPosition el : orderPositions) {
                 el.setOrder(currentOrder);
                 orderPositionService.create(el);
             }
-            orderService.update(currentOrder);
-            Stage stage = (Stage) btnOK.getScene().getWindow();
-            stage.close();
-        }else if(orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0){
+            currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
+        } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
             List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
             for (OrderPosition el : list) {
                 orderPositionService.delete(el);
             }
-            orderService.update(currentOrder);
-            for(OrderPosition el:orderPositions){
+            for (OrderPosition el : orderPositions) {
                 el.setOrder(currentOrder);
                 orderPositionService.create(el);
             }
-            orderService.update(currentOrder);
-            Stage stage = (Stage) btnOK.getScene().getWindow();
-            stage.close();
+            currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
         }
+        if (currentClient != null) {
+            currentOrder.setClient(currentClient);
+//            orderService.update(currentOrder);
+            currentClient = null;
+        }
+
+        if (areaNote.getText() != null && areaNote.getText().length() > 0) {
+            currentOrder.setNoteAboutOrder(areaNote.getText());
+        }
+
+        if (fldReadyOrderDate.getValue() != null) {
+            currentOrder.setOrderReady(Date.from(fldReadyOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+
+
+        currentOrder.setOrderConditions(btnOrderStatus.getValue());
+        orderService.update(currentOrder);
+        new ManagerWindow().updateOrdersList();
+        new ManagerWindow().updateOrderPositions(currentOrder);
+
+        Stage stage = (Stage) btnOK.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -318,12 +356,6 @@ public class UpdateOrder {
     }
 
     @FXML
-    public void updateOrderPositions1(Order newOrder) {
-        orderPositions.clear();
-        orderPositions.setAll(orderPositionService.getOrderPositionByOrder(newOrder));
-    }
-
-    @FXML
     void pressCancel() {
         Stage current = (Stage) btnCancel.getScene().getWindow();
         current.close();
@@ -337,5 +369,21 @@ public class UpdateOrder {
         lbPhone.setText(phoneNumber);
         lbEmail.setText(email);
     }
+
+    public static void setCurrentClient(Client currentClient) {
+        UpdateOrder.currentClient = currentClient;
+    }
+
+    @FXML
+    void setOrderCostValue() {
+        Double value = 0.0;
+        if(orderPositions.size() > 0){
+            for (OrderPosition el:orderPositions ){
+                value += el.getTotalPriceOfProduct();
+            }
+        }
+        lblrderCost.setText("Вартість замовлення, грн: " + value.toString());
+    }
+
 }
 

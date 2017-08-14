@@ -35,7 +35,7 @@
                <children>
                   <VBox prefHeight="335.0" prefWidth="590.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="ЗАМОВЛЕННЯ">
+                        <Label fx:id="lbCurrentOrder" text="ЗАМОВЛЕННЯ">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

@@ -26,9 +26,11 @@ public class UpdateOrderPosition {
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
     private OrderService orderService = context.getBean(OrderService.class);
 
-
     private static boolean createOrderOwner;
     private static boolean updatreOrdeOwner;
+
+    private static CreateOrder createOrderController;
+    private static UpdateOrder updateOrderController;
 
     private static Order currentOrder;
 
@@ -113,37 +115,23 @@ public class UpdateOrderPosition {
     void pressOK() {
         if(fldAmount.getText() != null && fldAmount.getText().length() > 0 && tableView.getSelectionModel().getSelectedItem() != null){
             if(createOrderOwner){
-                OrderPosition updated = new OrderPosition();
-                updated.setProduct(tableView.getSelectionModel().getSelectedItem());
-                updated.setProductAmount(Integer.parseInt(fldAmount.getText()));
-//                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
-//                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
-//                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
-//                        Integer.parseInt(fldAmount.getText()));
+                OrderPosition updated = new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem());
                 CreateOrder.setToOrderPosition(indexCurrentOrderPosition, updated);
+                createOrderController.setOrderCostValue();
                 fldAmount.clear();
                 Stage current = (Stage) btnSave.getScene().getWindow();
                 current.close();
                 createOrderOwner = false;
             }
             if(updatreOrdeOwner){
-                OrderPosition updated = currentOrderPosition;
-                updated.setProduct(tableView.getSelectionModel().getSelectedItem());
-                updated.setProductAmount(Integer.parseInt(fldAmount.getText()));
+                OrderPosition updated = new OrderPosition(Integer.parseInt(fldAmount.getText()), tableView.getSelectionModel().getSelectedItem());
                 UpdateOrder.setToOrderPosition(indexCurrentOrderPosition, updated);
-//                updated.setPositionCode(tableView.getSelectionModel().getSelectedItem().getProductCode());
-//                updated.setPositionName(tableView.getSelectionModel().getSelectedItem().getProductName());
-//                updated.setTotalPriceOfProduct(tableView.getSelectionModel().getSelectedItem().getProductPrice() *
-//                        Integer.parseInt(fldAmount.getText()));
-//                orderPositionService.update(updated);
-//                orderService.update(currentOrder);
-//                new UpdateOrder().updateOrderPositions();
+                updateOrderController.setOrderCostValue();
                 fldAmount.clear();
                 Stage current = (Stage) btnSave.getScene().getWindow();
                 current.close();
                 updatreOrdeOwner = false;
             }
-
         }
     }
 
@@ -177,6 +165,14 @@ public class UpdateOrderPosition {
 
     public static void setCurrentOrder(Order currentOrder) {
         UpdateOrderPosition.currentOrder = currentOrder;
+    }
+
+    public static void setCreateOrderController(CreateOrder createOrderController) {
+        UpdateOrderPosition.createOrderController = createOrderController;
+    }
+
+    public static void setUpdateOrderController(UpdateOrder updateOrderController) {
+        UpdateOrderPosition.updateOrderController = updateOrderController;
     }
 }
 

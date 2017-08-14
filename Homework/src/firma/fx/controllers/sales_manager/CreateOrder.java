@@ -183,6 +183,7 @@ public class CreateOrder {
     void pressCreateOrderPosition() {
         CreateOrderPosition.setCreateOrderOwner(true);
         CreateOrderPosition.setUpdatreOrdeOwner(false);
+        CreateOrderPosition.setCreateOrderController(this);
         try {
             Stage stage = new Stage();
             stage.setTitle("Обрати товар");
@@ -204,6 +205,7 @@ public class CreateOrder {
         if (tableViewOrdersPositions.getSelectionModel().getSelectedItem() != null) {
             UpdateOrderPosition.setCreateOrderOwner(true);
             UpdateOrderPosition.setUpdatreOrdeOwner(false);
+            UpdateOrderPosition.setCreateOrderController(this);
             UpdateOrderPosition.setCurrentOrderPosition(tableViewOrdersPositions.getSelectionModel().getSelectedItem());
             UpdateOrderPosition.setIndexCurrentOrderPosition(orderPositions.indexOf(tableViewOrdersPositions.getSelectionModel().getSelectedItem()));
             try {
@@ -228,6 +230,7 @@ public class CreateOrder {
         if (tableViewOrdersPositions.getSelectionModel().getSelectedItem() != null) {
             DeletePositionInOrder.setCreateOrderOwner(true);
             DeletePositionInOrder.setUpdatreOrdeOwner(false);
+            DeletePositionInOrder.setCreateOrderController(this);
             DeletePositionInOrder.setCurrentOrderPosition(tableViewOrdersPositions.getSelectionModel().getSelectedItem());
             try {
                 Stage stage = new Stage();
@@ -252,6 +255,7 @@ public class CreateOrder {
                 orderPositions.size() > 0){
             Order order = new Order(fldOrderNumber.getText(),  Date.from(fldOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), btnOrderStatus.getValue(),
                     areaNotes.getText(), currentClient);
+            order.setTotalPrice(Double.parseDouble(lbOrderCost.getText().substring(26)));
             Set<EmployeeFirm> setEmployee = new LinkedHashSet<>();
             setEmployee.add(LoginController.getCurrentEmployee());
             order.setManagers(setEmployee);
@@ -300,6 +304,16 @@ public class CreateOrder {
 
     public static void setCurrentClient(Client currentClient) {
         CreateOrder.currentClient = currentClient;
+    }
+
+    void setOrderCostValue() {
+        Double value = 0.0;
+        if(orderPositions.size() > 0){
+            for (OrderPosition el:orderPositions ){
+                value += el.getTotalPriceOfProduct();
+            }
+        }
+        lbOrderCost.setText("Вартість замовлення, грн: " + value.toString());
     }
 }
 
