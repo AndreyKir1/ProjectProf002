@@ -83,10 +83,14 @@ public class StorageManagerWindow {
     private TableColumn<OrderPosition, String> columnProductName;
 
     @FXML
-    private TableColumn<OrderPosition, String> columnProductAmount;
+    private TableColumn<OrderPosition, Integer> columnProductAmount;
 
     @FXML
-    private TableColumn<OrderPosition, String> columnProductPrice;
+    private TableColumn<OrderPosition, Double> columnProductPrice;
+
+    public static Order getCurrentOrder(){
+        return currentOrder;
+    }
 
     @FXML
     private void initialize() throws ParseException {
