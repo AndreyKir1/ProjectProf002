@@ -21,7 +21,7 @@ public class OrderPosition {
     @Column(name = "PRODUCT_AMOUNT")
     private Integer productAmount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Order order;
 
     @OneToOne

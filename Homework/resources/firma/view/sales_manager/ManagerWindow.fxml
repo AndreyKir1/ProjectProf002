@@ -45,10 +45,11 @@
                         </Label>
                         <TableView fx:id="tableOrders" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="columnOrderNumber" prefWidth="75.0" text="Номер" />
-                            <TableColumn fx:id="columnOrderDate" prefWidth="75.0" text="Дата" />
-                              <TableColumn fx:id="columnOrderCustomer" prefWidth="75.0" text="Замовник" />
-                              <TableColumn fx:id="columnOrderCost" prefWidth="75.0" text="Вартість" />
+                            <TableColumn fx:id="columnOrderNumber" prefWidth="67.0" text="Номер" />
+                            <TableColumn fx:id="columnOrderDate" prefWidth="73.0" text="Дата" />
+                              <TableColumn fx:id="columnOrderCustomer" prefWidth="94.0" text="Замовник" />
+                              <TableColumn fx:id="columnOrderCost" prefWidth="82.0" text="Вартість" />
+                              <TableColumn fx:id="columnOrderStatus" prefWidth="149.0" text="Стан замовлення" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -74,7 +75,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <CheckBox fx:id="chBoxNew" focusTraversable="false" mnemonicParsing="false" onAction="#boxNewOrders" text="нові">
+                        <CheckBox fx:id="chBoxInSManager" focusTraversable="false" mnemonicParsing="false" onAction="#BoxInSManager" text="опрацьовуються продавцем">
                            <VBox.margin>
                               <Insets left="5.0" top="5.0" />
                            </VBox.margin>
@@ -82,7 +83,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxWorked" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#boxInWork" text="в роботі">
+                        <CheckBox fx:id="chBoxInStorage" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#BoxInStorage" text="опрацьовуються на складі">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -90,7 +91,7 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxFinished" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#boxDone" text="виконані">
+                        <CheckBox fx:id="chBoxReady" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#BoxReady" text="готові">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -98,7 +99,15 @@
                               <Insets left="5.0" top="10.0" />
                            </VBox.margin>
                         </CheckBox>
-                        <CheckBox fx:id="chBoxAll" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#boxAll" text="всі">
+                        <CheckBox fx:id="chBoxDone" focusTraversable="false" layoutX="15.0" layoutY="54.0" mnemonicParsing="false" onAction="#BoxDone" text="виконані">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="5.0" top="10.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                        <CheckBox fx:id="chBoxCanceled" focusTraversable="false" layoutX="20.0" layoutY="118.0" mnemonicParsing="false" onAction="#BoxCanceled" text="відмінені">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -130,15 +139,6 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Label layoutX="15.0" layoutY="145.0" text="Статус замовлення">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <ChoiceBox fx:id="btnOrderStatus" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#pressChangeStatus" prefHeight="30.0" prefWidth="200.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

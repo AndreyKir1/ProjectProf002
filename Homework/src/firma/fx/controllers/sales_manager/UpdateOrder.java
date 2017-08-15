@@ -40,6 +40,9 @@ public class UpdateOrder {
     private OrderService orderService = context.getBean(OrderService.class);
     private Order currentOrder;
 
+    private static ManagerWindow managerWindowController;
+    private static int currentOrderRow;
+
     @FXML
     private static Client currentClient;
 
@@ -312,7 +315,6 @@ public class UpdateOrder {
         }
         if (currentClient != null) {
             currentOrder.setClient(currentClient);
-//            orderService.update(currentOrder);
             currentClient = null;
         }
 
@@ -323,15 +325,25 @@ public class UpdateOrder {
         if (fldReadyOrderDate.getValue() != null) {
             currentOrder.setOrderReady(Date.from(fldReadyOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
-
-
         currentOrder.setOrderConditions(btnOrderStatus.getValue());
         orderService.update(currentOrder);
         new ManagerWindow().updateOrdersList();
-        new ManagerWindow().updateOrderPositions(currentOrder);
 
         Stage stage = (Stage) btnOK.getScene().getWindow();
         stage.close();
+        managerWindowController.BoxInSManager();
+        managerWindowController.BoxInStorage();
+        managerWindowController.BoxReady();
+        managerWindowController.BoxDone();
+        managerWindowController.BoxCanceled();
+        managerWindowController.updateOrderPositions(currentOrder);
+        managerWindowController.tableOrders.getSelectionModel().select(currentOrderRow);
+    }
+
+    @FXML
+    void pressCancel() {
+        Stage current = (Stage) btnCancel.getScene().getWindow();
+        current.close();
     }
 
     @FXML
@@ -353,12 +365,6 @@ public class UpdateOrder {
     public void updateOrderPositions() {
         orderPositions.clear();
         orderPositions.setAll(orderPositionService.getOrderPositionByOrder(currentOrder));
-    }
-
-    @FXML
-    void pressCancel() {
-        Stage current = (Stage) btnCancel.getScene().getWindow();
-        current.close();
     }
 
     @FXML
@@ -385,5 +391,12 @@ public class UpdateOrder {
         lblrderCost.setText("Вартість замовлення, грн: " + value.toString());
     }
 
+    public static void setManagerWindowController(ManagerWindow managerWindowController) {
+        UpdateOrder.managerWindowController = managerWindowController;
+    }
+
+    public static void setCurrentOrderRow(int currentOrderRow) {
+        UpdateOrder.currentOrderRow = currentOrderRow;
+    }
 }
 

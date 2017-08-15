@@ -3,6 +3,7 @@ package firma.hibernate.dao.order;
 import firma.hibernate.entity.Client;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.entity.Order;
+import firma.support.OrderStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -91,6 +92,21 @@ public class OrderDAOimpl implements OrderDAO {
         try {
             Query query = session.createQuery("from Order where client =:client");
             query.setParameter("client", client);
+            List<Order> list = query.list();
+            return list;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getByStatus(OrderStatus orderStatus) {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from Order where orderConditions =:conditions");
+            query.setParameter("conditions", orderStatus);
             List<Order> list = query.list();
             return list;
         }catch (HibernateException e){

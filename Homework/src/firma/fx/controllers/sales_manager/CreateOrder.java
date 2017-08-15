@@ -41,6 +41,9 @@ public class CreateOrder {
     private OrderService orderService = context.getBean(OrderService.class);
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
 
+    private static ManagerWindow managerWindowController;
+    private static int currentOrderRow;
+
     @FXML
     private static Client currentClient;
 
@@ -259,7 +262,6 @@ public class CreateOrder {
             Set<EmployeeFirm> setEmployee = new LinkedHashSet<>();
             setEmployee.add(LoginController.getCurrentEmployee());
             order.setManagers(setEmployee);
-//            order.setSalesManager(LoginController.getCurrentEmployee());
             orderService.create(order);
             for(OrderPosition el:orderPositions){
                 el.setOrder(order);
@@ -267,6 +269,14 @@ public class CreateOrder {
             }
             new ManagerWindow().updateOrdersList();
             currentClient = null;
+            managerWindowController.chBoxInSManager.setSelected(true);
+            managerWindowController.chBoxInStorage.setSelected(true);
+            managerWindowController.chBoxReady.setSelected(true);
+            managerWindowController.chBoxDone.setSelected(true);
+            managerWindowController.chBoxCanceled.setSelected(true);
+            managerWindowController.tableOrders.getSelectionModel().selectLast();
+            managerWindowController.updateOrderPositions(order);
+
             Stage current = (Stage) btnSave.getScene().getWindow();
             current.close();
         }
@@ -314,6 +324,14 @@ public class CreateOrder {
             }
         }
         lbOrderCost.setText("Вартість замовлення, грн: " + value.toString());
+    }
+
+    public static void setManagerWindowController(ManagerWindow managerWindowController) {
+        CreateOrder.managerWindowController = managerWindowController;
+    }
+
+    public static void setCurrentOrderRow(int currentOrderRow) {
+        CreateOrder.currentOrderRow = currentOrderRow;
     }
 }
 

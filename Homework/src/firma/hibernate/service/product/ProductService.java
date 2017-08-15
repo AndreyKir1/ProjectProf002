@@ -3,6 +3,7 @@ package firma.hibernate.service.product;
 
 import firma.hibernate.entity.Product;
 import firma.hibernate.entity.ProductType;
+import firma.support.OrderStatus;
 
 import java.util.List;
 

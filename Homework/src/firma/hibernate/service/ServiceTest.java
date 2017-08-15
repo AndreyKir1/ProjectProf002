@@ -86,11 +86,11 @@ public class ServiceTest {
 //        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", employee4, client5);
 
 
-        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.NEW, " ", client1);
-        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.NEW, " ", client2);
-        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.NEW, " ", client3);
-        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.NEW, " ", client4);
-        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.NEW, " ", client5);
+        Order order1 = new Order("000001", new SimpleDateFormat("dd.MM.yyyy").parse("01.08.2017"), OrderStatus.PROCESSED_BY_SMANAGER, " ", client1);
+        Order order2 = new Order("000002", new SimpleDateFormat("dd.MM.yyyy").parse("05.08.2017"), OrderStatus.PROCESSED_BY_SMANAGER, " ", client2);
+        Order order3 = new Order("000003", new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2017"), OrderStatus.PROCESSED_BY_SMANAGER, " ", client3);
+        Order order4 = new Order("000004", new SimpleDateFormat("dd.MM.yyyy").parse("08.08.2017"), OrderStatus.PROCESSED_BY_SMANAGER, " ", client4);
+        Order order5 = new Order("000005", new SimpleDateFormat("dd.MM.yyyy").parse("10.08.2017"), OrderStatus.PROCESSED_BY_SMANAGER, " ", client5);
 
 
         //        Create Order positions

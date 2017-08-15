@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "AMOUNT_IN_STORAGE")
     private Integer amountInStorage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ProductType productType;
 
     public Product() {

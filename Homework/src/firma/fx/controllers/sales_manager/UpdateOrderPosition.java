@@ -79,7 +79,22 @@ public class UpdateOrderPosition {
         columnProductPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
         tableView.setItems(products);
+        for(ProductType el:btnChooseProductCategory.getItems()){
+            if(el.getTypeName().equals(currentOrderPosition.getProduct().getProductType().getTypeName())){
+                btnChooseProductCategory.setValue(el);
+                break;
+            }
+        }
 
+        chooseProductCategory(currentOrderPosition.getProduct().getProductType());
+        fldAmount.setText(currentOrderPosition.getProductAmount().toString());
+
+        for(Product el:tableView.getItems()){
+            if(el.getProductCode().equals(currentOrderPosition.getProduct().getProductCode())){
+                tableView.getSelectionModel().select(tableView.getItems().indexOf(el));
+                break;
+            }
+        }
         updateCountLbl();
 
         tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

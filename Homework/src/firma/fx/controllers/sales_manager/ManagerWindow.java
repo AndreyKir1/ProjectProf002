@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,19 +44,28 @@ public class ManagerWindow {
     private Button btnNewOrder;
 
     @FXML
-    private CheckBox chBoxNew;
+    public CheckBox chBoxInStorage;
+
+    @FXML
+    public CheckBox chBoxCanceled;
+
+    @FXML
+    public CheckBox chBoxReady;
+
+    @FXML
+    public CheckBox chBoxInSManager;
+
+    @FXML
+    public CheckBox chBoxDone;
 
     @FXML
     private Label lblOrderNumbers;
 
     @FXML
-    private CheckBox chBoxAll;
-
-    @FXML
     private Label lbCurrentOrder;
 
     @FXML
-    private TableView<Order> tableOrders;
+    public TableView<Order> tableOrders;
 
     @FXML
     private TableColumn<Order, Client> columnOrderCustomer;
@@ -70,7 +80,7 @@ public class ManagerWindow {
     private TableColumn<Order, Double> columnOrderCost;
 
     @FXML
-    private ChoiceBox<OrderStatus> btnOrderStatus;
+    private TableColumn<Order, OrderStatus> columnOrderStatus;
 
     @FXML
     private TableView<OrderPosition> tableOrderDetails;
@@ -86,12 +96,6 @@ public class ManagerWindow {
 
     @FXML
     private TableColumn<OrderPosition, String> columnProductName;
-
-    @FXML
-    private CheckBox chBoxFinished;
-
-    @FXML
-    private CheckBox chBoxWorked;
 
     @FXML
     private Button btnUpdateOrder;
@@ -110,71 +114,49 @@ public class ManagerWindow {
         columnOrderDate.setCellValueFactory(new PropertyValueFactory<>("createOrder"));
         columnOrderCustomer.setCellValueFactory(new PropertyValueFactory<>("client"));
         columnOrderCost.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        columnOrderStatus.setCellValueFactory(new PropertyValueFactory<>("orderConditions"));
         tableOrders.setItems(ordersList);
 
-//        orderPositionsList = FXCollections.observableArrayList();
+        orderPositionsList = FXCollections.observableArrayList();
         columnProductCode.setCellValueFactory(new PropertyValueFactory<>("positionCode"));
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         columnProductCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
-//        tableOrderDetails.setItems(orderPositionsList);
 
-        btnOrderStatus.getItems().setAll(OrderStatus.values());
+        chBoxCanceled.setSelected(true);
+        chBoxInStorage.setSelected(true);
+        chBoxInSManager.setSelected(true);
+        chBoxDone.setSelected(true);
+        chBoxReady.setSelected(true);
 
         tableOrders.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getClickCount() == 1) {
-                    int row =  tableOrders.getSelectionModel().getSelectedIndex();
-                    lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + tableOrders.getSelectionModel().getSelectedItem().getNumber());
-                    showOrderPositions(tableOrders.getSelectionModel().getSelectedItem());
-                    tableOrders.getSelectionModel().select(row);
+                    if (tableOrders.getSelectionModel().getSelectedItem() != null) {
+                        lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + tableOrders.getSelectionModel().getSelectedItem().getNumber());
+                        orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(tableOrders.getSelectionModel().getSelectedItem()));
+                        tableOrderDetails.setItems(orderPositionsList);
+                    }
                 }
-            }
-        });
-
-        btnOrderStatus.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Order currentOrder = orderService.read(tableOrders.getSelectionModel().getSelectedItem().getId());
-                OrderStatus currentConditions = OrderStatus.values()[newValue.intValue()];
-                currentOrder.setOrderConditions(currentConditions);
-                orderService.update(currentOrder);
-                updateOrdersList();
             }
         });
     }
 
     @FXML
     public void showOrderPositions(Order order) {
-        if(order != null){
+        if (order != null) {
             orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(order));
             tableOrderDetails.setItems(orderPositionsList);
-            btnOrderStatus.setValue(tableOrders.getSelectionModel().getSelectedItem().getOrderConditions());
         }
     }
 
     @FXML
     public void updateOrderPositions(Order order) {
-        if(order != null){
+        if (order != null) {
             orderPositionsList.clear();
             orderPositionsList.setAll(orderPositionService.getOrderPositionByOrder(order));
         }
-    }
-
-    @FXML
-    void boxNewOrders() {
-
-    }
-
-    @FXML
-    void boxInWork() {
-
-    }
-
-    @FXML
-    void boxDone() {
-
     }
 
     @FXML
@@ -184,6 +166,7 @@ public class ManagerWindow {
 
     @FXML
     void pressNewOrder() {
+        CreateOrder.setManagerWindowController(this);
         try {
             Stage stage = new Stage();
             stage.setTitle("Створити нове замовлення");
@@ -202,8 +185,11 @@ public class ManagerWindow {
 
     @FXML
     void pressUpdateOrder() {
-        if(tableOrders.getSelectionModel().getSelectedItem() != null){
+        if (tableOrders.getSelectionModel().getSelectedItem() != null) {
             currentOrder = orderService.read(tableOrders.getSelectionModel().getSelectedItem().getId());
+            UpdateOrder.setCurrentOrderRow(tableOrders.getSelectionModel().getSelectedIndex());
+            UpdateOrder.setManagerWindowController(this);
+
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Редагування замовлення");
@@ -222,14 +208,9 @@ public class ManagerWindow {
     }
 
     @FXML
-    public void updateOrdersList(){
+    public void updateOrdersList() {
         ordersList.clear();
         ordersList.setAll(orderService.getAll());
-    }
-
-    @FXML
-    void pressChangeStatus() {
-        tableOrders.getSelectionModel().getSelectedItem().setOrderConditions(btnOrderStatus.getValue());
     }
 
     @FXML
@@ -237,4 +218,204 @@ public class ManagerWindow {
         System.exit(0);
     }
 
+    @FXML
+    public void BoxInSManager() {
+        orderPositionsList.clear();
+        lblOrderNumbers.setText("ЗАМОВЛЕННЯ");
+        ChBoxSManagerAction();
+    }
+
+    @FXML
+    public void BoxInStorage() {
+        orderPositionsList.clear();
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+        ChBoxStorageAction();
+    }
+
+    @FXML
+    public void BoxReady() {
+        orderPositionsList.clear();
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+        ChBoxReadyAction();
+    }
+
+    @FXML
+    public void BoxCanceled() {
+        orderPositionsList.clear();
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+        ChBoxCanceledAction();
+    }
+
+    @FXML
+    public void BoxDone() {
+        orderPositionsList.clear();
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+        ChBoxDoneAction();
+    }
+
+    private void ChBoxSManagerAction() {
+        if (chBoxInSManager.isSelected()) {
+            ordersList.clear();
+            ordersList.setAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        }
+    }
+
+    private void ChBoxStorageAction() {
+        if (chBoxInStorage.isSelected()) {
+            ordersList.clear();
+            ordersList.setAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        }
+    }
+
+    private void ChBoxReadyAction() {
+        if (chBoxReady.isSelected()) {
+            ordersList.clear();
+            ordersList.setAll(orderService.getByStatus(OrderStatus.READY));
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        }
+    }
+
+    private void ChBoxDoneAction() {
+        if (chBoxDone.isSelected()) {
+            ordersList.clear();
+            ordersList.setAll(orderService.getByStatus(OrderStatus.DONE));
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if (chBoxCanceled.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+            }
+        }
+    }
+
+    private void ChBoxCanceledAction() {
+        if (chBoxCanceled.isSelected()) {
+            ordersList.clear();
+            ordersList.setAll(orderService.getByStatus(OrderStatus.CANCELED));
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxInStorage.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            }
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+        }
+    }
 }

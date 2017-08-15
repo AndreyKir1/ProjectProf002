@@ -2,6 +2,7 @@ package firma.hibernate.dao.product;
 
 import firma.hibernate.entity.Product;
 import firma.hibernate.entity.ProductType;
+import firma.support.OrderStatus;
 
 import java.util.List;
 
@@ -12,5 +13,4 @@ public interface ProductDAO {
     boolean delete(Product product);
     List<Product> getAll();
     List<Product> getByProductType(ProductType productType);
-
 }
