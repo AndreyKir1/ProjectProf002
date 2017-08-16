@@ -114,7 +114,6 @@ public class LoginController {
     private void pressCancel() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
-//        HibernateUtil.getFactory().close();
     }
 
     @FXML
@@ -147,8 +146,7 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
-                                + " . Ваш рівень доступу - менеджер");
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/ManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setMinWidth(640);
@@ -164,8 +162,7 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
-                                + " . Ваш рівень доступу - кладовщик");
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/StorageManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
@@ -175,11 +172,25 @@ public class LoginController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else if (employeeService.readByAccount(el).getEmployeeRols().equals(EmployeeRols.CASHIER)) {
+                    try {
+                        currentEmployee = employeeService.readByAccount(el);
+                        Stage stage = new Stage();
+                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
+                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/CashierWindow.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                        Stage curentStage = (Stage) btnOK.getScene().getWindow();
+                        curentStage.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                } else {
+                    fldPassword.setEffect(new InnerShadow(5, Color.RED));
+                    fldLogin.setEffect(new InnerShadow(5, Color.RED));
                 }
-                break;
-            } else {
-                fldPassword.setEffect(new InnerShadow(5, Color.RED));
-                fldLogin.setEffect(new InnerShadow(5, Color.RED));
             }
         }
     }

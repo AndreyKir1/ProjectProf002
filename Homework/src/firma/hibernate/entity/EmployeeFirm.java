@@ -32,7 +32,7 @@ public class EmployeeFirm {
     @OneToOne
     private AccountEmployee accountEmployee;
 
-    @ManyToMany(mappedBy = "managers", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "managers", fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     public EmployeeFirm() {

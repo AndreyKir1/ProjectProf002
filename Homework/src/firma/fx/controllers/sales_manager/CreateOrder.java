@@ -259,7 +259,7 @@ public class CreateOrder {
             Order order = new Order(fldOrderNumber.getText(),  Date.from(fldOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), btnOrderStatus.getValue(),
                     areaNotes.getText(), currentClient);
             order.setTotalPrice(Double.parseDouble(lbOrderCost.getText().substring(26)));
-            Set<EmployeeFirm> setEmployee = new LinkedHashSet<>();
+            Set<EmployeeFirm> setEmployee = order.getManagers();
             setEmployee.add(LoginController.getCurrentEmployee());
             order.setManagers(setEmployee);
             orderService.create(order);

@@ -4,6 +4,7 @@ import firma.support.OrderStatus;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,10 @@ public class Order {
     @Column (name = "READY_DATE")
     private Date orderReady;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "SALE_DATE")
+    private Date saledDate;
+
     @Enumerated(EnumType.ORDINAL)
     @Column (name = "ORDER_CONDITIONS")
     private OrderStatus orderConditions;
@@ -41,14 +46,14 @@ public class Order {
 //    @OneToOne(fetch = FetchType.LAZY)
 //    private EmployeeFirm storageManager;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "jnd_orders_employee", joinColumns = @JoinColumn(name = "orders_fk"), inverseJoinColumns = @JoinColumn(name = "managers_fk"))
     private Set<EmployeeFirm> managers;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private Set<OrderPosition> orderPositions;
 
     public Order() {
@@ -60,6 +65,7 @@ public class Order {
         this.orderConditions = orderConditions;
         this.noteAboutOrder = noteAboutOrder;
         this.client = client;
+        this.managers = new LinkedHashSet<>();
     }
 
 
@@ -144,6 +150,13 @@ public class Order {
         this.managers = managers;
     }
 
+    public Date getSaledDate() {
+        return saledDate;
+    }
+
+    public void setSaledDate(Date saledDate) {
+        this.saledDate = saledDate;
+    }
 
 //    public EmployeeFirm getSalesManager() {
 //        return salesManager;

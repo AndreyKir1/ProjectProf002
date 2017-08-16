@@ -215,7 +215,8 @@ public class ManagerWindow {
 
     @FXML
     void pressExit() {
-        System.exit(0);
+        Stage stage = (Stage) btnExit.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
