@@ -128,7 +128,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
                         <Button fx:id="btnUpdateOrder" focusTraversable="false" layoutX="15.0" layoutY="167.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressUpdateOrder" prefHeight="30.0" prefWidth="200.0" text="редагувати">

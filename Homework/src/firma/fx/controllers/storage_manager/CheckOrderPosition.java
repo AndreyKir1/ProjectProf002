@@ -3,24 +3,32 @@ package firma.fx.controllers.storage_manager;
 import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
 import firma.hibernate.entity.Product;
+import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.hibernate.service.product.ProductService;
+import firma.support.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.text.ParseException;
+import java.util.Comparator;
+import java.util.List;
 
 public class CheckOrderPosition {
 
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private ProductService productService = context.getBean(ProductService.class);
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private OrderService orderService = context.getBean(OrderService.class);
 
     private Order currentOrder;
 
@@ -31,54 +39,133 @@ public class CheckOrderPosition {
     private static ObservableList<OrderPosition> orderProductsList;
 
     @FXML
+    private TableView<Product> TableViewStorageProducts;
+
+    @FXML
+    private TableColumn<Product, String> columnStorageProductCode;
+
+    @FXML
+    private TableColumn<Product, Integer> columnStorageProductAmount;
+
+    @FXML
+    private TableColumn<Product, String> columnStorageProductName;
+
+    @FXML
+    private Button btnOK;
+
+    @FXML
+    private TableView<OrderPosition> TableViewOrderPositions;
+
+    @FXML
+    private TableColumn<OrderPosition, Integer> columnOPAmount;
+
+    @FXML
+    private TableColumn<OrderPosition, String> columnOPProductCode;
+
+    @FXML
+    private TableColumn<OrderPosition, String> columnOPProductName;
+
+    @FXML
+    private Button btnCancel;
+
+    @FXML
+    private Label lbCurrentOrder;
+
+    @FXML
+    private TextArea fldNote;
+
+    @FXML
     private TextField fldSearchProduct;
 
     @FXML
     private Button btnSearchProduct;
 
     @FXML
-    private Button btnCancel;
-
-    @FXML
-    private Button btnOK;
-
-    @FXML
-    private TextArea fldNote;
-
-    @FXML
-    private TableView<OrderPosition> TableViewOrderProducts;
-
-    @FXML
-    private TableColumn<OrderPosition, String> columnOrderProduct;
-
-    @FXML
-    private TableColumn<OrderPosition, Integer> columnOrderProductAmount;
-
-    @FXML
-    private TableView<Product> TableViewStorageProducts;
-
-    @FXML
-    private TableColumn<Product, String> columnStorageProduct;
-
-    @FXML
-    private TableColumn<Product, Integer> columnStorageProductAmount;
+    private ChoiceBox<OrderStatus> chOrderStatus;
 
     @FXML
     private void initialize() throws ParseException {
+        currentOrder = StorageManagerWindow.getCurrentOrder();
+
         storageProductsList = FXCollections.observableList(productService.getAll());
-        columnStorageProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        storageProductsList.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getProductCode().compareTo(o2.getProductCode());
+            }
+        });
+        columnStorageProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
         columnStorageProductAmount.setCellValueFactory(new PropertyValueFactory<>("amountInStorage"));
+        columnStorageProductCode.setCellValueFactory(new PropertyValueFactory<>("productCode"));
         TableViewStorageProducts.setItems(storageProductsList);
 
-        currentOrder = StorageManagerWindow.getCurrentOrder();
         orderProductsList = FXCollections.observableList(orderPositionService.getOrderPositionByOrder(currentOrder));
-        columnOrderProduct.setCellValueFactory(new PropertyValueFactory<>("positionName"));
-        columnOrderProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
-        TableViewOrderProducts.setItems(orderProductsList);
+        columnOPProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
+        columnOPProductCode.setCellValueFactory(new PropertyValueFactory<>("positionCode"));
+        columnOPAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
+        TableViewOrderPositions.setItems(orderProductsList);
 
         fldNote.setText(currentOrder.getNoteAboutOrder());
+        lbCurrentOrder.setText("ПОЗИЦІЇ ЗАМОВЛЕННЯ #" + currentOrder.getNumber());
+
+        TableViewOrderPositions.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 1) {
+                    if (TableViewOrderPositions.getSelectionModel().getSelectedItem() != null) {
+                        long currentOposID = TableViewOrderPositions.getSelectionModel().getSelectedItem().getId();
+                        Product currrentProduct = orderPositionService.read(currentOposID).getProduct();
+
+                        storageProductsList.clear();
+                        storageProductsList.setAll(productService.getByProductType(currrentProduct.getProductType()));
+                        lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + currentOrder.getNumber());
+                        TableViewStorageProducts.setItems(storageProductsList);
+
+                        for (Product el : storageProductsList) {
+                            if (el.getProductCode().equals(currrentProduct.getProductCode())) {
+                                TableViewStorageProducts.getSelectionModel().select(el);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        chOrderStatus.getItems().setAll(OrderStatus.PROCESSED_BY_SMANAGER, OrderStatus.PROCESSED_IN_STOREGE);
+        chOrderStatus.setValue(currentOrder.getOrderConditions());
     }
 
+    @FXML
+    void pressSearchProduct() {
+        if (fldSearchProduct.getText() != null && fldSearchProduct.getText().length() > 0) {
+            List<Product> list = productService.getAll();
+            storageProductsList.clear();
+            for (Product el : list) {
+                if (el.getProductCode().toLowerCase().contains(fldSearchProduct.getText()) || el.getProductName().toLowerCase().contains(fldSearchProduct.getText())){
+                    storageProductsList.add(el);
+                }
+            }
+            if (storageProductsList.size() > 0) {
+                fldSearchProduct.setText(null);
+            }
+        }
+    }
+
+    @FXML
+    void pressOK() {
+        currentOrder.setNoteAboutOrder(fldNote.getText());
+        currentOrder.setOrderConditions(chOrderStatus.getValue());
+        orderService.update(currentOrder);
+        Stage stage = (Stage) btnOK.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void pressCancel() {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
 
 
 }

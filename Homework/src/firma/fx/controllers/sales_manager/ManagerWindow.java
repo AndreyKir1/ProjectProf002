@@ -160,11 +160,6 @@ public class ManagerWindow {
     }
 
     @FXML
-    void boxAll() {
-
-    }
-
-    @FXML
     void pressNewOrder() {
         CreateOrder.setManagerWindowController(this);
         try {
