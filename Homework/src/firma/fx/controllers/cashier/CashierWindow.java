@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -117,10 +118,16 @@ public class CashierWindow {
         chBoxCanceled.setSelected(true);
 
         ordersList = FXCollections.observableArrayList();
-        ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+        ordersList.sort(new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                return o1.getCreateOrder().compareTo(o2.getCreateOrder());
+            }
+        });
         tableOrders.setItems(ordersList);
 
         columnOrderNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -136,6 +143,7 @@ public class CashierWindow {
         columnProductCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
         tableOrderDetails.setItems(orderPositionsList);
 
+
         tableOrders.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -145,6 +153,12 @@ public class CashierWindow {
                         currentOrder = orderService.read(currentOrderID);
                         lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + currentOrder.getNumber());
                         orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(currentOrder));
+                        orderPositionsList.sort(new Comparator<OrderPosition>() {
+                            @Override
+                            public int compare(OrderPosition o1, OrderPosition o2) {
+                                return o1.getPositionCode().compareTo(o2.getPositionCode());
+                            }
+                        });
                         tableOrderDetails.setItems(orderPositionsList);
                     }
                 }
@@ -183,26 +197,26 @@ public class CashierWindow {
     private void ChBoxSManagerAction() {
         if (chBoxInSManager.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -210,26 +224,26 @@ public class CashierWindow {
     private void ChBoxReadyAction() {
         if (chBoxReady.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.READY));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -237,26 +251,26 @@ public class CashierWindow {
     private void ChBoxDoneAction() {
         if (chBoxDone.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.DONE));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -264,26 +278,26 @@ public class CashierWindow {
     private void ChBoxCanceledAction() {
         if (chBoxCanceled.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.CANCELED));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxDone.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.DONE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
         }
     }

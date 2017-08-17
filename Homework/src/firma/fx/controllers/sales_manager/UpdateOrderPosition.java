@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Comparator;
+
 public class UpdateOrderPosition {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private ProductService productService = context.getBean(ProductService.class);
@@ -78,6 +80,12 @@ public class UpdateOrderPosition {
         columnProductCode.setCellValueFactory(new PropertyValueFactory<>("productCode"));
         columnProductPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        products.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getProductCode().compareTo(o2.getProductCode());
+            }
+        });
         tableView.setItems(products);
         for(ProductType el:btnChooseProductCategory.getItems()){
             if(el.getTypeName().equals(currentOrderPosition.getProduct().getProductType().getTypeName())){

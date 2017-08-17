@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +103,12 @@ public class AdminWindowController {
         columnLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         columnDateStartOfWork.setCellValueFactory(new PropertyValueFactory<>("dateOfStarWorking"));
         columnAccount.setCellValueFactory(new PropertyValueFactory<>("account"));//може доведеться булеан приводити до стрінга
+        listEmployee.sort(new Comparator<EmployeeFirm>() {
+            @Override
+            public int compare(EmployeeFirm o1, EmployeeFirm o2) {
+                return o1.getSurname().compareTo(o2.getSurname());
+            }
+        });
 
         tblView.setItems(listEmployee);
         tblView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

@@ -32,6 +32,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -54,16 +55,16 @@ public class CreateOrder {
     private TableView<OrderPosition> tableViewOrdersPositions;
 
     @FXML
-    private TableColumn<Order, Integer> columnAmount;
+    private TableColumn<OrderPosition, Integer> columnAmount;
 
     @FXML
-    private TableColumn<Order, String> columnProductCode;
+    private TableColumn<OrderPosition, String> columnProductCode;
 
     @FXML
-    private TableColumn<Order, String> columnProductNane;
+    private TableColumn<OrderPosition, String> columnProductNane;
 
     @FXML
-    private TableColumn<Order, Double> columnCost;
+    private TableColumn<OrderPosition, Double> columnCost;
 
     @FXML
     private Button btnAddNewCustomer;
@@ -126,7 +127,6 @@ public class CreateOrder {
         columnProductNane.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         columnCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
-
         tableViewOrdersPositions.setItems(orderPositions);
 
         btnOrderStatus.getItems().setAll(OrderStatus.values());

@@ -4,6 +4,7 @@ import firma.fx.controllers.LoginController;
 import firma.hibernate.entity.EmployeeFirm;
 import firma.hibernate.entity.Order;
 import firma.hibernate.entity.OrderPosition;
+import firma.hibernate.service.employee.EmployeeService;
 import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.support.EmployeeRols;
@@ -27,6 +28,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +37,7 @@ public class StorageManagerWindow {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String [] {"firma/Config.xml"});
     private OrderService orderService = context.getBean(OrderService.class);
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
+    private static Order currentOrder;
 
     @FXML
     private static ObservableList<Order> ordersList;
@@ -42,7 +45,6 @@ public class StorageManagerWindow {
     @FXML
     private static ObservableList<OrderPosition> orderPositionsList;
 
-    private static Order currentOrder;
 
     @FXML
     private Button btnCheckOrderPosition;
@@ -101,6 +103,18 @@ public class StorageManagerWindow {
     @FXML
     private Label lbCurrentOrder;
 
+    @FXML
+    private Button btnTest;
+
+    @FXML
+    private void pressTest(){
+//        EmployeeService employeeService = context.getBean(EmployeeService.class);
+//        List<Order> list = orderService.getOrdersByEmployee(employeeService.read(13L));
+//        for (Order el:list){
+//            System.out.println(el);
+//        }
+    }
+
     public static Order getCurrentOrder(){
         return currentOrder;
     }
@@ -113,10 +127,10 @@ public class StorageManagerWindow {
         chBoxCanceled.setSelected(true);
 
         ordersList = FXCollections.observableArrayList();
-        ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
-        ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
         tableOrders.setItems(ordersList);
 
         columnOrderNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -267,26 +281,26 @@ public class StorageManagerWindow {
     private void ChBoxSManagerAction() {
         if (chBoxInSManager.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -294,27 +308,27 @@ public class StorageManagerWindow {
     private void ChBoxStorageAction() {
         if (chBoxInStorage.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -322,26 +336,26 @@ public class StorageManagerWindow {
     private void ChBoxReadyAction() {
         if (chBoxReady.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.READY));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
             if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.CANCELED));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -349,26 +363,26 @@ public class StorageManagerWindow {
     private void ChBoxCanceledAction() {
         if (chBoxCanceled.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getByStatus(OrderStatus.CANCELED));
+            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
         } else {
             ordersList.clear();
             if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_IN_STOREGE));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
             if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.READY));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
             }
             if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getByStatus(OrderStatus.PROCESSED_BY_SMANAGER));
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
         }
     }

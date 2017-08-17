@@ -29,6 +29,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 public class CreateOrderPosition {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
@@ -85,6 +86,12 @@ public class CreateOrderPosition {
         columnProductCode.setCellValueFactory(new PropertyValueFactory<>("productCode"));
         columnProductPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        products.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getProductCode().compareTo(o2.getProductCode());
+            }
+        });
         tableView.setItems(products);
 
         updateCountLbl();

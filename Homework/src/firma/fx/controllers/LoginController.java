@@ -128,7 +128,7 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
+                        stage.setTitle("Вітаємо, " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName()
                                 + " . Ви адміністратор системи");
                         stage.setMinHeight(600);
                         stage.setMinWidth(800);
@@ -146,7 +146,7 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
+                        stage.setTitle("Вітаємо, " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/ManagerWindow.fxml"));
                         Scene scene = new Scene(root);
                         stage.setMinWidth(640);
@@ -162,9 +162,11 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
+                        stage.setTitle("Вітаємо, " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/StorageManagerWindow.fxml"));
                         Scene scene = new Scene(root);
+                        stage.setMinWidth(640);
+                        stage.setMinHeight(800);
                         stage.setScene(scene);
                         stage.show();
                         Stage curentStage = (Stage) btnOK.getScene().getWindow();
@@ -176,9 +178,11 @@ public class LoginController {
                     try {
                         currentEmployee = employeeService.readByAccount(el);
                         Stage stage = new Stage();
-                        stage.setTitle("Вітаємо Вас " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
+                        stage.setTitle("Вітаємо, " + currentEmployee.getSurname() + " " + currentEmployee.getName() + " " + currentEmployee.getLastName());
                         Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/CashierWindow.fxml"));
                         Scene scene = new Scene(root);
+                        stage.setMinWidth(640);
+                        stage.setMinHeight(800);
                         stage.setScene(scene);
                         stage.show();
                         Stage curentStage = (Stage) btnOK.getScene().getWindow();

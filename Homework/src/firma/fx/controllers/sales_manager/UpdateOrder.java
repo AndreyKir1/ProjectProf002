@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -132,6 +133,12 @@ public class UpdateOrder {
         lbOrderNumber.setText(currentOrder.getNumber());
         lbOrderDarte.setText(new SimpleDateFormat("dd.MM.yyyy").format(currentOrder.getCreateOrder()));
         orderPositions = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(currentOrder));
+        orderPositions.sort(new Comparator<OrderPosition>() {
+            @Override
+            public int compare(OrderPosition o1, OrderPosition o2) {
+                return o1.getPositionCode().compareTo(o2.getPositionCode());
+            }
+        });
         tableOrderPosition.setItems(orderPositions);
 
         btnOrderStatus.getItems().setAll(OrderStatus.values());

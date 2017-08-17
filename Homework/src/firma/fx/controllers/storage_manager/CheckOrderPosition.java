@@ -97,12 +97,24 @@ public class CheckOrderPosition {
         columnStorageProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
         columnStorageProductAmount.setCellValueFactory(new PropertyValueFactory<>("amountInStorage"));
         columnStorageProductCode.setCellValueFactory(new PropertyValueFactory<>("productCode"));
+        storageProductsList.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getProductCode().compareTo(o2.getProductCode());
+            }
+        });
         TableViewStorageProducts.setItems(storageProductsList);
 
         orderProductsList = FXCollections.observableList(orderPositionService.getOrderPositionByOrder(currentOrder));
         columnOPProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnOPProductCode.setCellValueFactory(new PropertyValueFactory<>("positionCode"));
         columnOPAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
+        orderProductsList.sort(new Comparator<OrderPosition>() {
+            @Override
+            public int compare(OrderPosition o1, OrderPosition o2) {
+                return o1.getPositionCode().compareTo(o2.getPositionCode());
+            }
+        });
         TableViewOrderPositions.setItems(orderProductsList);
 
         fldNote.setText(currentOrder.getNoteAboutOrder());
@@ -115,10 +127,16 @@ public class CheckOrderPosition {
                     if (TableViewOrderPositions.getSelectionModel().getSelectedItem() != null) {
                         long currentOposID = TableViewOrderPositions.getSelectionModel().getSelectedItem().getId();
                         Product currrentProduct = orderPositionService.read(currentOposID).getProduct();
-
+                        storageProductsList.sort(new Comparator<Product>() {
+                            @Override
+                            public int compare(Product o1, Product o2) {
+                                return o1.getProductCode().compareTo(o2.getProductCode());
+                            }
+                        });
                         storageProductsList.clear();
                         storageProductsList.setAll(productService.getByProductType(currrentProduct.getProductType()));
                         lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + currentOrder.getNumber());
+
                         TableViewStorageProducts.setItems(storageProductsList);
 
                         for (Product el : storageProductsList) {

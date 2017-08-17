@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 public class ChoseCustomer {
     private static ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
@@ -83,6 +84,12 @@ public class ChoseCustomer {
         columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         customersList = FXCollections.observableArrayList(service.getAll());
+        customersList.sort(new Comparator<Client>() {
+            @Override
+            public int compare(Client o1, Client o2) {
+                return o1.getSurname().compareTo(o2.getSurname());
+            }
+        });
         tblView.setItems(customersList);
 
         updateCountLbl();
