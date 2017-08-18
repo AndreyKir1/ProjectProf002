@@ -5,6 +5,7 @@ import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.hibernate.service.product.ProductService;
 import firma.hibernate.service.productType.ProductTypeService;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,11 +15,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.lang.reflect.Method;
 import java.util.Comparator;
 
 public class UpdateOrderPosition {
@@ -65,7 +71,7 @@ public class UpdateOrderPosition {
     private Button btnSave;
 
     @FXML
-    private TextField fldAmount;
+    private CustomTextField fldAmount;
 
     @FXML
     private ChoiceBox<ProductType> btnChooseProductCategory;
@@ -127,6 +133,27 @@ public class UpdateOrderPosition {
                 chooseProductCategory(productTypeService.getAll().get(newValue.intValue()));
             }
         });
+
+        fldAmount.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) fldAmount.setEffect(null);
+        });
+
+        tableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) tableView.setEffect(null);
+        });
+
+        setClearInCTF(fldAmount);
+    }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -154,6 +181,13 @@ public class UpdateOrderPosition {
                 Stage current = (Stage) btnSave.getScene().getWindow();
                 current.close();
                 updatreOrdeOwner = false;
+            }
+        }else{
+            if(fldAmount.getText() == null || fldAmount.getText().length() == 0){
+                fldAmount.setEffect(new InnerShadow(5, Color.RED));
+            }
+            if(tableView.getSelectionModel().getSelectedItem() == null){
+                tableView.setEffect(new InnerShadow(5, Color.RED));
             }
         }
     }

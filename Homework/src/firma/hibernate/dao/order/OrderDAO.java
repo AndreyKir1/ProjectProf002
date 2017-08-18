@@ -17,4 +17,7 @@ public interface OrderDAO {
     List<Order> getOrdersByEmployee(EmployeeFirm employee, OrderStatus orderStatus);
     List<Order> getOrdersByClient(Client client);
     List<Order> getByStatus(OrderStatus orderStatus);
+    List<Order> getOrdersWithoutCashier();
+    List<Order> getOrdersWithoutStorageManager();
+
 }

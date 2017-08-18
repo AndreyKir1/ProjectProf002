@@ -8,6 +8,7 @@ import firma.hibernate.entity.OrderPosition;
 import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.support.OrderStatus;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -24,13 +25,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
@@ -139,6 +145,25 @@ public class CreateOrder {
                 }
             }
         });
+
+        fldOrderDate.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) fldOrderDate.setEffect(null);
+        });
+
+        fldOrderNumber.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) fldOrderNumber.setEffect(null);
+        });
+    }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -262,6 +287,7 @@ public class CreateOrder {
             Set<EmployeeFirm> setEmployee = order.getManagers();
             setEmployee.add(LoginController.getCurrentEmployee());
             order.setManagers(setEmployee);
+            order.setSaleManager(true);
             orderService.create(order);
             for(OrderPosition el:orderPositions){
                 el.setOrder(order);
@@ -279,6 +305,13 @@ public class CreateOrder {
 
             Stage current = (Stage) btnSave.getScene().getWindow();
             current.close();
+        }else{
+            if (fldOrderDate.getValue() == null){
+                fldOrderDate.setEffect(new InnerShadow(5, Color.RED));
+            }
+            if (fldOrderNumber.getText() == null || fldOrderNumber.getText().length() == 0){
+                fldOrderNumber.setEffect(new InnerShadow(5, Color.RED));
+            }
         }
     }
 

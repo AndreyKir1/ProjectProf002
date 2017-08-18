@@ -21,7 +21,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
@@ -165,6 +167,10 @@ public class UpdateOrder {
                 }
             }
         });
+
+        tableOrderPosition.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) tableOrderPosition.setEffect(null);
+        });
     }
 
     @FXML
@@ -224,6 +230,8 @@ public class UpdateOrder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            tableOrderPosition.setEffect(new InnerShadow(5, Color.RED));
         }
     }
 
@@ -250,6 +258,8 @@ public class UpdateOrder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            tableOrderPosition.setEffect(new InnerShadow(5, Color.RED));
         }
     }
 

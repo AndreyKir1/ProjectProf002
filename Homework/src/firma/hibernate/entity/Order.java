@@ -40,6 +40,15 @@ public class Order {
     @Column(name = "NOTE_ABOUT_ORDER")
     private String noteAboutOrder;
 
+    @Column(name = "IS_SALE_MANAGER")
+    private boolean isSaleManager;
+
+    @Column(name = "IS_STORAGE_MANAGER")
+    private boolean isStorageManager;
+
+    @Column(name = "IS_CASHIER")
+    private boolean isCashier;
+
 //    @OneToOne(fetch = FetchType.LAZY)
 //    private EmployeeFirm salesManager;
 ////
@@ -66,6 +75,9 @@ public class Order {
         this.noteAboutOrder = noteAboutOrder;
         this.client = client;
         this.managers = new LinkedHashSet<>();
+        this.isCashier = false;
+        this.isSaleManager = false;
+        this.isStorageManager = false;
     }
 
 
@@ -158,7 +170,31 @@ public class Order {
         this.saledDate = saledDate;
     }
 
-//    public EmployeeFirm getSalesManager() {
+    public boolean getSaleManager() {
+        return this.isSaleManager;
+    }
+
+    public void setSaleManager(boolean saleManager) {
+        this.isSaleManager = saleManager;
+    }
+
+    public boolean getStorageManager() {
+        return this.isStorageManager;
+    }
+
+    public void setStorageManager(boolean storageManager) {
+        this.isStorageManager = storageManager;
+    }
+
+    public boolean getCashier() {
+        return this.isCashier;
+    }
+
+    public void setCashier(boolean cashier) {
+        this.isCashier = cashier;
+    }
+
+    //    public EmployeeFirm getSalesManager() {
 //        return salesManager;
 //    }
 //

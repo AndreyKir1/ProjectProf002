@@ -20,7 +20,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
@@ -161,6 +163,40 @@ public class ManagerWindow {
                 }
             }
         });
+
+        tableOrders.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    if (tableOrders.getSelectionModel().getSelectedItem() != null) {
+                        currentOrder = tableOrders.getSelectionModel().getSelectedItem();
+                        try {
+                            Stage stage = new Stage();
+                            stage.setTitle("Інформація про замовлення");
+                            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/OrderView.fxml"));
+                            Scene scene = new Scene(root);
+                            stage.setMinWidth(800);
+                            stage.setMinHeight(570);
+                            stage.setScene(scene);
+                            stage.initModality(Modality.WINDOW_MODAL);
+                            stage.initOwner(btnNewOrder.getScene().getWindow());
+                            stage.show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+        tableOrders.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) tableOrders.setEffect(null);
+        });
+    }
+
+    @FXML
+    private void showOrderView(){
+
     }
 
     @FXML
@@ -219,13 +255,19 @@ public class ManagerWindow {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            tableOrders.setEffect(new InnerShadow(5, Color.RED));
         }
     }
 
     @FXML
     public void updateOrdersList() {
         ordersList.clear();
-        ordersList.setAll(orderService.getAll());
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
+        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
     }
 
     @FXML

@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrdersByEmployee(EmployeeFirm employee, OrderStatus orderStatus) {
-        if(employee != null) return dao.getOrdersByEmployee(employee, orderStatus);
+        if (employee != null) return dao.getOrdersByEmployee(employee, orderStatus);
         else return null;
     }
 
@@ -70,5 +70,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getByStatus(OrderStatus orderStatus) {
         if (orderStatus != null) return dao.getByStatus(orderStatus);
-        else return null;    }
+        else return null;
+    }
+
+    @Override
+    public List<Order> getOrdersWithoutCashier() {
+        return dao.getOrdersWithoutCashier();
+    }
+
+    @Override
+    public List<Order> getOrdersWithoutStorageManager() {
+        return dao.getOrdersWithoutStorageManager();
+    }
 }

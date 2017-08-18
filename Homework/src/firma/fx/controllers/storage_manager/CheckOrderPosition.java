@@ -7,6 +7,7 @@ import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.hibernate.service.product.ProductService;
 import firma.support.OrderStatus;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +17,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +35,7 @@ public class CheckOrderPosition {
     private OrderService orderService = context.getBean(OrderService.class);
 
     private Order currentOrder;
+    private static StorageManagerWindow smwController;
 
     @FXML
     private static ObservableList<Product> storageProductsList;
@@ -75,7 +80,7 @@ public class CheckOrderPosition {
     private TextArea fldNote;
 
     @FXML
-    private TextField fldSearchProduct;
+    private CustomTextField fldSearchProduct;
 
     @FXML
     private Button btnSearchProduct;
@@ -152,6 +157,19 @@ public class CheckOrderPosition {
 
         chOrderStatus.getItems().setAll(OrderStatus.PROCESSED_BY_SMANAGER, OrderStatus.PROCESSED_IN_STOREGE);
         chOrderStatus.setValue(currentOrder.getOrderConditions());
+
+        setClearInCTF(fldSearchProduct);
+    }
+
+    @FXML
+    private void setClearInCTF(CustomTextField ctf) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, ctf, ctf.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -160,7 +178,7 @@ public class CheckOrderPosition {
             List<Product> list = productService.getAll();
             storageProductsList.clear();
             for (Product el : list) {
-                if (el.getProductCode().toLowerCase().contains(fldSearchProduct.getText()) || el.getProductName().toLowerCase().contains(fldSearchProduct.getText())){
+                if (el.getProductCode().toLowerCase().contains(fldSearchProduct.getText()) || el.getProductName().toLowerCase().contains(fldSearchProduct.getText())) {
                     storageProductsList.add(el);
                 }
             }
@@ -175,6 +193,12 @@ public class CheckOrderPosition {
         currentOrder.setNoteAboutOrder(fldNote.getText());
         currentOrder.setOrderConditions(chOrderStatus.getValue());
         orderService.update(currentOrder);
+        smwController.BoxCanceled();
+        smwController.BoxInSManager();
+        smwController.BoxInStorage();
+        smwController.BoxNew();
+        smwController.BoxReady();
+
         Stage stage = (Stage) btnOK.getScene().getWindow();
         stage.close();
     }
@@ -185,5 +209,7 @@ public class CheckOrderPosition {
         stage.close();
     }
 
-
+    public static void setSmwController(StorageManagerWindow smwController) {
+        CheckOrderPosition.smwController = smwController;
+    }
 }

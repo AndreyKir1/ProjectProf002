@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.controlsfx.control.textfield.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -88,11 +89,11 @@
                      <children>
                         <HBox alignment="TOP_RIGHT" minHeight="-Infinity" prefHeight="40.0" prefWidth="400.0">
                            <children>
-                              <TextField fx:id="fldSearchProduct" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                              <CustomTextField fx:id="fldSearchProduct" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0">
                                  <HBox.margin>
-                                    <Insets right="10.0" />
+                                    <Insets right="5.0" />
                                  </HBox.margin>
-                              </TextField>
+                              </CustomTextField>
                               <Button fx:id="btnSearchProduct" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressSearchProduct" prefHeight="30.0" prefWidth="150.0" text="знайти товар">
                                  <font>
                                     <Font name="System Bold" size="12.0" />

@@ -75,6 +75,14 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
+                        <CheckBox fx:id="chBoxNew" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#BoxNew" text="нові">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </VBox.margin>
+                        </CheckBox>
                         <CheckBox fx:id="chBoxInSManager" focusTraversable="false" mnemonicParsing="false" onAction="#BoxInSManager" text="опрацьовуються продавцем">
                            <VBox.margin>
                               <Insets left="5.0" top="5.0" />

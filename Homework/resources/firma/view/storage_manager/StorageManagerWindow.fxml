@@ -24,7 +24,7 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TableView fx:id="tableOrders" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableOrders" cacheShape="false" centerShape="false" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" scaleShape="false" VBox.vgrow="ALWAYS">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
@@ -56,6 +56,14 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
+                        <CheckBox fx:id="chBoxNew" focusTraversable="false" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#BoxNew" text="нові">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </VBox.margin>
+                        </CheckBox>
                         <CheckBox fx:id="chBoxInSManager" focusTraversable="false" mnemonicParsing="false" onAction="#BoxInSManager" text="опрацьовуються продавцем">
                            <font>
                               <Font name="System Bold" size="12.0" />
@@ -112,7 +120,7 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnTest" focusTraversable="false" layoutX="15.0" layoutY="202.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressTest" prefHeight="30.0" prefWidth="100.0" text="test" visible="false">
+                        <Button fx:id="btnTest" disable="true" focusTraversable="false" layoutX="15.0" layoutY="202.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressTest" prefHeight="30.0" prefWidth="100.0" text="test" visible="false">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -139,7 +147,7 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="TableViewPositions" editable="true" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="302.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="TableViewPositions" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="302.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>

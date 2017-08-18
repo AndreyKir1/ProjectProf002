@@ -96,6 +96,9 @@ public class CashierWindow {
     private CheckBox chBoxReady;
 
     @FXML
+    private CheckBox chBoxNew;
+
+    @FXML
     private Button btnSaleOrder;
 
     @FXML
@@ -116,12 +119,14 @@ public class CashierWindow {
         chBoxReady.setSelected(true);
         chBoxDone.setSelected(true);
         chBoxCanceled.setSelected(true);
+        chBoxNew.setSelected(true);
 
         ordersList = FXCollections.observableArrayList();
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+        ordersList.addAll(orderService.getOrdersWithoutCashier());
         ordersList.sort(new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
@@ -169,7 +174,7 @@ public class CashierWindow {
     @FXML
     void BoxInSManager() {
         orderPositionsList.clear();
-        lblOrderNumbers.setText("ЗАМОВЛЕННЯ");
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
         ChBoxSManagerAction();
     }
 
@@ -194,6 +199,13 @@ public class CashierWindow {
         ChBoxCanceledAction();
     }
 
+    @FXML
+    void BoxNew() {
+        orderPositionsList.clear();
+        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
+        ChBoxNewAction();
+    }
+
     private void ChBoxSManagerAction() {
         if (chBoxInSManager.isSelected()) {
             ordersList.clear();
@@ -207,6 +219,9 @@ public class CashierWindow {
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
+            }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
@@ -217,6 +232,9 @@ public class CashierWindow {
             }
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+            }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
             }
         }
     }
@@ -234,6 +252,9 @@ public class CashierWindow {
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
+            }
         } else {
             ordersList.clear();
             if (chBoxInSManager.isSelected()) {
@@ -244,6 +265,9 @@ public class CashierWindow {
             }
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+            }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
             }
         }
     }
@@ -261,6 +285,9 @@ public class CashierWindow {
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
+            }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
@@ -271,6 +298,9 @@ public class CashierWindow {
             }
             if (chBoxCanceled.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+            }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
             }
         }
     }
@@ -288,6 +318,9 @@ public class CashierWindow {
             if (chBoxInSManager.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
+            }
         } else {
             ordersList.clear();
             if (chBoxReady.isSelected()) {
@@ -298,6 +331,42 @@ public class CashierWindow {
             }
             if (chBoxInSManager.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if(chBoxNew.isSelected()){
+                ordersList.addAll(orderService.getOrdersWithoutCashier());
+            }
+        }
+    }
+
+    private void ChBoxNewAction() {
+        if (chBoxNew.isSelected()) {
+            ordersList.clear();
+            ordersList.addAll(orderService.getOrdersWithoutCashier());
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if(chBoxCanceled.isSelected()){
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
+            }
+        } else {
+            ordersList.clear();
+            if (chBoxReady.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
+            }
+            if (chBoxDone.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
+            }
+            if (chBoxInSManager.isSelected()) {
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
+            }
+            if(chBoxCanceled.isSelected()){
+                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
     }
@@ -333,8 +402,7 @@ public class CashierWindow {
             ChBoxReadyAction();
             ChBoxDoneAction();
             ChBoxCanceledAction();
-        }
-        else{
+        } else {
             try {
                 Stage stage = new Stage();
                 stage.setTitle("Обережно!");
@@ -366,13 +434,14 @@ public class CashierWindow {
             List<OrderPosition> tempList = orderPositionService.getOrderPositionByOrder(currentOrder);
             Product temp;
             double cost = 0.0;
-            for (OrderPosition el:tempList){
+            for (OrderPosition el : tempList) {
                 temp = productService.read(el.getProduct().getId());
-                temp.setAmountInStorage(temp.getAmountInStorage() +  el.getProductAmount());
+                temp.setAmountInStorage(temp.getAmountInStorage() + el.getProductAmount());
                 productService.update(temp);
                 cost += el.getTotalPriceOfProduct();
             }
-            FirmBancAccount.setBankAccount(FirmBancAccount.getBankAccount() - cost);
+            double cost1 = FirmBancAccount.getBankAccount();
+            FirmBancAccount.setBankAccount(cost1 - cost);
             currentOrder.setOrderConditions(OrderStatus.CANCELED);
             orderService.update(currentOrder);
             ChBoxSManagerAction();
@@ -401,34 +470,29 @@ public class CashierWindow {
     @FXML
     void pressTakeOrder() throws InterruptedException {
         if (tableOrders.getSelectionModel().getSelectedItem() != null) {
-            long id = tableOrders.getSelectionModel().getSelectedItem().getId();
-            currentOrder = orderService.read(id);
-            Set<EmployeeFirm> setEmployee = currentOrder.getManagers();
-            boolean cashierExist = false;
-            for (EmployeeFirm el : setEmployee) {
-                if (el.getEmployeeRols().equals(EmployeeRols.CASHIER)) {
-                    cashierExist = true;
-                    try {
-                        Stage stage = new Stage();
-                        stage.setTitle("Нагадування!");
-                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/CantSatCashier.fxml"));
-                        Scene scene = new Scene(root);
-                        stage.setResizable(false);
-                        stage.setScene(scene);
-                        stage.initModality(Modality.WINDOW_MODAL);
-                        stage.initOwner(btnTakeOrder.getScene().getWindow());
-                        stage.show();
-                        TimeUnit.SECONDS.sleep(2);
-                        stage.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+            if (tableOrders.getSelectionModel().getSelectedItem().getCashier()) {
+                try {
+                    Stage stage = new Stage();
+                    stage.setTitle("Нагадування!");
+                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/CantSatCashier.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setResizable(false);
+                    stage.setScene(scene);
+                    stage.initModality(Modality.WINDOW_MODAL);
+                    stage.initOwner(btnTakeOrder.getScene().getWindow());
+                    stage.show();
+                    TimeUnit.SECONDS.sleep(2);
+                    stage.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
-            if (!cashierExist) {
+            }else{
+                long id = tableOrders.getSelectionModel().getSelectedItem().getId();
+                currentOrder = orderService.read(id);
+                Set<EmployeeFirm> setEmployee = currentOrder.getManagers();
                 setEmployee.add(LoginController.getCurrentEmployee());
                 currentOrder.setManagers(setEmployee);
+                currentOrder.setCashier(true);
                 orderService.update(currentOrder);
                 try {
                     Stage stage = new Stage();
@@ -445,7 +509,52 @@ public class CashierWindow {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+                ChBoxSManagerAction();
+                ChBoxReadyAction();
+                ChBoxDoneAction();
+                ChBoxCanceledAction();            }
+//            boolean cashierExist = false;
+//            for (EmployeeFirm el : setEmployee) {
+//                if (el.getEmployeeRols().equals(EmployeeRols.CASHIER)) {
+//                    cashierExist = true;
+//                    try {
+//                        Stage stage = new Stage();
+//                        stage.setTitle("Нагадування!");
+//                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/CantSatCashier.fxml"));
+//                        Scene scene = new Scene(root);
+//                        stage.setResizable(false);
+//                        stage.setScene(scene);
+//                        stage.initModality(Modality.WINDOW_MODAL);
+//                        stage.initOwner(btnTakeOrder.getScene().getWindow());
+//                        stage.show();
+//                        TimeUnit.SECONDS.sleep(2);
+//                        stage.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//                }
+//            }
+//            if (!cashierExist) {
+//                setEmployee.add(LoginController.getCurrentEmployee());
+//                currentOrder.setManagers(setEmployee);
+//                orderService.update(currentOrder);
+//                try {
+//                    Stage stage = new Stage();
+//                    stage.setTitle("Вітаннячко :)");
+//                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/ConfirmIsOorderYours.fxml"));
+//                    Scene scene = new Scene(root);
+//                    stage.setResizable(false);
+//                    stage.setScene(scene);
+//                    stage.initModality(Modality.WINDOW_MODAL);
+//                    stage.initOwner(btnTakeOrder.getScene().getWindow());
+//                    stage.show();
+//                    TimeUnit.SECONDS.sleep(2);
+//                    stage.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
     }
 

@@ -71,7 +71,6 @@ public class OrderDAOimpl implements OrderDAO {
         return factory.getCurrentSession().createQuery("FROM firma.hibernate.entity.Order").list();
     }
 
-//        оця фігня не працює, звязок мені то мені
     @Override
     @Transactional
     public List<Order> getOrdersByEmployee(EmployeeFirm employee, OrderStatus orderStatus) {
@@ -82,6 +81,37 @@ public class OrderDAOimpl implements OrderDAO {
                     "o.orderConditions=:conditions");
             query.setParameter("conditions", orderStatus);
             query.setParameter("employee", employee);
+            List<Order> list = query.list();
+            return list;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //
+    @Override
+    @Transactional
+    public List<Order> getOrdersWithoutCashier() {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from Order where isCashier =:isCmanager");
+            query.setParameter("isCmanager", false);
+            List<Order> list = query.list();
+            return list;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getOrdersWithoutStorageManager() {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from Order where isStorageManager =:isSmanager");
+            query.setParameter("isSmanager", false);
             List<Order> list = query.list();
             return list;
         }catch (HibernateException e){
