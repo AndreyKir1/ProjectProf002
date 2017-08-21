@@ -9,6 +9,7 @@ import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.support.EmployeeRols;
 import firma.support.OrderStatus;
+import firma.support.StyleRowFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -62,15 +64,6 @@ public class StorageManagerWindow {
     private CheckBox chBoxInStorage;
 
     @FXML
-    private CheckBox chBoxReady;
-
-    @FXML
-    private CheckBox chBoxInSManager;
-
-    @FXML
-    private CheckBox chBoxCanceled;
-
-    @FXML
     private CheckBox chBoxNew;
 
     @FXML
@@ -90,6 +83,12 @@ public class StorageManagerWindow {
 
     @FXML
     private TableColumn<Order, String> columnOrderCustomer;
+
+    @FXML
+    private TableColumn<Order, Date> columnReadyDate;
+
+    @FXML
+    private TableColumn<Order, Date> columnSaledDate;
 
     @FXML
     private TableView<OrderPosition> TableViewPositions;
@@ -119,11 +118,11 @@ public class StorageManagerWindow {
 //        for (Order el:list){
 //            System.out.println(el);
 //        }
-        EmployeeService employeeService = context.getBean(EmployeeService.class);
-        List<Order> list = orderService.getOrdersWithoutCashier();
-        for (Order el : list) {
-            System.out.println(el.getNumber());
-        }
+//        EmployeeService employeeService = context.getBean(EmployeeService.class);
+//        List<Order> list = orderService.getOrdersWithoutCashier();
+//        for (Order el : list) {
+//            System.out.println(el.getNumber());
+//        }
     }
 
     public static Order getCurrentOrder() {
@@ -132,24 +131,13 @@ public class StorageManagerWindow {
 
     @FXML
     private void initialize() throws ParseException {
-        chBoxInSManager.setSelected(true);
-        chBoxReady.setSelected(true);
         chBoxInStorage.setSelected(true);
-        chBoxCanceled.setSelected(true);
         chBoxNew.setSelected(true);
 
         ordersList = FXCollections.observableArrayList();
-        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-        ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-        ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-        ordersList.sort(new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                return o1.getCreateOrder().compareTo(o2.getCreateOrder());
-            }
-        });
+        ordersList.addAll(orderService.getNewOrdersStorManager());
+        sortOrderList();
         tableOrders.setItems(ordersList);
 
         columnOrderNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
@@ -157,12 +145,18 @@ public class StorageManagerWindow {
         columnOrderCost.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         columnOrderStatus.setCellValueFactory(new PropertyValueFactory<>("orderConditions"));
         columnOrderCustomer.setCellValueFactory(new PropertyValueFactory<>("client"));
+        columnReadyDate.setCellValueFactory(new PropertyValueFactory<>("orderReady"));
+        columnSaledDate.setCellValueFactory(new PropertyValueFactory<>("saledDate"));
+
+        columnSaledDate.setVisible(false);
+        columnReadyDate.setVisible(false);
 
         orderPositionsList = FXCollections.observableArrayList();
         columnProductCode.setCellValueFactory(new PropertyValueFactory<>("positionCode"));
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         columnProductCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
+        sortOrderPositionsList();
         TableViewPositions.setItems(orderPositionsList);
 
         tableOrders.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -174,32 +168,36 @@ public class StorageManagerWindow {
                         currentOrder = orderService.read(currentOrderID);
                         lbCurrentOrder.setText("ЗАМОВЛЕННЯ #" + currentOrder.getNumber());
                         orderPositionsList = FXCollections.observableArrayList(orderPositionService.getOrderPositionByOrder(currentOrder));
+                        sortOrderPositionsList();
                         TableViewPositions.setItems(orderPositionsList);
+                        tableOrders.setEffect(null);
                     }
                 }
             }
         });
 
-
         tableOrders.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) tableOrders.setEffect(null);
         });
-    }
 
-//    @FXML
-//    private void showCurrentOrderDetails() {
-//        if (TableViewOrders.getSelectionModel().getSelectedItem() != null){
-//            currentOrder = TableViewOrders.getSelectionModel().getSelectedItem();
-//            Long id = currentOrder.getId();
-//            currentOrder = orderService.read(id);
-//
-//            currentOrderPositionsList = FXCollections.observableList(orderPositionService.getOrderPositionByOrder(currentOrder));
-//            columnProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
-//            columnProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
-//            columnProductPrice.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
-//            TableViewPositions.setItems(currentOrderPositionsList);
-//        }
-//    }
+        Callback<TableView<Order>,TableRow<Order>> tableRowCallback = value -> {
+            TableRow<Order> row = new TableRow<Order>() {
+                @Override
+                public void updateItem(Order order, boolean empty) {
+                    super.updateItem(order, empty);
+                    if (order == null)
+                        return;
+                    if (!order.getStorageManager()) {
+                        setStyle("-fx-background-color: rgba(91,255,15,0.41);");
+                    } else {
+                        setStyle(null);
+                    }
+                }
+            };
+            return row;
+        };
+        tableOrders.setRowFactory(tableRowCallback);
+    }
 
     @FXML
     void pressTakeOrder() throws InterruptedException {//перевірити звязки
@@ -220,7 +218,7 @@ public class StorageManagerWindow {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 long id = tableOrders.getSelectionModel().getSelectedItem().getId();
                 currentOrder = orderService.read(id);
                 Set<EmployeeFirm> setEmployee = currentOrder.getManagers();
@@ -243,60 +241,19 @@ public class StorageManagerWindow {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                ChBoxStorageAction();
+                ChBoxNewAction();
+                tableOrders.refresh();
             }
-
-//            boolean storageExist = false;
-//            for (EmployeeFirm el : setEmployee) {
-//                if (el.getEmployeeRols().equals(EmployeeRols.STORAGE_MANAGER)) {
-//                    storageExist = true;
-//                    try {
-//                        Stage stage = new Stage();
-//                        stage.setTitle("Нагадування!");
-//                        Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/CantSatStorageManager.fxml"));
-//                        Scene scene = new Scene(root);
-//                        stage.setResizable(false);
-//                        stage.setScene(scene);
-//                        stage.initModality(Modality.WINDOW_MODAL);
-//                        stage.initOwner(btnTakeOrder.getScene().getWindow());
-//                        stage.show();
-//                        TimeUnit.SECONDS.sleep(2);
-//                        stage.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    break;
-//                }
-//            }
-//            if (!storageExist) {
-//                setEmployee.add(LoginController.getCurrentEmployee());
-//                currentOrder.setManagers(setEmployee);
-//                orderService.update(currentOrder);
-//                try {
-//                    Stage stage = new Stage();
-//                    stage.setTitle("Вітаннячко :)");
-//                    Parent root = FXMLLoader.load(getClass().getResource("/firma/view/cashier/ConfirmIsOorderYours.fxml"));
-//                    Scene scene = new Scene(root);
-//                    stage.setResizable(false);
-//                    stage.setScene(scene);
-//                    stage.initModality(Modality.WINDOW_MODAL);
-//                    stage.initOwner(btnTakeOrder.getScene().getWindow());
-//                    stage.show();
-//                    TimeUnit.SECONDS.sleep(2);
-//                    stage.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         } else {
+            btnTakeOrder.requestFocus();
             tableOrders.setEffect(new InnerShadow(5, Color.RED));
         }
     }
 
     @FXML
-    void pressCheckOrderPosition() {
-        if (tableOrders.getSelectionModel().getSelectedItem() != null
-                && (tableOrders.getSelectionModel().getSelectedItem().getOrderConditions().equals(OrderStatus.PROCESSED_BY_SMANAGER)
-                || tableOrders.getSelectionModel().getSelectedItem().getOrderConditions().equals(OrderStatus.PROCESSED_IN_STOREGE))) {
+    void pressCheckOrderPosition() throws InterruptedException {
+        if (tableOrders.getSelectionModel().getSelectedItem() != null && tableOrders.getSelectionModel().getSelectedItem().getStorageManager()) {
             long id = tableOrders.getSelectionModel().getSelectedItem().getId();
             CheckOrderPosition.setSmwController(this);
             currentOrder = orderService.read(id);
@@ -312,77 +269,42 @@ public class StorageManagerWindow {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-//            tableOrders.setEffect(new InnerShadow(5, Color.RED));
+        } else if (tableOrders.getSelectionModel().getSelectedItem() == null) {
+            btnCheckOrderPosition.requestFocus();
+            tableOrders.setEffect(new InnerShadow(5, Color.RED));
+        } else if (!tableOrders.getSelectionModel().getSelectedItem().getStorageManager()) {
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Вітаннячко :)");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/storage_manager/CantChackOPs.fxml"));
+                Scene scene = new Scene(root);
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnTakeOrder.getScene().getWindow());
+                stage.show();
+                TimeUnit.SECONDS.sleep(2);
+                stage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @FXML
-    void BoxInSManager() {
-        orderPositionsList.clear();
-        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
-        ChBoxSManagerAction();
-    }
-
-    @FXML
     void BoxInStorage() {
+        tableOrders.refresh();
         orderPositionsList.clear();
         lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
         ChBoxStorageAction();
     }
 
     @FXML
-    void BoxReady() {
-        orderPositionsList.clear();
-        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
-        ChBoxReadyAction();
-    }
-
-    @FXML
-    void BoxCanceled() {
-        orderPositionsList.clear();
-        lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
-        ChBoxCanceledAction();
-    }
-
-    @FXML
-    void BoxNew(){
+    void BoxNew() {
+        tableOrders.refresh();
         orderPositionsList.clear();
         lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
         ChBoxNewAction();
-    }
-
-    private void ChBoxSManagerAction() {
-        if (chBoxInSManager.isSelected()) {
-            ordersList.clear();
-            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        } else {
-            ordersList.clear();
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        }
     }
 
     private void ChBoxStorageAction() {
@@ -390,132 +312,50 @@ public class StorageManagerWindow {
             ordersList.clear();
             ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             lbCurrentOrder.setText("ЗАМОВЛЕННЯ");
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
+            if (chBoxNew.isSelected()) {
+                ordersList.addAll(orderService.getNewOrdersStorManager());
             }
         } else {
             ordersList.clear();
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
+            if (chBoxNew.isSelected()) {
+                ordersList.addAll(orderService.getNewOrdersStorManager());
             }
         }
-    }
-
-    private void ChBoxReadyAction() {
-        if (chBoxReady.isSelected()) {
-            ordersList.clear();
-            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        } else {
-            ordersList.clear();
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if (chBoxCanceled.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        }
-    }
-
-    private void ChBoxCanceledAction() {
-        if (chBoxCanceled.isSelected()) {
-            ordersList.clear();
-            ordersList.setAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        } else {
-            ordersList.clear();
-            if (chBoxInStorage.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if(chBoxNew.isSelected()){
-                ordersList.addAll(orderService.getOrdersWithoutStorageManager());
-            }
-        }
+        sortOrderList();
     }
 
     private void ChBoxNewAction() {
         if (chBoxNew.isSelected()) {
             ordersList.clear();
-            ordersList.setAll(orderService.getOrdersWithoutStorageManager());
+            ordersList.setAll(orderService.getNewOrdersStorManager());
             if (chBoxInStorage.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
-            }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if(chBoxCanceled.isSelected()){
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         } else {
             ordersList.clear();
             if (chBoxInStorage.isSelected()) {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_IN_STOREGE));
             }
-            if (chBoxReady.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
-            }
-            if (chBoxInSManager.isSelected()) {
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
-            }
-            if(chBoxCanceled.isSelected()){
-                ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-            }
         }
+        sortOrderList();
+    }
+
+    private void sortOrderList() {
+        ordersList.sort(new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                return o1.getCreateOrder().compareTo(o2.getCreateOrder());
+            }
+        });
+    }
+
+    private void sortOrderPositionsList() {
+        orderPositionsList.sort(new Comparator<OrderPosition>() {
+            @Override
+            public int compare(OrderPosition o1, OrderPosition o2) {
+                return o1.getPositionCode().compareTo(o2.getPositionCode());
+            }
+        });
     }
 
     @FXML

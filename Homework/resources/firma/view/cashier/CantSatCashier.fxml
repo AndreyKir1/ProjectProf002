@@ -10,7 +10,7 @@
    <children>
       <VBox alignment="CENTER" fillWidth="false" layoutX="90.0" layoutY="-50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="lbtext" alignment="CENTER" minWidth="-Infinity" prefHeight="36.0" prefWidth="210.0" text="За Вами вже було закріплено дане замовлення." textAlignment="CENTER" wrapText="true">
+            <Label fx:id="lbtext" alignment="CENTER" minWidth="-Infinity" prefHeight="36.0" prefWidth="210.0" text="За Вами вже було закріплено дане замовлення!" textAlignment="CENTER" textFill="RED" wrapText="true">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

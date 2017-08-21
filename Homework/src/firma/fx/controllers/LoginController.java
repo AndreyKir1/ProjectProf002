@@ -191,10 +191,11 @@ public class LoginController {
                         e.printStackTrace();
                     }
                     break;
-                } else {
-                    fldPassword.setEffect(new InnerShadow(5, Color.RED));
-                    fldLogin.setEffect(new InnerShadow(5, Color.RED));
                 }
+
+            } else {
+                fldPassword.setEffect(new InnerShadow(5, Color.RED));
+                fldLogin.setEffect(new InnerShadow(5, Color.RED));
             }
         }
     }

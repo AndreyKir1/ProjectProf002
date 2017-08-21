@@ -43,10 +43,12 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TableView fx:id="tableOrders" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableOrders" focusTraversable="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="280.0" prefWidth="580.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="columnOrderNumber" prefWidth="67.0" text="Номер" />
-                            <TableColumn fx:id="columnOrderDate" prefWidth="73.0" text="Дата" />
+                            <TableColumn fx:id="columnOrderDate" prefWidth="73.0" text="Дата замов." />
+                              <TableColumn fx:id="columnReadyDate" prefWidth="73.0" text="Дата готовності" />
+                              <TableColumn fx:id="columnSaledDate" prefWidth="73.0" text="Дата продажу" />
                               <TableColumn fx:id="columnOrderCustomer" prefWidth="94.0" text="Замовник" />
                               <TableColumn fx:id="columnOrderCost" prefWidth="82.0" text="Вартість" />
                               <TableColumn fx:id="columnOrderStatus" prefWidth="149.0" text="Стан замовлення" />

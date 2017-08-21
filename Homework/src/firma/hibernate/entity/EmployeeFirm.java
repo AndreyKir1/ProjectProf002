@@ -1,6 +1,8 @@
 package firma.hibernate.entity;
 
 import firma.support.EmployeeRols;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import javax.persistence.*;
 import java.util.Date;

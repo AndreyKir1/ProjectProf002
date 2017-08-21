@@ -122,6 +122,25 @@ public class OrderDAOimpl implements OrderDAO {
 
     @Override
     @Transactional
+    public List<Order> getNewOrdersStorManager() {
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("from Order where orderConditions=:orderCondition and isStorageManager=:flag");
+        query.setParameter("orderCondition", OrderStatus.PROCESSED_IN_STOREGE);
+        query.setParameter("flag", false);
+        return query.list();
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getNewOrdersCashier() {
+        Session session = factory.getCurrentSession();
+        Query query = session.createQuery("from Order where orderConditions=:orderCondition and isCashier=:flag");
+        query.setParameter("orderCondition", OrderStatus.READY);
+        query.setParameter("flag", false);
+        return query.list();    }
+
+    @Override
+    @Transactional
     public List<Order> getOrdersByClient(Client client) {
         Session session = factory.getCurrentSession();
         try {

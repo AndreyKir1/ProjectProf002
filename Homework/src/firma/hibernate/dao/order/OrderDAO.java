@@ -19,5 +19,9 @@ public interface OrderDAO {
     List<Order> getByStatus(OrderStatus orderStatus);
     List<Order> getOrdersWithoutCashier();
     List<Order> getOrdersWithoutStorageManager();
+    /*вибборка з бази для нових замовлень для кладовщика, тег "на складі" - false*/
+    List<Order> getNewOrdersStorManager();
 
+    /*вибборка з бази для нових замовлень для продавця, тег "у продавця" - false*/
+    List<Order> getNewOrdersCashier();
 }

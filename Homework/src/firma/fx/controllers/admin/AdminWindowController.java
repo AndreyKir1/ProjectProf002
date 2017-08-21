@@ -8,6 +8,8 @@ import firma.hibernate.service.employee.EmployeeService;
 import firma.hibernate.service.employee.EmployeeServiceImpl;
 import firma.hibernate.util.HibernateUtil;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -25,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import org.springframework.context.ApplicationContext;
@@ -102,7 +105,8 @@ public class AdminWindowController {
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         columnDateStartOfWork.setCellValueFactory(new PropertyValueFactory<>("dateOfStarWorking"));
-        columnAccount.setCellValueFactory(new PropertyValueFactory<>("account"));//може доведеться булеан приводити до стрінга
+        columnAccount.setCellValueFactory(new PropertyValueFactory<>("account"));//може доведеться булеан приводити до стрінг
+
         listEmployee.sort(new Comparator<EmployeeFirm>() {
             @Override
             public int compare(EmployeeFirm o1, EmployeeFirm o2) {

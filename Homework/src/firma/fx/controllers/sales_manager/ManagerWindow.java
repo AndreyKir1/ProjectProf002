@@ -31,6 +31,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ManagerWindow {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
@@ -87,6 +88,12 @@ public class ManagerWindow {
     private TableColumn<Order, OrderStatus> columnOrderStatus;
 
     @FXML
+    private TableColumn<Order, Date> columnReadyDate;
+
+    @FXML
+    private TableColumn<Order, Date> columnSaledDate;
+
+    @FXML
     private TableView<OrderPosition> tableOrderDetails;
 
     @FXML
@@ -125,12 +132,13 @@ public class ManagerWindow {
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.READY));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.DONE));
         ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
-        ordersList.sort(new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                return o1.getCreateOrder().compareTo(o2.getCreateOrder());
-            }
-        });
+        columnReadyDate.setCellValueFactory(new PropertyValueFactory<>("orderReady"));
+        columnSaledDate.setCellValueFactory(new PropertyValueFactory<>("saledDate"));
+
+        columnSaledDate.setVisible(false);
+        columnReadyDate.setVisible(false);
+
+        orderListSort();
 
         columnOrderNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
         columnOrderDate.setCellValueFactory(new PropertyValueFactory<>("createOrder"));
@@ -144,6 +152,8 @@ public class ManagerWindow {
         columnProductName.setCellValueFactory(new PropertyValueFactory<>("positionName"));
         columnProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         columnProductCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
+
+
 
         tableOrders.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -159,6 +169,7 @@ public class ManagerWindow {
                             }
                         });
                         tableOrderDetails.setItems(orderPositionsList);
+                        tableOrders.setEffect(null);
                     }
                 }
             }
@@ -191,6 +202,15 @@ public class ManagerWindow {
 
         tableOrders.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) tableOrders.setEffect(null);
+        });
+    }
+
+    private void orderListSort() {
+        ordersList.sort(new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                return o1.getCreateOrder().compareTo(o2.getCreateOrder());
+            }
         });
     }
 
@@ -235,8 +255,9 @@ public class ManagerWindow {
     }
 
     @FXML
-    void pressUpdateOrder() {
-        if (tableOrders.getSelectionModel().getSelectedItem() != null) {
+    void pressUpdateOrder() throws InterruptedException {
+        if (tableOrders.getSelectionModel().getSelectedItem() != null &&
+                !tableOrders.getSelectionModel().getSelectedItem().getOrderConditions().equals(OrderStatus.CANCELED)) {
             currentOrder = orderService.read(tableOrders.getSelectionModel().getSelectedItem().getId());
             UpdateOrder.setCurrentOrderRow(tableOrders.getSelectionModel().getSelectedIndex());
             UpdateOrder.setManagerWindowController(this);
@@ -255,8 +276,24 @@ public class ManagerWindow {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        }else if (tableOrders.getSelectionModel().getSelectedItem() == null){
             tableOrders.setEffect(new InnerShadow(5, Color.RED));
+        }else if (tableOrders.getSelectionModel().getSelectedItem().getOrderConditions().equals(OrderStatus.CANCELED)){
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Увага!");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/CantUpdate.fxml"));
+                Scene scene = new Scene(root);
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnUpdateOrder.getScene().getWindow());
+                stage.show();
+                TimeUnit.SECONDS.sleep(2);
+                stage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -342,6 +379,7 @@ public class ManagerWindow {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
+        orderListSort();
     }
 
     private void ChBoxStorageAction() {
@@ -376,6 +414,7 @@ public class ManagerWindow {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
+        orderListSort();
     }
 
     private void ChBoxReadyAction() {
@@ -409,6 +448,7 @@ public class ManagerWindow {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
+        orderListSort();
     }
 
     private void ChBoxDoneAction() {
@@ -442,6 +482,7 @@ public class ManagerWindow {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.CANCELED));
             }
         }
+        orderListSort();
     }
 
     private void ChBoxCanceledAction() {
@@ -475,5 +516,6 @@ public class ManagerWindow {
                 ordersList.addAll(orderService.getOrdersByEmployee(LoginController.getCurrentEmployee(), OrderStatus.PROCESSED_BY_SMANAGER));
             }
         }
+        orderListSort();
     }
 }

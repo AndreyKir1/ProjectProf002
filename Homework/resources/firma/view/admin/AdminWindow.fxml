@@ -32,7 +32,7 @@
             </MenuBar>
             <HBox prefHeight="540.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="tblView" focusTraversable="false" prefHeight="530.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tblView" focusTraversable="false" prefHeight="530.0" prefWidth="660.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="columnSurname" prefWidth="75.0" text="Прізвище" />
                       <TableColumn fx:id="columnName" prefWidth="75.0" text="Ім'я" />

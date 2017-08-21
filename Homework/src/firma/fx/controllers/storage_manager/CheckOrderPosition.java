@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import org.springframework.context.ApplicationContext;
@@ -159,6 +160,24 @@ public class CheckOrderPosition {
         chOrderStatus.setValue(currentOrder.getOrderConditions());
 
         setClearInCTF(fldSearchProduct);
+
+        Callback<TableView<OrderPosition>,TableRow<OrderPosition>> tableRowCallback = value -> {
+            TableRow<OrderPosition> row = new TableRow<OrderPosition>() {
+                @Override
+                public void updateItem(OrderPosition orderPosition, boolean empty) {
+                    super.updateItem(orderPosition, empty);
+                    if (orderPosition == null)
+                        return;
+                    if (orderPosition.getProductAmount() > orderPosition.getProduct().getAmountInStorage()) {
+                        setStyle("-fx-background-color: rgba(255,8,0,0.41);");
+                    } else {
+                        setStyle(null);
+                    }
+                }
+            };
+            return row;
+        };
+        TableViewOrderPositions.setRowFactory(tableRowCallback);
     }
 
     @FXML
@@ -193,11 +212,8 @@ public class CheckOrderPosition {
         currentOrder.setNoteAboutOrder(fldNote.getText());
         currentOrder.setOrderConditions(chOrderStatus.getValue());
         orderService.update(currentOrder);
-        smwController.BoxCanceled();
-        smwController.BoxInSManager();
         smwController.BoxInStorage();
         smwController.BoxNew();
-        smwController.BoxReady();
 
         Stage stage = (Stage) btnOK.getScene().getWindow();
         stage.close();

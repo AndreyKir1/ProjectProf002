@@ -8,7 +8,11 @@ import firma.hibernate.entity.OrderPosition;
 import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
 import firma.support.OrderStatus;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -135,13 +139,13 @@ public class CreateOrder {
         columnCost.setCellValueFactory(new PropertyValueFactory<>("totalPriceOfProduct"));
         tableViewOrdersPositions.setItems(orderPositions);
 
-        btnOrderStatus.getItems().setAll(OrderStatus.values());
+        btnOrderStatus.getItems().setAll(OrderStatus.PROCESSED_IN_STOREGE, OrderStatus.PROCESSED_BY_SMANAGER);
 
         tableViewOrdersPositions.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getClickCount() == 2) {
-
+                if (event.getClickCount() == 1) {
+                    tableViewOrdersPositions.setEffect(null);
                 }
             }
         });
@@ -152,6 +156,13 @@ public class CreateOrder {
 
         fldOrderNumber.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) fldOrderNumber.setEffect(null);
+        });
+
+        btnOrderStatus.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                btnOrderStatus.setEffect(null);
+            }
         });
     }
 
@@ -174,6 +185,7 @@ public class CreateOrder {
     @FXML
     void AddWithDBase() {
         ChoseCustomer.setCreateOrderController(this);
+        btnAddWithDBase.setEffect(null);
         try {
             Stage stage = new Stage();
             stage.setTitle("Вибрати замовника з бази");
@@ -192,19 +204,6 @@ public class CreateOrder {
 
     @FXML
     void pressAddNewCustomer() {
-//        try {
-//            Stage stage = new Stage();
-//            stage.setTitle("Вибрати замовника з бази");
-//            Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/AddCustomer.fxml"));
-//            Scene scene = new Scene(root);
-//            stage.setResizable(false);
-//            stage.setScene(scene);
-//            stage.initModality(Modality.WINDOW_MODAL);
-//            stage.initOwner(btnAddNewCustomer.getScene().getWindow());
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @FXML
@@ -212,6 +211,8 @@ public class CreateOrder {
         CreateOrderPosition.setCreateOrderOwner(true);
         CreateOrderPosition.setUpdatreOrdeOwner(false);
         CreateOrderPosition.setCreateOrderController(this);
+        btnCreateOrderPosition.setEffect(null);
+        tableViewOrdersPositions.setEffect(null);
         try {
             Stage stage = new Stage();
             stage.setTitle("Обрати товар");
@@ -278,10 +279,10 @@ public class CreateOrder {
 
     @FXML
     void pressSave() {
-        if(fldOrderNumber.getText() != null && fldOrderNumber.getText().length() > 0 && fldOrderDate.getValue() != null && lbSurname.getText() != null &&
+        if (fldOrderNumber.getText() != null && fldOrderNumber.getText().length() > 0 && fldOrderDate.getValue() != null && lbSurname.getText() != null &&
                 lbName.getText() != null && lbLastName.getText() != null && lbEmail.getText() != null && lbPhone.getText() != null && btnOrderStatus.getValue() != null &&
-                orderPositions.size() > 0){
-            Order order = new Order(fldOrderNumber.getText(),  Date.from(fldOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), btnOrderStatus.getValue(),
+                orderPositions.size() > 0) {
+            Order order = new Order(fldOrderNumber.getText(), Date.from(fldOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), btnOrderStatus.getValue(),
                     areaNotes.getText(), currentClient);
             order.setTotalPrice(Double.parseDouble(lbOrderCost.getText().substring(26)));
             Set<EmployeeFirm> setEmployee = order.getManagers();
@@ -289,7 +290,7 @@ public class CreateOrder {
             order.setManagers(setEmployee);
             order.setSaleManager(true);
             orderService.create(order);
-            for(OrderPosition el:orderPositions){
+            for (OrderPosition el : orderPositions) {
                 el.setOrder(order);
                 orderPositionService.create(el);
             }
@@ -305,12 +306,24 @@ public class CreateOrder {
 
             Stage current = (Stage) btnSave.getScene().getWindow();
             current.close();
-        }else{
-            if (fldOrderDate.getValue() == null){
+        } else {
+            btnSave.requestFocus();
+            if (fldOrderDate.getValue() == null) {
                 fldOrderDate.setEffect(new InnerShadow(5, Color.RED));
             }
-            if (fldOrderNumber.getText() == null || fldOrderNumber.getText().length() == 0){
+            if (fldOrderNumber.getText() == null || fldOrderNumber.getText().length() == 0) {
                 fldOrderNumber.setEffect(new InnerShadow(5, Color.RED));
+            }
+            if (btnOrderStatus.getValue() == null) {
+                btnOrderStatus.setEffect(new InnerShadow(5, Color.RED));
+            }
+            if (lbSurname.getText() == null || lbName.getText() == null || lbLastName.getText() == null || lbEmail.getText() == null || lbPhone.getText() == null ||
+                    lbSurname.getText().length() < 1 || lbName.getText().length() < 1 || lbLastName.getText().length() < 1 || lbEmail.getText().length() < 1 || lbPhone.getText().length() < 1) {
+                btnAddWithDBase.setEffect(new InnerShadow(5, Color.RED));
+            }
+            if (orderPositions.size() == 0) {
+                tableViewOrdersPositions.setEffect(new InnerShadow(5, Color.RED));
+                btnCreateOrderPosition.setEffect(new InnerShadow(5, Color.RED));
             }
         }
     }
@@ -322,7 +335,7 @@ public class CreateOrder {
     }
 
     @FXML
-    void setCustomerData(String surName, String name, String lastName, String phoneNumber, String email){
+    void setCustomerData(String surName, String name, String lastName, String phoneNumber, String email) {
         lbSurname.setText(surName);
         lbName.setText(name);
         lbLastName.setText(lastName);
@@ -331,17 +344,17 @@ public class CreateOrder {
     }
 
     @FXML
-    public static void addToorderPositions(OrderPosition orderPosition){
+    public static void addToorderPositions(OrderPosition orderPosition) {
         orderPositions.add(orderPosition);
     }
 
     @FXML
-    public static void setToOrderPosition(int index, OrderPosition orderPosition){
+    public static void setToOrderPosition(int index, OrderPosition orderPosition) {
         orderPositions.set(index, orderPosition);
     }
 
     @FXML
-    public static void deleteOrderPositions(OrderPosition orderPosition){
+    public static void deleteOrderPositions(OrderPosition orderPosition) {
         orderPositions.remove(orderPosition);
     }
 
@@ -351,8 +364,8 @@ public class CreateOrder {
 
     void setOrderCostValue() {
         Double value = 0.0;
-        if(orderPositions.size() > 0){
-            for (OrderPosition el:orderPositions ){
+        if (orderPositions.size() > 0) {
+            for (OrderPosition el : orderPositions) {
                 value += el.getTotalPriceOfProduct();
             }
         }

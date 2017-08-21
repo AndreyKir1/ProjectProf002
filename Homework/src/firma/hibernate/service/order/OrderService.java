@@ -20,5 +20,6 @@ public interface OrderService {
     List<Order> getByStatus(OrderStatus orderStatus);
     List<Order> getOrdersWithoutCashier();
     List<Order> getOrdersWithoutStorageManager();
-
+    List<Order> getNewOrdersStorManager();
+    List<Order> getNewOrdersCashier();
 }

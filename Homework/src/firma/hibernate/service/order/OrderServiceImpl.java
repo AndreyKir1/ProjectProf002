@@ -82,4 +82,14 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersWithoutStorageManager() {
         return dao.getOrdersWithoutStorageManager();
     }
+
+    @Override
+    public List<Order> getNewOrdersStorManager() {
+        return dao.getNewOrdersStorManager();
+    }
+
+    @Override
+    public List<Order> getNewOrdersCashier() {
+        return dao.getNewOrdersCashier();
+    }
 }

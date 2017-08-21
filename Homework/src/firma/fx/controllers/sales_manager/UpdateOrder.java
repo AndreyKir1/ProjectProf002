@@ -1,10 +1,10 @@
 package firma.fx.controllers.sales_manager;
 
-import firma.hibernate.entity.Client;
-import firma.hibernate.entity.Order;
-import firma.hibernate.entity.OrderPosition;
+import firma.hibernate.entity.*;
+import firma.hibernate.service.employee.EmployeeService;
 import firma.hibernate.service.order.OrderService;
 import firma.hibernate.service.orderPosition.OrderPositionService;
+import firma.hibernate.service.product.ProductService;
 import firma.support.OrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,11 +36,15 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class UpdateOrder {
     private ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"firma/Config.xml"});
     private OrderPositionService orderPositionService = context.getBean(OrderPositionService.class);
     private OrderService orderService = context.getBean(OrderService.class);
+    private EmployeeService employeeService = context.getBean(EmployeeService.class);
+    private ProductService productService = context.getBean(ProductService.class);
+
     private Order currentOrder;
 
     private static ManagerWindow managerWindowController;
@@ -143,7 +147,7 @@ public class UpdateOrder {
         });
         tableOrderPosition.setItems(orderPositions);
 
-        btnOrderStatus.getItems().setAll(OrderStatus.values());
+        btnOrderStatus.getItems().setAll(OrderStatus.READY, OrderStatus.CANCELED, OrderStatus.PROCESSED_IN_STOREGE, OrderStatus.PROCESSED_BY_SMANAGER   d722);
         btnOrderStatus.setValue(currentOrder.getOrderConditions());
 
         Client temp = currentOrder.getClient();
@@ -171,6 +175,12 @@ public class UpdateOrder {
         tableOrderPosition.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) tableOrderPosition.setEffect(null);
         });
+
+        areaNote.setText(currentOrder.getNoteAboutOrder());
+
+        if (currentOrder.getOrderConditions().equals(OrderStatus.PROCESSED_IN_STOREGE)){
+            btnOrderStatus.setDisable(true);
+        }
     }
 
     @FXML
@@ -230,7 +240,7 @@ public class UpdateOrder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             tableOrderPosition.setEffect(new InnerShadow(5, Color.RED));
         }
     }
@@ -258,7 +268,7 @@ public class UpdateOrder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             tableOrderPosition.setEffect(new InnerShadow(5, Color.RED));
         }
     }
@@ -305,56 +315,135 @@ public class UpdateOrder {
     }
 
     @FXML
-    void pressOK() {
-//        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
-        if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
-            List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
-            for (OrderPosition el : list) {
-                orderPositionService.delete(el);
+    void pressOK() throws InterruptedException {
+        if (btnOrderStatus.getValue().equals(OrderStatus.READY) && !currentOrder.getStorageManager()) {
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Увага!");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/CantReady.fxml"));
+                Scene scene = new Scene(root);
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnOK.getScene().getWindow());
+                stage.show();
+                TimeUnit.SECONDS.sleep(2);
+                stage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            currentOrder.setTotalPrice(0.0);
-        } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
-            for (OrderPosition el : orderPositions) {
-                el.setOrder(currentOrder);
-                orderPositionService.create(el);
+        } else if (currentOrder.getOrderConditions().equals(OrderStatus.PROCESSED_IN_STOREGE) && btnOrderStatus.getValue().equals(OrderStatus.READY)) {
+            try {
+                Stage stage = new Stage();
+                stage.setTitle("Увага!");
+                Parent root = FXMLLoader.load(getClass().getResource("/firma/view/sales_manager/CantReady1.fxml"));
+                Scene scene = new Scene(root);
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(btnOK.getScene().getWindow());
+                stage.show();
+                TimeUnit.SECONDS.sleep(2);
+                stage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
-        } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
-            List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
-            for (OrderPosition el : list) {
-                orderPositionService.delete(el);
+        } else {
+            Product temp;
+            if (btnOrderStatus.getValue().equals(OrderStatus.READY)) {
+                if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+                    List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+                    for (OrderPosition el : list) {
+                        long productID = el.getProduct().getId();
+                        temp = productService.read(productID);
+                        temp.setAmountInStorage(temp.getAmountInStorage() + el.getProductAmount());
+                        productService.update(temp);
+                        orderPositionService.delete(el);
+                    }
+                    currentOrder.setTotalPrice(0.0);
+                } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
+                    for (OrderPosition el : orderPositions) {
+                        el.setOrder(currentOrder);
+                        long productID = el.getProduct().getId();
+                        temp = productService.read(productID);
+                        temp.setAmountInStorage(temp.getAmountInStorage() - el.getProductAmount());
+                        productService.update(temp);
+                        orderPositionService.create(el);
+                    }
+                    currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
+                } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+                    List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+                    for (OrderPosition el : list) {
+                        long productID = el.getProduct().getId();
+                        temp = productService.read(productID);
+                        temp.setAmountInStorage(temp.getAmountInStorage() + el.getProductAmount());
+                        orderPositionService.delete(el);
+                        productService.update(temp);
+                    }
+                    for (OrderPosition el : orderPositions) {
+                        el.setOrder(currentOrder);
+                        long productID = el.getProduct().getId();
+                        temp = productService.read(productID);
+                        temp.setAmountInStorage(temp.getAmountInStorage() - el.getProductAmount());
+                        orderPositionService.create(el);
+                        productService.update(temp);
+                    }
+                    currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
+                }
+            } else {
+                if (orderPositions.size() == 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+                    List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+                    for (OrderPosition el : list) {
+                        orderPositionService.delete(el);
+                    }
+                    currentOrder.setTotalPrice(0.0);
+                } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() == 0) {
+                    for (OrderPosition el : orderPositions) {
+                        el.setOrder(currentOrder);
+                        orderPositionService.create(el);
+                    }
+                    currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
+                } else if (orderPositions.size() > 0 && orderPositionService.getOrderPositionByOrder(currentOrder).size() > 0) {
+                    List<OrderPosition> list = orderPositionService.getOrderPositionByOrder(currentOrder);
+                    for (OrderPosition el : list) {
+                        orderPositionService.delete(el);
+                    }
+                    for (OrderPosition el : orderPositions) {
+                        el.setOrder(currentOrder);
+                        orderPositionService.create(el);
+                    }
+                    currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
+                }
             }
-            for (OrderPosition el : orderPositions) {
-                el.setOrder(currentOrder);
-                orderPositionService.create(el);
-            }
-            currentOrder.setTotalPrice(Double.parseDouble(lblrderCost.getText().substring(26)));
-        }
-        if (currentClient != null) {
-            currentOrder.setClient(currentClient);
-            currentClient = null;
-        }
 
-        if (areaNote.getText() != null && areaNote.getText().length() > 0) {
-            currentOrder.setNoteAboutOrder(areaNote.getText());
-        }
+            if (currentClient != null) {
+                currentOrder.setClient(currentClient);
+                currentClient = null;
+            }
 
-        if (fldReadyOrderDate.getValue() != null) {
-            currentOrder.setOrderReady(Date.from(fldReadyOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        }
-        currentOrder.setOrderConditions(btnOrderStatus.getValue());
-        orderService.update(currentOrder);
-        new ManagerWindow().updateOrdersList();
+            if (areaNote.getText() != null && areaNote.getText().length() > 0) {
+                currentOrder.setNoteAboutOrder(areaNote.getText());
+            }
 
-        Stage stage = (Stage) btnOK.getScene().getWindow();
-        stage.close();
-        managerWindowController.BoxInSManager();
-        managerWindowController.BoxInStorage();
-        managerWindowController.BoxReady();
-        managerWindowController.BoxDone();
-        managerWindowController.BoxCanceled();
-        managerWindowController.updateOrderPositions(currentOrder);
-        managerWindowController.tableOrders.getSelectionModel().select(currentOrderRow);
+            if (fldReadyOrderDate.getValue() != null) {
+                currentOrder.setOrderReady(Date.from(fldReadyOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            }
+
+            currentOrder.setOrderConditions(btnOrderStatus.getValue());
+            orderService.update(currentOrder);
+            new ManagerWindow().updateOrdersList();
+
+            managerWindowController.BoxInSManager();
+            managerWindowController.BoxInStorage();
+            managerWindowController.BoxReady();
+            managerWindowController.BoxDone();
+            managerWindowController.BoxCanceled();
+            managerWindowController.updateOrderPositions(currentOrder);
+            managerWindowController.tableOrders.getSelectionModel().select(currentOrderRow);
+
+            Stage stage = (Stage) btnOK.getScene().getWindow();
+            stage.close();
+        }
     }
 
     @FXML
@@ -400,8 +489,8 @@ public class UpdateOrder {
     @FXML
     void setOrderCostValue() {
         Double value = 0.0;
-        if(orderPositions.size() > 0){
-            for (OrderPosition el:orderPositions ){
+        if (orderPositions.size() > 0) {
+            for (OrderPosition el : orderPositions) {
                 value += el.getTotalPriceOfProduct();
             }
         }
