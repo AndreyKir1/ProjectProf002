@@ -147,7 +147,7 @@ public class UpdateOrder {
         });
         tableOrderPosition.setItems(orderPositions);
 
-        btnOrderStatus.getItems().setAll(OrderStatus.READY, OrderStatus.CANCELED, OrderStatus.PROCESSED_IN_STOREGE, OrderStatus.PROCESSED_BY_SMANAGER   d722);
+        btnOrderStatus.getItems().setAll(OrderStatus.READY, OrderStatus.CANCELED, OrderStatus.PROCESSED_IN_STOREGE, OrderStatus.PROCESSED_BY_SMANAGER);
         btnOrderStatus.setValue(currentOrder.getOrderConditions());
 
         Client temp = currentOrder.getClient();
