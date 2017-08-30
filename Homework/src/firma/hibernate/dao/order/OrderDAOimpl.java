@@ -76,7 +76,6 @@ public class OrderDAOimpl implements OrderDAO {
     public List<Order> getOrdersByEmployee(EmployeeFirm employee, OrderStatus orderStatus) {
         Session session = factory.getCurrentSession();
         try {
-//            Query query = session.createQuery("select distinct o from Order o join o.managers as employee where employee=:employee");
             Query query = session.createQuery("select distinct o from Order o join o.managers as employee where employee=:employee and " +
                     "o.orderConditions=:conditions");
             query.setParameter("conditions", orderStatus);
@@ -88,6 +87,20 @@ public class OrderDAOimpl implements OrderDAO {
             return null;
         }
     }
+
+    @Override
+    @Transactional
+    public List<Order> getOrdersByEmployee(EmployeeFirm employee) {
+        Session session = factory.getCurrentSession();
+        try {
+            Query query = session.createQuery("select distinct o from Order o join o.managers as employee where employee=:employee");
+            query.setParameter("employee", employee);
+            List<Order> list = query.list();
+            return list;
+        }catch (HibernateException e){
+            e.printStackTrace();
+            return null;
+        }    }
 
     //
     @Override

@@ -92,6 +92,12 @@ public class AdminWindowController {
     public void updateListEmployee() {
         listEmployee.clear();
         listEmployee.addAll(employeeService.getAll());
+        listEmployee.sort(new Comparator<EmployeeFirm>() {
+            @Override
+            public int compare(EmployeeFirm o1, EmployeeFirm o2) {
+                return o1.getSurname().compareTo(o2.getSurname());
+            }
+        });
     }
 
     private void updateCountLbl() {

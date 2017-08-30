@@ -62,6 +62,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersByEmployee(EmployeeFirm employee) {
+        if (employee != null) return dao.getOrdersByEmployee(employee);
+        else return null;
+    }
+
+    @Override
     public List<Order> getOrdersByClient(Client client) {
         if (client != null) return dao.getOrdersByClient(client);
         else return null;

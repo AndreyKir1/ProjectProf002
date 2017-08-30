@@ -16,6 +16,7 @@ public interface OrderService {
     boolean delete(Order order);
     List<Order> getAll();
     List<Order> getOrdersByEmployee(EmployeeFirm employee, OrderStatus orderStatus);
+    List<Order> getOrdersByEmployee(EmployeeFirm employee);
     List<Order> getOrdersByClient(Client client);
     List<Order> getByStatus(OrderStatus orderStatus);
     List<Order> getOrdersWithoutCashier();
